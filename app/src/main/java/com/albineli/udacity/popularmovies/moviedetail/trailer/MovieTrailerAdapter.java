@@ -36,7 +36,7 @@ public class MovieTrailerAdapter extends CustomRecyclerViewAdapter<MovieTrailerM
         String sizeText = String.format(movieTrailerViewHolder.getContext().getString(R.string.screen_size_trailer), movieTrailerModel.getSize());
         movieTrailerViewHolder.mSizeTextView.setText(sizeText);
 
-        if (movieTrailerModel.getSite().equalsIgnoreCase("YouTube")) { // TODO: I didn't found a non youtube video, but I must handle it
+        if (movieTrailerModel.getSite().equalsIgnoreCase("YouTube")) { // TODO: I didn't find a non youtube video, but I must handle it
             movieTrailerViewHolder.mThumbnailSimpleDraweeView.setImageURI(String.format(URL_YOUTUBE_THUMBNAIL_FORMAT, movieTrailerModel.getKey()));
             movieTrailerViewHolder.mSourceTextView.setText(R.string.youtube);
             movieTrailerViewHolder.mSourceTextView.setVisibility(View.VISIBLE);
