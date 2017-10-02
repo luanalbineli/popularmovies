@@ -12,6 +12,10 @@ android {
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
         buildConfigField("String", "API_KEY", API_KEY)
+
+        jackOptions {
+            enabled true
+        }
     }
 
     buildTypes {
@@ -76,8 +80,8 @@ dependencies {
     compile "com.jakewharton.timber:timber:$rootProject.timber_version"
 
     // Room
-    compile "android.arch.persistence.room:runtime:$rootProject.room_version"
-    annotationProcessor "android.arch.persistence.room:compiler:$rootProject.room_version"
+    /*compile "android.arch.persistence.room:runtime:$rootProject.room_version"
+    annotationProcessor "android.arch.persistence.room:compiler:$rootProject.room_version"*/
 
     // ReadMore TextView
     compile "com.borjabravo:readmoretextview:$rootProject.readmoreTextview_version"

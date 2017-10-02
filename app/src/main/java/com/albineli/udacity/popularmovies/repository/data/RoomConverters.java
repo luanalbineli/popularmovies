@@ -1,6 +1,6 @@
 package com.albineli.udacity.popularmovies.repository.data;
 
-import android.arch.persistence.room.TypeConverter;
+/*import android.arch.persistence.room.TypeConverter;
 
 import java.util.Date;
 
@@ -15,4 +15,4 @@ public class RoomConverters {
     public static Long dateToTimestamp(Date date) {
         return date == null ? null : date.getTime();
     }
-}
+}*/

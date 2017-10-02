@@ -1,6 +1,6 @@
 package com.albineli.udacity.popularmovies.repository.data;
 
-import android.arch.persistence.room.Database;
+/*import android.arch.persistence.room.Database;
 import android.arch.persistence.room.Room;
 import android.arch.persistence.room.RoomDatabase;
 import android.arch.persistence.room.TypeConverters;
@@ -24,4 +24,4 @@ public abstract class MovieDatabaseRoom extends RoomDatabase {
 
         return mInstance;
     }
-}
+}*/
