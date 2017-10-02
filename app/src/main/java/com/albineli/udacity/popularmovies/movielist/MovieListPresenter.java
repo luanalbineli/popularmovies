@@ -50,6 +50,10 @@ public class MovieListPresenter extends BasePresenterImpl implements MovieListCo
             return;
         }
 
+        Timber.i("Restoring the state - pageIndex: " + movieListStateModel.pageIndex +
+                "\nselectedMovieIndex: " + movieListStateModel.selectedMovieIndex +
+                "\nfirst visible item index: " + movieListStateModel.firstVisibleMovieIndex);
+
         handleSuccessLoadMovieList(movieListStateModel.movieList, true, true);
         if (movieListStateModel.selectedMovieIndex != Integer.MIN_VALUE) {
             selectedMovieIndex = movieListStateModel.selectedMovieIndex;

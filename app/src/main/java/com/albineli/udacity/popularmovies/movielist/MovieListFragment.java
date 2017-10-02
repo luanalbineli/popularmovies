@@ -34,6 +34,7 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import timber.log.Timber;
 
 
 public class MovieListFragment extends BaseFragment<MovieListContract.View> implements MovieListContract.View {
@@ -130,6 +131,7 @@ public class MovieListFragment extends BaseFragment<MovieListContract.View> impl
 
         getFragmentManager()
                 .addOnBackStackChangedListener(() -> {
+                    Timber.i("Changed the backstack: " + getFragmentManager().getBackStackEntryCount());
                     boolean visible = getFragmentManager().getBackStackEntryCount() == 0;
                     mPresenter.onVisibilityChanged(visible);
                 });
@@ -149,7 +151,10 @@ public class MovieListFragment extends BaseFragment<MovieListContract.View> impl
         } else if (filter == MovieListFilterDescriptor.FAVORITE) {
             titleStringResId = R.string.favorite;
         }
-        getActivity().setTitle(getString(titleStringResId));
+
+        String title = getString(titleStringResId);
+        Timber.d("Setting the title: " + title);
+        getActivity().setTitle(title);
     }
 
     @Override
@@ -267,6 +272,10 @@ public class MovieListFragment extends BaseFragment<MovieListContract.View> impl
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
+        Timber.i("Saving the state - pageIndex: " + mPresenter.pageIndex +
+                "\nselectedMovieIndex: " + mPresenter.selectedMovieIndex +
+                "\nfirst visible item index: " + mGridLayoutManager.findFirstVisibleItemPosition());
+
         MovieListStateModel.saveToBundle(outState, mMovieListAdapter.getItems(), mPresenter.pageIndex, mPresenter.selectedMovieIndex, mGridLayoutManager.findFirstVisibleItemPosition());
     }
 
