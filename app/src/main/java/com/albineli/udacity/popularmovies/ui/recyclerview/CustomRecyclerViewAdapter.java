@@ -14,6 +14,8 @@ import com.albineli.udacity.popularmovies.ui.RequestStatusView;
 import java.util.ArrayList;
 import java.util.List;
 
+import timber.log.Timber;
+
 public abstract class CustomRecyclerViewAdapter<TItem, THolder extends CustomRecyclerViewHolder> extends RecyclerView.Adapter<CustomRecyclerViewHolder> {
     private final List<TItem> mItems;
     private IListRecyclerViewItemClick<TItem> mOnItemClickListener;
@@ -92,13 +94,16 @@ public abstract class CustomRecyclerViewAdapter<TItem, THolder extends CustomRec
     }
 
     public final void addItems(List<TItem> items) {
+        hideRequestStatus();
+
         int itemCount = mItems.size();
         mItems.addAll(items);
-        // Notify that the itens had changed.
         notifyItemRangeInserted(itemCount, items.size());
     }
 
     public final void replaceItems(List<TItem> items) {
+        redrawGridStatus(RequestStatusDescriptor.HIDDEN);
+
         clearItems();
 
         mItems.addAll(items);
@@ -140,6 +145,7 @@ public abstract class CustomRecyclerViewAdapter<TItem, THolder extends CustomRec
     }
 
     private void redrawGridStatus(int gridStatus) {
+        Timber.i("REDRAWING THE GRID STATUS: " + gridStatus);
         int previousRequestStatus = mRequestStatus;
         mRequestStatus = gridStatus;
         if (mRequestStatus == RequestStatusDescriptor.HIDDEN) {

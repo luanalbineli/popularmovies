@@ -8,6 +8,8 @@ import java.util.List;
 
 public interface MovieListContract {
     interface View {
+        void setTitleByFilter(@MovieListFilterDescriptor.MovieListFilter int filter);
+
         void showLoadingMovieListError();
         void showMovieList(List<MovieModel> movieList, boolean replaceData);
         void showMovieDetail(MovieModel movieModel);
@@ -31,7 +33,7 @@ public interface MovieListContract {
     }
 
     interface Presenter extends BasePresenter<View> {
-        void start(@MovieListFilterDescriptor.MovieListFilter int filter);
+        void init(@MovieListFilterDescriptor.MovieListFilter int filter);
         void onStop();
         void loadMovieList(boolean startOver);
         void setFilter(@MovieListFilterDescriptor.MovieListFilter int filter);
@@ -43,5 +45,9 @@ public interface MovieListContract {
         void tryAgain();
 
         void favoriteMovie(MovieModel movie, boolean favorite);
+
+        void resume();
+
+        void onVisibilityChanged(boolean visible);
     }
 }

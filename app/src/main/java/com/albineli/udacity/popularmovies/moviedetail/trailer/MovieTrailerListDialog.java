@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.albineli.udacity.popularmovies.PopularMovieApplication;
+import com.albineli.udacity.popularmovies.R;
 import com.albineli.udacity.popularmovies.base.BaseFullscreenDialogWithList;
 import com.albineli.udacity.popularmovies.base.BasePresenter;
 import com.albineli.udacity.popularmovies.injector.components.ApplicationComponent;
@@ -57,6 +58,8 @@ public class MovieTrailerListDialog extends BaseFullscreenDialogWithList<MovieTr
         super.onViewCreated(view, savedInstanceState);
 
         mPresenter.start(mList);
+
+        setTitle(R.string.all_trailers);
     }
 
     @Override

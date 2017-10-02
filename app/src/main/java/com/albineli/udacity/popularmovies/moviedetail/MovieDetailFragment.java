@@ -179,6 +179,8 @@ public class MovieDetailFragment extends BaseFragment<MovieDetailContract.View> 
 
     @Override
     public void showMovieDetail(final MovieModel movieModel) {
+        getActivity().setTitle(movieModel.getTitle());
+
         String posterWidth = ApiUtil.getDefaultPosterSize(mPosterSimpleDraweeView.getWidth());
         String posterUrl = ApiUtil.buildPosterImageUrl(movieModel.getPosterPath(), posterWidth);
         mPosterSimpleDraweeView.setImageURI(posterUrl);

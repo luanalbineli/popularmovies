@@ -42,7 +42,7 @@ public class MovieListPresenter extends BasePresenterImpl implements MovieListCo
     }
 
     @Override
-    public void start(@MovieListFilterDescriptor.MovieListFilter int filter) {
+    public void init(@MovieListFilterDescriptor.MovieListFilter int filter) {
         loadMovieList(true);
     }
 
@@ -76,20 +76,15 @@ public class MovieListPresenter extends BasePresenterImpl implements MovieListCo
             observable = mMovieRepository.getFavoriteList();
         }
 
-        mSubscription = observable.subscribe(
-                response -> handleSuccessLoadMovieList(response, startOver),
-                this::handleErrorLoadMovieList);
+        mSubscription = observable
+                .doOnTerminate(() -> mSubscription = null)
+                .subscribe(
+                    response -> handleSuccessLoadMovieList(response, startOver),
+                    this::handleErrorLoadMovieList);
     }
 
     private void handleSuccessLoadMovieList(ArrayRequestAPI<MovieModel> response, boolean startOver) {
         Timber.i("handleSuccessLoadMovieList - CHANGED");
-        if (mFilter == MovieListFilterDescriptor.FAVORITE) {
-            mView.hideRequestStatus();
-        } else {
-            mView.showLoadingIndicator(); // Show again to draw again (and wrap content).
-        }
-
-        mSubscription = null;
         if (response.results.size() == 0) {
             mView.clearMovieList(); // Make sure that the list is empty.
             mView.showEmptyListMessage();
@@ -105,7 +100,6 @@ public class MovieListPresenter extends BasePresenterImpl implements MovieListCo
     }
 
     private void handleErrorLoadMovieList(Throwable throwable) {
-        mSubscription = null;
         mHasError = true;
         Timber.e(throwable, "An error occurred while tried to get the movies");
 
@@ -139,6 +133,8 @@ public class MovieListPresenter extends BasePresenterImpl implements MovieListCo
         mFilter = movieListFilter;
         // Reload the movie list.
         loadMovieList(true);
+
+        mView.setTitleByFilter(movieListFilter);
     }
 
     @Override
@@ -177,6 +173,18 @@ public class MovieListPresenter extends BasePresenterImpl implements MovieListCo
 
         if (mView.getMovieListCount() == 0) {
             mView.showEmptyListMessage();
+        }
+    }
+
+    @Override
+    public void resume() {
+        mView.setTitleByFilter(mFilter);
+    }
+
+    @Override
+    public void onVisibilityChanged(boolean visible) {
+        if (visible) {
+            mView.setTitleByFilter(mFilter);
         }
     }
 }

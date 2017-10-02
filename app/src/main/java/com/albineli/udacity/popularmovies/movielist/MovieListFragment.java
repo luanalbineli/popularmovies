@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.annotation.StringRes;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -66,9 +67,6 @@ public class MovieListFragment extends BaseFragment<MovieListContract.View> impl
 
     GridLayoutManager mGridLayoutManager;
 
-    @MovieListFilterDescriptor.MovieListFilter
-    private int mFilter;
-
     @Override
     protected void onInjectDependencies(ApplicationComponent applicationComponent) {
         DaggerFragmentComponent.builder()
@@ -84,8 +82,6 @@ public class MovieListFragment extends BaseFragment<MovieListContract.View> impl
         if (getArguments() == null || !getArguments().containsKey(FILTER_BUNDLE_KEY)) {
             throw new InvalidParameterException("filter");
         }
-
-        mFilter = MovieListFilterDescriptor.parseFromInt(getArguments().getInt(FILTER_BUNDLE_KEY));
     }
 
     @Nullable
@@ -119,13 +115,39 @@ public class MovieListFragment extends BaseFragment<MovieListContract.View> impl
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        mPresenter.start(mFilter);
+
+        int filter = MovieListFilterDescriptor.parseFromInt(getArguments().getInt(FILTER_BUNDLE_KEY));
+
+        mPresenter.init(filter);
     }
 
     @Override
     public void onStart() {
         super.onStart();
         EventBus.getDefault().register(this);
+
+        getFragmentManager()
+                .addOnBackStackChangedListener(() -> {
+                    boolean visible = getFragmentManager().getBackStackEntryCount() == 0;
+                    mPresenter.onVisibilityChanged(visible);
+                });
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        mPresenter.resume();
+    }
+
+    @Override
+    public void setTitleByFilter(@MovieListFilterDescriptor.MovieListFilter int filter) {
+        @StringRes int titleStringResId = R.string.popular;
+        if (filter == MovieListFilterDescriptor.RATING) {
+            titleStringResId = R.string.rating;
+        } else if (filter == MovieListFilterDescriptor.FAVORITE) {
+            titleStringResId = R.string.favorite;
+        }
+        getActivity().setTitle(getString(titleStringResId));
     }
 
     @Override
@@ -228,10 +250,9 @@ public class MovieListFragment extends BaseFragment<MovieListContract.View> impl
     }
 
     public void reloadListWithNewSort(@MovieListFilterDescriptor.MovieListFilter int movieListFilter) {
-        mFilter = movieListFilter;
         mPresenter.setFilter(movieListFilter);
 
-        if (getFragmentManager().getBackStackEntryCount() > 0) { // Are at detail screen
+        if (getFragmentManager().getBackStackEntryCount() > 0) { // If is at detail screen
             getFragmentManager().popBackStack();
         }
     }

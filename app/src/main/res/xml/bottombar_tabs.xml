@@ -3,13 +3,13 @@
     <tab
         id="@+id/tab_popular"
         icon="@drawable/ic_popularity"
-        title="@string/tab_popular" />
+        title="@string/popular" />
     <tab
         id="@+id/tab_rating"
         icon="@drawable/ic_star_half_black_24dp"
-        title="@string/tab_rating" />
+        title="@string/rating" />
     <tab
         id="@+id/tab_favorite"
         icon="@drawable/ic_heart_black_24dp"
-        title="@string/tab_favorite" />
+        title="@string/favorite" />
 </tabs>

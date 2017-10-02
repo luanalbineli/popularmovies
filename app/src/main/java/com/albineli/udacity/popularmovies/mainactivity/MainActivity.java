@@ -39,7 +39,8 @@ public class MainActivity extends AppCompatActivity implements FragmentManager.O
         setContentView(R.layout.activity_main);
         Toolbar toolbar = ButterKnife.findById(this, R.id.toolbar);
         setSupportActionBar(toolbar);
-        setTitle(null);
+
+        super.setTitle(null);
 
         ButterKnife.bind(this);
 
@@ -105,8 +106,6 @@ public class MainActivity extends AppCompatActivity implements FragmentManager.O
     }
 
     private @MovieListFilterDescriptor.MovieListFilter int getFilterBySelectedTab(@IdRes int selectedTabId) {
-        // TODO: MVP PLEASE
-        mToobarTitle.setText(mBottomBar.getTabWithId(selectedTabId).getTitle());
         switch (selectedTabId) {
             case R.id.tab_popular:
                 return MovieListFilterDescriptor.POPULAR;
@@ -115,5 +114,15 @@ public class MainActivity extends AppCompatActivity implements FragmentManager.O
             default:
                 return MovieListFilterDescriptor.FAVORITE;
         }
+    }
+
+    @Override
+    public void setTitle(int titleId) {
+        setTitle(getString(titleId));
+    }
+
+    @Override
+    public void setTitle(CharSequence title) {
+        mToobarTitle.setText(title);
     }
 }

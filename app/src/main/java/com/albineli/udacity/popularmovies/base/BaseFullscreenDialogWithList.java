@@ -6,11 +6,13 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.annotation.Nullable;
+import android.support.annotation.StringRes;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.albineli.udacity.popularmovies.PopularMovieApplication;
 import com.albineli.udacity.popularmovies.R;
@@ -34,6 +36,9 @@ public abstract class BaseFullscreenDialogWithList<TModel extends Parcelable, TV
 
     @BindView(R.id.toolbarMovieReviewDialog)
     Toolbar mDialogToolbar;
+
+    @BindView(R.id.tvListFragmentDialogTitle)
+    TextView mTitle;
 
     protected ArrayList<TModel> mList;
 
@@ -75,6 +80,10 @@ public abstract class BaseFullscreenDialogWithList<TModel extends Parcelable, TV
         mDialogToolbar.setNavigationOnClickListener(v -> dismiss());
 
         return rootView;
+    }
+
+    protected void setTitle(@StringRes int titleResId) {
+        mTitle.setText(titleResId);
     }
 
     protected static <TFragmentDialog extends BaseFullscreenDialogWithList<TModel, ?>, TModel extends Parcelable> TFragmentDialog createNewInstance(Class<TFragmentDialog> clazz, List<TModel> items) {
