@@ -102,7 +102,7 @@ public class MovieDetailPresenter extends BasePresenterImpl implements MovieDeta
     @Override
     public void removeFavoriteMovie(MovieModel movieModel) {
         mMovieRepository.removeFavoriteMovie(movieModel).subscribe(
-                now -> mView.showSuccessMessageRemoveFavoriteMovie(),
+                mView::showSuccessMessageRemoveFavoriteMovie,
                 throwable -> {
                     Timber.e(throwable, "An error occurred while tried to remove the favorite movie");
                     mView.showErrorMessageRemoveFavoriteMovie();
@@ -113,7 +113,7 @@ public class MovieDetailPresenter extends BasePresenterImpl implements MovieDeta
     @Override
     public void saveFavoriteMovie(MovieModel movieModel) {
         mMovieRepository.saveFavoriteMovie(movieModel).subscribe(
-                now -> mView.showSuccessMessageAddFavoriteMovie(),
+                mView::showSuccessMessageAddFavoriteMovie,
                 throwable -> {
                     Timber.e(throwable, "An error occurred while tried to add the favorite movie");
                     mView.showErrorMessageAddFavoriteMovie();

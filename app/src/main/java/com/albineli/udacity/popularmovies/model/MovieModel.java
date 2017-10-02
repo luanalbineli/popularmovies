@@ -1,8 +1,5 @@
 package com.albineli.udacity.popularmovies.model;
 
-import android.arch.persistence.room.ColumnInfo;
-import android.arch.persistence.room.Entity;
-import android.arch.persistence.room.PrimaryKey;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.os.Parcel;
@@ -13,7 +10,6 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.Date;
 
-@Entity(tableName = MovieContract.MovieEntry.TABLE_NAME)
 public class MovieModel implements Parcelable {
 
     private MovieModel(ContentValues contentValues) {
@@ -76,36 +72,27 @@ public class MovieModel implements Parcelable {
         voteCount = in.readInt();
     }
 
-    @PrimaryKey
-    @ColumnInfo(index = true, name = MovieContract.MovieEntry._ID)
     @SerializedName("id")
     private int id;
 
-    @ColumnInfo(name = MovieContract.MovieEntry.COLUMN_POSTER_PATH)
     @SerializedName("poster_path")
     private String posterPath;
 
-    @ColumnInfo(name = MovieContract.MovieEntry.COLUMN_OVERVIEW)
     @SerializedName("overview")
     private String overview;
 
-    @ColumnInfo(name = MovieContract.MovieEntry.COLUMN_TITLE)
     @SerializedName("title")
     private String title;
 
-    @ColumnInfo(name = MovieContract.MovieEntry.COLUMN_VOTE_AVERAGE)
     @SerializedName("vote_average")
     private double voteAverage;
 
-    @ColumnInfo(name = MovieContract.MovieEntry.COLUMN_RELEASE_DATE)
     @SerializedName("release_date")
     private Date releaseDate;
 
-    @ColumnInfo(name = MovieContract.MovieEntry.COLUMN_BACKDROP_PATH)
     @SerializedName("backdrop_path")
     private String backdropPath;
 
-    @ColumnInfo(name = MovieContract.MovieEntry.COLUMN_VOTE_COUNT)
     @SerializedName("vote_count")
     private int voteCount;
 

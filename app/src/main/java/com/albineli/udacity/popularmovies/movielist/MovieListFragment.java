@@ -18,6 +18,7 @@ import com.albineli.udacity.popularmovies.enums.MovieListFilterDescriptor;
 import com.albineli.udacity.popularmovies.event.FavoriteMovieEvent;
 import com.albineli.udacity.popularmovies.injector.components.ApplicationComponent;
 import com.albineli.udacity.popularmovies.injector.components.DaggerFragmentComponent;
+import com.albineli.udacity.popularmovies.model.MovieListStateModel;
 import com.albineli.udacity.popularmovies.model.MovieModel;
 import com.albineli.udacity.popularmovies.moviedetail.MovieDetailFragment;
 import com.albineli.udacity.popularmovies.ui.recyclerview.CustomRecyclerViewAdapter;
@@ -117,8 +118,9 @@ public class MovieListFragment extends BaseFragment<MovieListContract.View> impl
         super.onViewCreated(view, savedInstanceState);
 
         int filter = MovieListFilterDescriptor.parseFromInt(getArguments().getInt(FILTER_BUNDLE_KEY));
+        MovieListStateModel movieListStateModel = MovieListStateModel.getFromBundle(savedInstanceState);
 
-        mPresenter.init(filter);
+        mPresenter.init(filter, movieListStateModel);
     }
 
     @Override
@@ -249,12 +251,23 @@ public class MovieListFragment extends BaseFragment<MovieListContract.View> impl
         return mMovieListAdapter.getItemCount();
     }
 
+    @Override
+    public void scrollToMovieIndex(int firstVisibleMovieIndex) {
+        mGridLayoutManager.scrollToPosition(firstVisibleMovieIndex);
+    }
+
     public void reloadListWithNewSort(@MovieListFilterDescriptor.MovieListFilter int movieListFilter) {
         mPresenter.setFilter(movieListFilter);
 
         if (getFragmentManager().getBackStackEntryCount() > 0) { // If is at detail screen
             getFragmentManager().popBackStack();
         }
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        MovieListStateModel.saveToBundle(outState, mMovieListAdapter.getItems(), mPresenter.pageIndex, mPresenter.selectedMovieIndex, mGridLayoutManager.findFirstVisibleItemPosition());
     }
 
     public static int getItensPerRow(Context context) {
