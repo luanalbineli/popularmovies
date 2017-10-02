@@ -2,7 +2,7 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 25
-    buildToolsVersion "25.0.2"
+    buildToolsVersion "25.0.3"
     defaultConfig {
         applicationId "com.albineli.udacity.popularmovies"
         minSdkVersion 17
@@ -92,7 +92,6 @@ dependencies {
     // LeakCanary
     debugCompile "com.squareup.leakcanary:leakcanary-android:$rootProject.leakcanary_version"
     releaseCompile "com.squareup.leakcanary:leakcanary-android-no-op:$rootProject.leakcanary_version"
-    testCompile "com.squareup.leakcanary:leakcanary-android-no-op:$rootProject.leakcanary_version"
 
     testCompile 'junit:junit:4.12'
 

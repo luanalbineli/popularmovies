@@ -128,6 +128,10 @@ public abstract class CustomRecyclerViewAdapter<TItem, THolder extends CustomRec
         notifyItemInserted(index);
     }
 
+    public final List<TItem> getItems() {
+        return mItems;
+    }
+
     public final void showLoading() {
         redrawGridStatus(RequestStatusDescriptor.LOADING);
     }

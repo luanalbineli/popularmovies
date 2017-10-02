@@ -4,9 +4,12 @@ import android.support.annotation.NonNull;
 
 import com.albineli.udacity.popularmovies.base.BasePresenterImpl;
 import com.albineli.udacity.popularmovies.enums.MovieListFilterDescriptor;
+import com.albineli.udacity.popularmovies.model.MovieListStateModel;
 import com.albineli.udacity.popularmovies.model.MovieModel;
 import com.albineli.udacity.popularmovies.repository.ArrayRequestAPI;
 import com.albineli.udacity.popularmovies.repository.movie.MovieRepository;
+
+import java.util.List;
 
 import javax.inject.Inject;
 
@@ -20,16 +23,15 @@ import timber.log.Timber;
 
 public class MovieListPresenter extends BasePresenterImpl implements MovieListContract.Presenter {
     private MovieListContract.View mView;
-    private @MovieListFilterDescriptor.MovieListFilter
-    int mFilter;
+    private @MovieListFilterDescriptor.MovieListFilter int mFilter;
 
     private boolean mHasError = false;
     private Disposable mSubscription;
     /*
         The unitial page must be 1 (API implementation).
      */
-    private int mPageIndex = 1;
-    private int mSelectedMovieIndex;
+    int pageIndex = 1;
+    int selectedMovieIndex = Integer.MIN_VALUE;
 
     @Inject
     MovieListPresenter(@NonNull MovieRepository movieRepository) {
@@ -42,8 +44,23 @@ public class MovieListPresenter extends BasePresenterImpl implements MovieListCo
     }
 
     @Override
-    public void init(@MovieListFilterDescriptor.MovieListFilter int filter) {
-        loadMovieList(true);
+    public void init(@MovieListFilterDescriptor.MovieListFilter int filter, MovieListStateModel movieListStateModel) {
+        if (movieListStateModel == null || movieListStateModel.movieList == null) { // Handle a invalid state restore.
+            loadMovieList(true);
+            return;
+        }
+
+        handleSuccessLoadMovieList(movieListStateModel.movieList, true, true);
+        if (movieListStateModel.selectedMovieIndex != Integer.MIN_VALUE) {
+            selectedMovieIndex = movieListStateModel.selectedMovieIndex;
+            mView.showMovieDetail(movieListStateModel.movieList.get(movieListStateModel.selectedMovieIndex));
+        }
+
+        if (movieListStateModel.firstVisibleMovieIndex != Integer.MIN_VALUE) {
+            mView.scrollToMovieIndex(movieListStateModel.firstVisibleMovieIndex);
+        }
+
+        pageIndex = movieListStateModel.pageIndex;
     }
 
     @Override
@@ -62,16 +79,16 @@ public class MovieListPresenter extends BasePresenterImpl implements MovieListCo
         mView.showLoadingIndicator();
 
         if (startOver) {
-            mPageIndex = 1;
+            pageIndex = 1;
         } else {
-            mPageIndex++;
+            pageIndex++;
         }
 
         Observable<ArrayRequestAPI<MovieModel>> observable;
         if (filter == MovieListFilterDescriptor.POPULAR) {
-            observable = mMovieRepository.getPopularList(mPageIndex);
+            observable = mMovieRepository.getPopularList(pageIndex);
         } else if (filter == MovieListFilterDescriptor.RATING) {
-            observable = mMovieRepository.getTopRatedList(mPageIndex);
+            observable = mMovieRepository.getTopRatedList(pageIndex);
         } else {
             observable = mMovieRepository.getFavoriteList();
         }
@@ -79,20 +96,20 @@ public class MovieListPresenter extends BasePresenterImpl implements MovieListCo
         mSubscription = observable
                 .doOnTerminate(() -> mSubscription = null)
                 .subscribe(
-                    response -> handleSuccessLoadMovieList(response, startOver),
+                    response -> handleSuccessLoadMovieList(response.results, response.hasMorePages(), startOver),
                     this::handleErrorLoadMovieList);
     }
 
-    private void handleSuccessLoadMovieList(ArrayRequestAPI<MovieModel> response, boolean startOver) {
+    private void handleSuccessLoadMovieList(List<MovieModel> movieList, boolean hasMorePages, boolean startOver) {
         Timber.i("handleSuccessLoadMovieList - CHANGED");
-        if (response.results.size() == 0) {
+        if (movieList.size() == 0) {
             mView.clearMovieList(); // Make sure that the list is empty.
             mView.showEmptyListMessage();
         } else {
-            mView.showMovieList(response.results, startOver);
+            mView.showMovieList(movieList, startOver);
         }
 
-        if (response.hasMorePages()) {
+        if (hasMorePages) {
             mView.enableLoadMoreListener();
         } else {
             mView.disableLoadMoreListener();
@@ -103,8 +120,8 @@ public class MovieListPresenter extends BasePresenterImpl implements MovieListCo
         mHasError = true;
         Timber.e(throwable, "An error occurred while tried to get the movies");
 
-        if (mPageIndex > 1) { // If something got wrong, reverse to the original position.
-            mPageIndex--;
+        if (pageIndex > 1) { // If something got wrong, reverse to the original position.
+            pageIndex--;
         }
 
         if (mFilter == MovieListFilterDescriptor.FAVORITE) {
@@ -131,6 +148,8 @@ public class MovieListPresenter extends BasePresenterImpl implements MovieListCo
         }
 
         mFilter = movieListFilter;
+        mView.clearMovieList();
+
         // Reload the movie list.
         loadMovieList(true);
 
@@ -139,7 +158,7 @@ public class MovieListPresenter extends BasePresenterImpl implements MovieListCo
 
     @Override
     public void openMovieDetail(int selectedMovieIndex, MovieModel movieModel) {
-        mSelectedMovieIndex = selectedMovieIndex;
+        this.selectedMovieIndex = selectedMovieIndex;
         mView.showMovieDetail(movieModel);
     }
 
@@ -166,9 +185,9 @@ public class MovieListPresenter extends BasePresenterImpl implements MovieListCo
         }
 
         if (favorite) {
-            mView.addMovieToListByIndex(mSelectedMovieIndex, movie);
+            mView.addMovieToListByIndex(selectedMovieIndex, movie);
         } else {
-            mView.removeMovieFromListByIndex(mSelectedMovieIndex);
+            mView.removeMovieFromListByIndex(selectedMovieIndex);
         }
 
         if (mView.getMovieListCount() == 0) {

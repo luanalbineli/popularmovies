@@ -2,11 +2,12 @@ package com.albineli.udacity.popularmovies.movielist;
 
 import com.albineli.udacity.popularmovies.base.BasePresenter;
 import com.albineli.udacity.popularmovies.enums.MovieListFilterDescriptor;
+import com.albineli.udacity.popularmovies.model.MovieListStateModel;
 import com.albineli.udacity.popularmovies.model.MovieModel;
 
 import java.util.List;
 
-public interface MovieListContract {
+interface MovieListContract {
     interface View {
         void setTitleByFilter(@MovieListFilterDescriptor.MovieListFilter int filter);
 
@@ -30,10 +31,12 @@ public interface MovieListContract {
         void addMovieToListByIndex(int index, MovieModel movieModel);
 
         int getMovieListCount();
+
+        void scrollToMovieIndex(int firstVisibleMovieIndex);
     }
 
     interface Presenter extends BasePresenter<View> {
-        void init(@MovieListFilterDescriptor.MovieListFilter int filter);
+        void init(@MovieListFilterDescriptor.MovieListFilter int filter, MovieListStateModel movieListStateModel);
         void onStop();
         void loadMovieList(boolean startOver);
         void setFilter(@MovieListFilterDescriptor.MovieListFilter int filter);
