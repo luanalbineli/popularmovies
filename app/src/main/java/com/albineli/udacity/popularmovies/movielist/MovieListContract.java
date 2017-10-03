@@ -36,10 +36,10 @@ interface MovieListContract {
     }
 
     interface Presenter extends BasePresenter<View> {
-        void init(@MovieListFilterDescriptor.MovieListFilter int filter, MovieListStateModel movieListStateModel);
+        void init(MovieListStateModel movieListStateModel);
         void onStop();
         void loadMovieList(boolean startOver);
-        void setFilter(@MovieListFilterDescriptor.MovieListFilter int filter);
+        void changeFilterList(@MovieListFilterDescriptor.MovieListFilter int filter);
 
         void openMovieDetail(int selectedMovieIndex, MovieModel movieModel);
 
@@ -48,8 +48,6 @@ interface MovieListContract {
         void tryAgain();
 
         void favoriteMovie(MovieModel movie, boolean favorite);
-
-        void resume();
 
         void onVisibilityChanged(boolean visible);
     }

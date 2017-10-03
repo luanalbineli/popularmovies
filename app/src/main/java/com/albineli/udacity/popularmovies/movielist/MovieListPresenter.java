@@ -9,6 +9,8 @@ import com.albineli.udacity.popularmovies.model.MovieModel;
 import com.albineli.udacity.popularmovies.repository.ArrayRequestAPI;
 import com.albineli.udacity.popularmovies.repository.movie.MovieRepository;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.List;
 
 import javax.inject.Inject;
@@ -23,7 +25,9 @@ import timber.log.Timber;
 
 public class MovieListPresenter extends BasePresenterImpl implements MovieListContract.Presenter {
     private MovieListContract.View mView;
-    private @MovieListFilterDescriptor.MovieListFilter int mFilter;
+
+    @MovieListFilterDescriptor.MovieListFilter
+    int filter;
 
     private boolean mHasError = false;
     private Disposable mSubscription;
@@ -44,21 +48,22 @@ public class MovieListPresenter extends BasePresenterImpl implements MovieListCo
     }
 
     @Override
-    public void init(@MovieListFilterDescriptor.MovieListFilter int filter, MovieListStateModel movieListStateModel) {
-        if (movieListStateModel == null || movieListStateModel.movieList == null) { // Handle a invalid state restore.
+    public void init(@NotNull MovieListStateModel movieListStateModel) {
+        mView.setTitleByFilter(movieListStateModel.filter);
+
+        filter = movieListStateModel.filter;
+
+        if (movieListStateModel.movieList == null) { // Handle a invalid state restore.
             loadMovieList(true);
             return;
         }
 
+        selectedMovieIndex = movieListStateModel.selectedMovieIndex;
         Timber.i("Restoring the state - pageIndex: " + movieListStateModel.pageIndex +
                 "\nselectedMovieIndex: " + movieListStateModel.selectedMovieIndex +
                 "\nfirst visible item index: " + movieListStateModel.firstVisibleMovieIndex);
 
         handleSuccessLoadMovieList(movieListStateModel.movieList, true, true);
-        if (movieListStateModel.selectedMovieIndex != Integer.MIN_VALUE) {
-            selectedMovieIndex = movieListStateModel.selectedMovieIndex;
-            mView.showMovieDetail(movieListStateModel.movieList.get(movieListStateModel.selectedMovieIndex));
-        }
 
         if (movieListStateModel.firstVisibleMovieIndex != Integer.MIN_VALUE) {
             mView.scrollToMovieIndex(movieListStateModel.firstVisibleMovieIndex);
@@ -100,8 +105,8 @@ public class MovieListPresenter extends BasePresenterImpl implements MovieListCo
         mSubscription = observable
                 .doOnTerminate(() -> mSubscription = null)
                 .subscribe(
-                    response -> handleSuccessLoadMovieList(response.results, response.hasMorePages(), startOver),
-                    this::handleErrorLoadMovieList);
+                        response -> handleSuccessLoadMovieList(response.results, response.hasMorePages(), startOver),
+                        this::handleErrorLoadMovieList);
     }
 
     private void handleSuccessLoadMovieList(List<MovieModel> movieList, boolean hasMorePages, boolean startOver) {
@@ -128,7 +133,7 @@ public class MovieListPresenter extends BasePresenterImpl implements MovieListCo
             pageIndex--;
         }
 
-        if (mFilter == MovieListFilterDescriptor.FAVORITE) {
+        if (filter == MovieListFilterDescriptor.FAVORITE) {
             mView.clearMovieList();
         }
 
@@ -137,21 +142,22 @@ public class MovieListPresenter extends BasePresenterImpl implements MovieListCo
 
     @Override
     public void loadMovieList(final boolean startOver) {
-        loadMovieList(startOver, mFilter);
+        loadMovieList(startOver, filter);
     }
 
     @Override
-    public void setFilter(@MovieListFilterDescriptor.MovieListFilter int movieListFilter) {
-        if (mFilter == movieListFilter) { // If it's the same order, do nothing.
+    public void changeFilterList(@MovieListFilterDescriptor.MovieListFilter int movieListFilter) {
+        if (filter == movieListFilter) { // If it's the same order, do nothing.
             return;
         }
 
+        selectedMovieIndex = Integer.MIN_VALUE;
         if (mSubscription != null && !mSubscription.isDisposed()) {
             mSubscription.dispose();
             mSubscription = null;
         }
 
-        mFilter = movieListFilter;
+        filter = movieListFilter;
         mView.clearMovieList();
 
         // Reload the movie list.
@@ -184,7 +190,7 @@ public class MovieListPresenter extends BasePresenterImpl implements MovieListCo
 
     @Override
     public void favoriteMovie(MovieModel movie, boolean favorite) {
-        if (mFilter != MovieListFilterDescriptor.FAVORITE) { // Only if the user is at favorite list it needs an update.
+        if (filter != MovieListFilterDescriptor.FAVORITE) { // Only if the user is at favorite list it needs an update.
             return;
         }
 
@@ -200,14 +206,9 @@ public class MovieListPresenter extends BasePresenterImpl implements MovieListCo
     }
 
     @Override
-    public void resume() {
-        mView.setTitleByFilter(mFilter);
-    }
-
-    @Override
     public void onVisibilityChanged(boolean visible) {
         if (visible) {
-            mView.setTitleByFilter(mFilter);
+            mView.setTitleByFilter(filter);
         }
     }
 }

@@ -2,7 +2,6 @@ package com.albineli.udacity.popularmovies.mainactivity;
 
 import android.app.FragmentManager;
 import android.os.Bundle;
-import android.os.PersistableBundle;
 import android.support.annotation.IdRes;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -11,8 +10,12 @@ import android.widget.TextView;
 
 import com.albineli.udacity.popularmovies.R;
 import com.albineli.udacity.popularmovies.enums.MovieListFilterDescriptor;
+import com.albineli.udacity.popularmovies.event.TabChangeFilterEvent;
 import com.albineli.udacity.popularmovies.movielist.MovieListFragment;
-import com.roughike.bottombar.BottomBar;
+import com.ashokvarma.bottomnavigation.BottomNavigationBar;
+import com.ashokvarma.bottomnavigation.BottomNavigationItem;
+
+import org.greenrobot.eventbus.EventBus;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -22,16 +25,14 @@ public class MainActivity extends AppCompatActivity implements FragmentManager.O
     private static final String SELECTED_TAB_BUNDLE_KEY = "selected_tab";
 
     @BindView(R.id.bb_bottom_menu)
-    BottomBar mBottomBar;
+    BottomNavigationBar mBottomBar;
 
     @BindView(R.id.toolbar_title)
     TextView mToobarTitle;
 
     private
     @IdRes
-    int mSelectedTabId = R.id.tab_popular;
-
-    private MovieListFragment mMovieListFragment;
+    int mSelectedTabIndex = 0;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -45,17 +46,35 @@ public class MainActivity extends AppCompatActivity implements FragmentManager.O
         ButterKnife.bind(this);
 
         if (savedInstanceState != null && savedInstanceState.containsKey(SELECTED_TAB_BUNDLE_KEY)) {
-            mSelectedTabId = savedInstanceState.getInt(SELECTED_TAB_BUNDLE_KEY);
+            mSelectedTabIndex = savedInstanceState.getInt(SELECTED_TAB_BUNDLE_KEY);
         }
 
-        mBottomBar.selectTabWithId(mSelectedTabId);
-        mBottomBar.setOnTabSelectListener(tabId -> {
-            if (mMovieListFragment == null) {
-                return;
+        Timber.i("SELECTED TAB " + mSelectedTabIndex);
+        mBottomBar.setMode(BottomNavigationBar.MODE_FIXED)
+                .addItem(new BottomNavigationItem(R.drawable.ic_popularity, R.string.popular))
+                .addItem(new BottomNavigationItem(R.drawable.ic_star_half_black_24dp, R.string.rating))
+                .addItem(new BottomNavigationItem(R.drawable.ic_heart_black_24dp, R.string.favorite))
+                .initialise();
+
+        mBottomBar.selectTab(mSelectedTabIndex, false);
+        mBottomBar.setTabSelectedListener(new BottomNavigationBar.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(int index) {
+                @MovieListFilterDescriptor.MovieListFilter int filter = getFilterBySelectedTab(index);
+                EventBus.getDefault().post(new TabChangeFilterEvent(filter));
+
+                mSelectedTabIndex = index;
             }
-            Timber.i("Selected item: " + tabId);
-            @MovieListFilterDescriptor.MovieListFilter int filter = getFilterBySelectedTab(tabId);
-            mMovieListFragment.reloadListWithNewSort(filter);
+
+            @Override
+            public void onTabUnselected(int i) {
+
+            }
+
+            @Override
+            public void onTabReselected(int i) {
+
+            }
         });
 
         setupMovieListFragment();
@@ -68,14 +87,14 @@ public class MainActivity extends AppCompatActivity implements FragmentManager.O
     private void setupMovieListFragment() {
         final String movieListFragmentTag = "movie_list";
         FragmentManager fragmentManager = getFragmentManager();
-        mMovieListFragment = (MovieListFragment) fragmentManager.findFragmentByTag(movieListFragmentTag);
-        if (mMovieListFragment == null) {
-            @MovieListFilterDescriptor.MovieListFilter int filter = getFilterBySelectedTab(mSelectedTabId);
+        MovieListFragment movieListFragment = (MovieListFragment) fragmentManager.findFragmentByTag(movieListFragmentTag);
+        if (movieListFragment == null) {
+            @MovieListFilterDescriptor.MovieListFilter int filter = getFilterBySelectedTab(mSelectedTabIndex);
 
-            mMovieListFragment = MovieListFragment.getInstance(filter);
+            movieListFragment = MovieListFragment.getInstance(filter);
             fragmentManager
                     .beginTransaction()
-                    .add(R.id.fl_main_content, mMovieListFragment, movieListFragmentTag)
+                    .add(R.id.fl_main_content, movieListFragment, movieListFragmentTag)
                     .setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out)
                     .commit();
         }
@@ -100,16 +119,18 @@ public class MainActivity extends AppCompatActivity implements FragmentManager.O
     }
 
     @Override
-    public void onSaveInstanceState(Bundle outState, PersistableBundle outPersistentState) {
-        super.onSaveInstanceState(outState, outPersistentState);
-        outState.putInt(SELECTED_TAB_BUNDLE_KEY, mSelectedTabId);
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putInt(SELECTED_TAB_BUNDLE_KEY, mSelectedTabIndex);
     }
 
-    private @MovieListFilterDescriptor.MovieListFilter int getFilterBySelectedTab(@IdRes int selectedTabId) {
-        switch (selectedTabId) {
-            case R.id.tab_popular:
+    private
+    @MovieListFilterDescriptor.MovieListFilter
+    int getFilterBySelectedTab(@IdRes int selectedTabIndex) {
+        switch (selectedTabIndex) {
+            case MovieListFilterDescriptor.POPULAR:
                 return MovieListFilterDescriptor.POPULAR;
-            case R.id.tab_rating:
+            case MovieListFilterDescriptor.RATING:
                 return MovieListFilterDescriptor.RATING;
             default:
                 return MovieListFilterDescriptor.FAVORITE;
