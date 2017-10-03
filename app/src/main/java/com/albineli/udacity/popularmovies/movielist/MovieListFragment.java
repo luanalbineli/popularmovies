@@ -16,6 +16,7 @@ import com.albineli.udacity.popularmovies.base.BaseFragment;
 import com.albineli.udacity.popularmovies.base.BasePresenter;
 import com.albineli.udacity.popularmovies.enums.MovieListFilterDescriptor;
 import com.albineli.udacity.popularmovies.event.FavoriteMovieEvent;
+import com.albineli.udacity.popularmovies.event.TabChangeFilterEvent;
 import com.albineli.udacity.popularmovies.injector.components.ApplicationComponent;
 import com.albineli.udacity.popularmovies.injector.components.DaggerFragmentComponent;
 import com.albineli.udacity.popularmovies.model.MovieListStateModel;
@@ -118,10 +119,12 @@ public class MovieListFragment extends BaseFragment<MovieListContract.View> impl
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        int filter = MovieListFilterDescriptor.parseFromInt(getArguments().getInt(FILTER_BUNDLE_KEY));
         MovieListStateModel movieListStateModel = MovieListStateModel.getFromBundle(savedInstanceState);
+        if (movieListStateModel == null) {
+            movieListStateModel = MovieListStateModel.getFromArguments(getArguments());
+        }
 
-        mPresenter.init(filter, movieListStateModel);
+        mPresenter.init(movieListStateModel);
     }
 
     @Override
@@ -135,12 +138,6 @@ public class MovieListFragment extends BaseFragment<MovieListContract.View> impl
                     boolean visible = getFragmentManager().getBackStackEntryCount() == 0;
                     mPresenter.onVisibilityChanged(visible);
                 });
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        mPresenter.resume();
     }
 
     @Override
@@ -168,6 +165,15 @@ public class MovieListFragment extends BaseFragment<MovieListContract.View> impl
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onFavoriteMovieEvent(FavoriteMovieEvent favoriteMovieEvent) {
         mPresenter.favoriteMovie(favoriteMovieEvent.movie, favoriteMovieEvent.favorite);
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onTabChangeFilterEvent(TabChangeFilterEvent tabChangeFilterEvent) {
+        mPresenter.changeFilterList(tabChangeFilterEvent.filter);
+
+        if (getFragmentManager().getBackStackEntryCount() > 0) { // If is at detail screen
+            getFragmentManager().popBackStack();
+        }
     }
 
     @Override
@@ -261,14 +267,6 @@ public class MovieListFragment extends BaseFragment<MovieListContract.View> impl
         mGridLayoutManager.scrollToPosition(firstVisibleMovieIndex);
     }
 
-    public void reloadListWithNewSort(@MovieListFilterDescriptor.MovieListFilter int movieListFilter) {
-        mPresenter.setFilter(movieListFilter);
-
-        if (getFragmentManager().getBackStackEntryCount() > 0) { // If is at detail screen
-            getFragmentManager().popBackStack();
-        }
-    }
-
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
@@ -276,7 +274,7 @@ public class MovieListFragment extends BaseFragment<MovieListContract.View> impl
                 "\nselectedMovieIndex: " + mPresenter.selectedMovieIndex +
                 "\nfirst visible item index: " + mGridLayoutManager.findFirstVisibleItemPosition());
 
-        MovieListStateModel.saveToBundle(outState, mMovieListAdapter.getItems(), mPresenter.pageIndex, mPresenter.selectedMovieIndex, mGridLayoutManager.findFirstVisibleItemPosition());
+        MovieListStateModel.saveToBundle(outState, mMovieListAdapter.getItems(), mPresenter.filter, mPresenter.pageIndex, mPresenter.selectedMovieIndex, mGridLayoutManager.findFirstVisibleItemPosition());
     }
 
     public static int getItensPerRow(Context context) {
