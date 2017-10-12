@@ -30,7 +30,7 @@ public class MovieTrailerListDialog extends BaseFullscreenDialogWithList<MovieTr
     MovieTrailerListDialogPresenter mPresenter;
 
     public static MovieTrailerListDialog getInstance(List<MovieTrailerModel> movieModelList) {
-        return MovieTrailerListDialog.createNewInstance(MovieTrailerListDialog.class, movieModelList);
+        return MovieTrailerListDialog.Companion.createNewInstance(MovieTrailerListDialog.class, movieModelList);
     }
 
     @Nullable
@@ -42,13 +42,13 @@ public class MovieTrailerListDialog extends BaseFullscreenDialogWithList<MovieTr
         mMovieReviewAdapter = new MovieTrailerAdapter();
         mMovieReviewAdapter.setOnItemClickListener((position, item) -> YouTubeUtil.openYouTubeVideo(getActivity(), item.getKey()));
 
-        mLinearLayoutManager = new LinearLayoutManager(mRecyclerView.getContext(), LinearLayoutManager.VERTICAL, false);
+        mLinearLayoutManager = new LinearLayoutManager(getMRecyclerView().getContext(), LinearLayoutManager.VERTICAL, false);
 
-        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(mRecyclerView.getContext(), mLinearLayoutManager.getOrientation());
+        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(getMRecyclerView().getContext(), mLinearLayoutManager.getOrientation());
 
-        mRecyclerView.addItemDecoration(dividerItemDecoration);
-        mRecyclerView.setLayoutManager(mLinearLayoutManager);
-        mRecyclerView.setAdapter(mMovieReviewAdapter);
+        getMRecyclerView().addItemDecoration(dividerItemDecoration);
+        getMRecyclerView().setLayoutManager(mLinearLayoutManager);
+        getMRecyclerView().setAdapter(mMovieReviewAdapter);
 
         return fullscreenDialogWithListView;
     }
@@ -57,7 +57,7 @@ public class MovieTrailerListDialog extends BaseFullscreenDialogWithList<MovieTr
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        mPresenter.start(mList);
+        mPresenter.start(getMList());
 
         setTitle(R.string.all_trailers);
     }

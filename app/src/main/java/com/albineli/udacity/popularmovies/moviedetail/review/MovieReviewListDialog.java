@@ -38,7 +38,7 @@ public class MovieReviewListDialog extends BaseFullscreenDialogWithList<MovieRev
     MovieReviewListDialogPresenter mPresenter;
 
     public static MovieReviewListDialog getInstance(List<MovieReviewModel> movieModelList, int movieId, boolean hasMore) {
-        MovieReviewListDialog instance = MovieReviewListDialog.createNewInstance(MovieReviewListDialog.class, movieModelList);
+        MovieReviewListDialog instance = MovieReviewListDialog.Companion.createNewInstance(MovieReviewListDialog.class, movieModelList);
         if (instance != null && instance.getArguments() != null) {
             instance.getArguments().putBoolean(HAS_MORE_BUNDLE_KEY, hasMore);
             instance.getArguments().putInt(MOVIE_ID_BUNDLE_KEY, movieId);
@@ -70,13 +70,13 @@ public class MovieReviewListDialog extends BaseFullscreenDialogWithList<MovieRev
             mPresenter.tryLoadReviewsAgain();
         });
 
-        mLinearLayoutManager = new LinearLayoutManager(mRecyclerView.getContext(), LinearLayoutManager.VERTICAL, false);
+        mLinearLayoutManager = new LinearLayoutManager(getMRecyclerView().getContext(), LinearLayoutManager.VERTICAL, false);
 
-        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(mRecyclerView.getContext(), mLinearLayoutManager.getOrientation());
+        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(getMRecyclerView().getContext(), mLinearLayoutManager.getOrientation());
 
-        mRecyclerView.addItemDecoration(dividerItemDecoration);
-        mRecyclerView.setLayoutManager(mLinearLayoutManager);
-        mRecyclerView.setAdapter(mMovieReviewAdapter);
+        getMRecyclerView().addItemDecoration(dividerItemDecoration);
+        getMRecyclerView().setLayoutManager(mLinearLayoutManager);
+        getMRecyclerView().setAdapter(mMovieReviewAdapter);
 
         return fullScrennDialogView;
     }
@@ -85,7 +85,7 @@ public class MovieReviewListDialog extends BaseFullscreenDialogWithList<MovieRev
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        mPresenter.start(mList, mMovieId, mHasMore);
+        mPresenter.start(getMList(), mMovieId, mHasMore);
 
         setTitle(R.string.all_reviews);
     }
@@ -97,7 +97,7 @@ public class MovieReviewListDialog extends BaseFullscreenDialogWithList<MovieRev
 
     @Override
     public void enableLoadMoreListener() {
-        mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+        getMRecyclerView().addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
@@ -109,7 +109,7 @@ public class MovieReviewListDialog extends BaseFullscreenDialogWithList<MovieRev
                 if (totalItemCount <= lastVisibleItem) {
                     /*java.lang.IllegalStateException: Cannot call this method in a scroll callback. Scroll callbacks mightbe run during a measure & layout pass where you cannot change theRecyclerView data.
                     Any method call that might change the structureof the RecyclerView or the adapter contents should be postponed tothe next frame. */
-                    mRecyclerView.post(() -> mPresenter.onListEndReached());
+                    getMRecyclerView().post(() -> mPresenter.onListEndReached());
                 }
             }
         });
@@ -117,7 +117,7 @@ public class MovieReviewListDialog extends BaseFullscreenDialogWithList<MovieRev
 
     @Override
     public void disableLoadMoreListener() {
-        mRecyclerView.clearOnScrollListeners();
+        getMRecyclerView().clearOnScrollListeners();
     }
 
     @Override
