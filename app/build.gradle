@@ -1,21 +1,23 @@
 apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-kapt'
+apply plugin: 'kotlin-android-extensions'
+
+apply from: '../dependencies.gradle'
+apply from: '../configuration.gradle'
 
 android {
-    compileSdkVersion 25
-    buildToolsVersion "25.0.3"
+    compileSdkVersion configuration.compileSdkVersion
+    buildToolsVersion configuration.buildToolsVersion
     defaultConfig {
-        applicationId "com.albineli.udacity.popularmovies"
-        minSdkVersion 17
-        targetSdkVersion 25
+        applicationId "com.albineli.popularmovies"
+        minSdkVersion configuration.minSdkVersion
+        targetSdkVersion configuration.targetSdkVersion
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
         buildConfigField("String", "API_KEY", API_KEY)
-
-        jackOptions {
-            enabled true
-        }
     }
 
     buildTypes {
@@ -29,6 +31,10 @@ android {
         exclude 'META-INF/rxjava.properties'
     }
 
+    sourceSets {
+        main.java.srcDirs += ['src/main/kotlin']
+    }
+
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
@@ -36,68 +42,14 @@ android {
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
+    def allLibs = [supportV7, design, eventBus, cardView, materialDialog, fresco, materialRatingBar, likeButton, readMoreTextView]
+    implementation defaultLibs + allLibs
 
-    compile "com.android.support:appcompat-v7:$rootProject.support_version"
-    compile "com.android.support:design:$rootProject.support_version"
-    compile "com.android.support.constraint:constraint-layout:$rootProject.constraint_layout_version"
-
-    // Retrofit + Gson + Logging
-    compile "com.squareup.retrofit2:retrofit:$rootProject.retrofit_version"
-    compile "com.google.code.gson:gson:$rootProject.gson_version"
-    compile "com.squareup.retrofit2:converter-gson:$rootProject.retrofit_version"
-    compile "com.squareup.okhttp3:logging-interceptor:$rootProject.okhttp_logging_interceptor_version"
-
-    // Butterknife
-    compile "com.jakewharton:butterknife:$rootProject.butterknife_version"
-    annotationProcessor "com.jakewharton:butterknife-compiler:$rootProject.butterknife_version"
-
-    // RxJava + RxAndroid
-    compile 'io.reactivex.rxjava2:rxjava:2.0.7'
-    compile 'io.reactivex.rxjava2:rxandroid:2.0.1'
-    compile 'com.squareup.retrofit2:adapter-rxjava2:2.2.0'
-
-    // Material Dialogs
-    compile 'com.afollestad.material-dialogs:core:0.9.4.1'
-
-    // Fresco (power image viewer)
-    compile "com.facebook.fresco:fresco:$rootProject.fresco_version"
+    // Leak Canary
+    debugImplementation leakCanaryDebug
+    releaseImplementation leakCanaryRelease
 
     // Dagger
-    compile "com.google.dagger:dagger:$rootProject.dagger_version"
-    annotationProcessor "com.google.dagger:dagger-compiler:$rootProject.dagger_version"
-
-    // Material RatingBar
-    compile "me.zhanghai.android.materialratingbar:library:$rootProject.materialratingbar_version"
-
-    // Like Button
-    compile "com.github.jd-alexander:LikeButton:$rootProject.likebutton_version"
-
-    // BottomBar
-    compile "com.ashokvarma.android:bottom-navigation-bar:$rootProject.bottombar_version"
-
-    // Timber
-    compile "com.jakewharton.timber:timber:$rootProject.timber_version"
-
-    // Room
-    /*compile "android.arch.persistence.room:runtime:$rootProject.room_version"
-    annotationProcessor "android.arch.persistence.room:compiler:$rootProject.room_version"*/
-
-    // ReadMore TextView
-    compile "com.borjabravo:readmoretextview:$rootProject.readmoreTextview_version"
-
-    // EventBus
-    compile "org.greenrobot:eventbus:$rootProject.eventBus_version"
-
-    // LeakCanary
-    debugCompile "com.squareup.leakcanary:leakcanary-android:$rootProject.leakcanary_version"
-    releaseCompile "com.squareup.leakcanary:leakcanary-android-no-op:$rootProject.leakcanary_version"
-
-    testCompile 'junit:junit:4.12'
-
-    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
-        exclude group: 'com.android.support', module: 'support-annotations'
-    })
-    compile 'com.android.support:cardview-v7:25.3.1'
-    compile 'org.jetbrains:annotations:15.0'
+    kapt daggerCompiler
+    implementation dagger
 }
