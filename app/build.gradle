@@ -42,7 +42,7 @@ android {
 }
 
 dependencies {
-    def allLibs = [supportV7, design, eventBus, cardView, materialDialog, fresco, materialRatingBar, likeButton, readMoreTextView]
+    def allLibs = [eventBus, fresco, materialRatingBar, likeButton, readMoreTextView, bottomBar, design]
     implementation defaultLibs + allLibs
 
     // Leak Canary

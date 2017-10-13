@@ -49,27 +49,27 @@ public class MovieListPresenter extends BasePresenterImpl implements MovieListCo
 
     @Override
     public void init(@NotNull MovieListStateModel movieListStateModel) {
-        mView.setTitleByFilter(movieListStateModel.filter);
+        mView.setTitleByFilter(movieListStateModel.getFilter());
 
-        filter = movieListStateModel.filter;
+        filter = movieListStateModel.getFilter();
 
-        if (movieListStateModel.movieList == null) { // Handle a invalid state restore.
+        if (movieListStateModel.getMovieList() == null) { // Handle a invalid state restore.
             loadMovieList(true);
             return;
         }
 
-        selectedMovieIndex = movieListStateModel.selectedMovieIndex;
-        Timber.i("Restoring the state - pageIndex: " + movieListStateModel.pageIndex +
-                "\nselectedMovieIndex: " + movieListStateModel.selectedMovieIndex +
-                "\nfirst visible item index: " + movieListStateModel.firstVisibleMovieIndex);
+        selectedMovieIndex = movieListStateModel.getSelectedMovieIndex();
+        Timber.i("Restoring the state - pageIndex: " + movieListStateModel.getPageIndex() +
+                "\nselectedMovieIndex: " + movieListStateModel.getSelectedMovieIndex() +
+                "\nfirst visible item index: " + movieListStateModel.getFirstVisibleMovieIndex());
 
-        handleSuccessLoadMovieList(movieListStateModel.movieList, true, true);
+        handleSuccessLoadMovieList(movieListStateModel.getMovieList(), true, true);
 
-        if (movieListStateModel.firstVisibleMovieIndex != Integer.MIN_VALUE) {
-            mView.scrollToMovieIndex(movieListStateModel.firstVisibleMovieIndex);
+        if (movieListStateModel.getFirstVisibleMovieIndex() != Integer.MIN_VALUE) {
+            mView.scrollToMovieIndex(movieListStateModel.getFirstVisibleMovieIndex());
         }
 
-        pageIndex = movieListStateModel.pageIndex;
+        pageIndex = movieListStateModel.getPageIndex();
     }
 
     @Override
@@ -94,18 +94,18 @@ public class MovieListPresenter extends BasePresenterImpl implements MovieListCo
         }
 
         Observable<ArrayRequestAPI<MovieModel>> observable;
-        if (filter == MovieListFilterDescriptor.POPULAR) {
-            observable = mMovieRepository.getPopularList(pageIndex);
-        } else if (filter == MovieListFilterDescriptor.RATING) {
-            observable = mMovieRepository.getTopRatedList(pageIndex);
+        if (filter == MovieListFilterDescriptor.INSTANCE.getPOPULAR()) {
+            observable = getMMovieRepository().getPopularList(pageIndex);
+        } else if (filter == MovieListFilterDescriptor.INSTANCE.getRATING()) {
+            observable = getMMovieRepository().getTopRatedList(pageIndex);
         } else {
-            observable = mMovieRepository.getFavoriteList();
+            observable = getMMovieRepository().getFavoriteList();
         }
 
         mSubscription = observable
                 .doOnTerminate(() -> mSubscription = null)
                 .subscribe(
-                        response -> handleSuccessLoadMovieList(response.results, response.hasMorePages(), startOver),
+                        response -> handleSuccessLoadMovieList(response.getResults(), response.hasMorePages(), startOver),
                         this::handleErrorLoadMovieList);
     }
 
@@ -133,7 +133,7 @@ public class MovieListPresenter extends BasePresenterImpl implements MovieListCo
             pageIndex--;
         }
 
-        if (filter == MovieListFilterDescriptor.FAVORITE) {
+        if (filter == MovieListFilterDescriptor.INSTANCE.getFAVORITE()) {
             mView.clearMovieList();
         }
 
@@ -190,7 +190,7 @@ public class MovieListPresenter extends BasePresenterImpl implements MovieListCo
 
     @Override
     public void favoriteMovie(MovieModel movie, boolean favorite) {
-        if (filter != MovieListFilterDescriptor.FAVORITE) { // Only if the user is at favorite list it needs an update.
+        if (filter != MovieListFilterDescriptor.INSTANCE.getFAVORITE()) { // Only if the user is at favorite list it needs an update.
             return;
         }
 

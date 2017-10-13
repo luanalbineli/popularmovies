@@ -33,8 +33,6 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
 import timber.log.Timber;
 
 
@@ -63,7 +61,7 @@ public class MovieListFragment extends BaseFragment<MovieListContract.View> impl
     @Inject
     MovieListPresenter mPresenter;
 
-    @BindView(R.id.rv_movie_list)
+//    @BindView(R.id.rv_movie_list)
     RecyclerView mMovieListRecyclerView;
 
     MovieListAdapter mMovieListAdapter;
@@ -91,7 +89,7 @@ public class MovieListFragment extends BaseFragment<MovieListContract.View> impl
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_movie_list, container, false);
-        ButterKnife.bind(this, rootView);
+     //   ButterKnife.bind(this, rootView);
 
         // List.
         mMovieListAdapter = new MovieListAdapter(R.string.the_list_is_empty, () -> mPresenter.tryAgain());
@@ -102,7 +100,7 @@ public class MovieListFragment extends BaseFragment<MovieListContract.View> impl
             @Override
             public int getSpanSize(int position) {
                 switch (mMovieListAdapter.getItemViewType(position)) {
-                    case CustomRecyclerViewAdapter.ViewType.ITEM:
+                    case CustomRecyclerViewAdapter.ViewType.Companion.getITEM():
                         return 1;
                     default: // Grid status.
                         return mGridLayoutManager.getSpanCount();
@@ -119,9 +117,9 @@ public class MovieListFragment extends BaseFragment<MovieListContract.View> impl
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        MovieListStateModel movieListStateModel = MovieListStateModel.getFromBundle(savedInstanceState);
+        MovieListStateModel movieListStateModel = MovieListStateModel.Companion.getFromBundle(savedInstanceState);
         if (movieListStateModel == null) {
-            movieListStateModel = MovieListStateModel.getFromArguments(getArguments());
+            movieListStateModel = MovieListStateModel.Companion.getFromArguments(getArguments());
         }
 
         mPresenter.init(movieListStateModel);
@@ -164,12 +162,12 @@ public class MovieListFragment extends BaseFragment<MovieListContract.View> impl
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onFavoriteMovieEvent(FavoriteMovieEvent favoriteMovieEvent) {
-        mPresenter.favoriteMovie(favoriteMovieEvent.movie, favoriteMovieEvent.favorite);
+        mPresenter.favoriteMovie(favoriteMovieEvent.getMovie(), favoriteMovieEvent.getFavorite());
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onTabChangeFilterEvent(TabChangeFilterEvent tabChangeFilterEvent) {
-        mPresenter.changeFilterList(tabChangeFilterEvent.filter);
+        mPresenter.changeFilterList(tabChangeFilterEvent.getFilter());
 
         if (getFragmentManager().getBackStackEntryCount() > 0) { // If is at detail screen
             getFragmentManager().popBackStack();
@@ -274,7 +272,7 @@ public class MovieListFragment extends BaseFragment<MovieListContract.View> impl
                 "\nselectedMovieIndex: " + mPresenter.selectedMovieIndex +
                 "\nfirst visible item index: " + mGridLayoutManager.findFirstVisibleItemPosition());
 
-        MovieListStateModel.saveToBundle(outState, mMovieListAdapter.getItems(), mPresenter.filter, mPresenter.pageIndex, mPresenter.selectedMovieIndex, mGridLayoutManager.findFirstVisibleItemPosition());
+        MovieListStateModel.Companion.saveToBundle(outState, mMovieListAdapter.getItems(), mPresenter.filter, mPresenter.pageIndex, mPresenter.selectedMovieIndex, mGridLayoutManager.findFirstVisibleItemPosition());
     }
 
     public static int getItensPerRow(Context context) {

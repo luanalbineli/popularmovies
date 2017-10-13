@@ -17,17 +17,15 @@ import com.ashokvarma.bottomnavigation.BottomNavigationItem;
 
 import org.greenrobot.eventbus.EventBus;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
 import timber.log.Timber;
 
 public class MainActivity extends AppCompatActivity implements FragmentManager.OnBackStackChangedListener {
     private static final String SELECTED_TAB_BUNDLE_KEY = "selected_tab";
 
-    @BindView(R.id.bb_bottom_menu)
+   // @BindView(R.id.bb_bottom_menu)
     BottomNavigationBar mBottomBar;
 
-    @BindView(R.id.toolbar_title)
+    //@BindView(R.id.toolbar_title)
     TextView mToobarTitle;
 
     private
@@ -43,7 +41,7 @@ public class MainActivity extends AppCompatActivity implements FragmentManager.O
 
         super.setTitle(null);
 
-        ButterKnife.bind(this);
+        //ButterKnife.bind(this);
 
         if (savedInstanceState != null && savedInstanceState.containsKey(SELECTED_TAB_BUNDLE_KEY)) {
             mSelectedTabIndex = savedInstanceState.getInt(SELECTED_TAB_BUNDLE_KEY);
@@ -128,12 +126,12 @@ public class MainActivity extends AppCompatActivity implements FragmentManager.O
     @MovieListFilterDescriptor.MovieListFilter
     int getFilterBySelectedTab(@IdRes int selectedTabIndex) {
         switch (selectedTabIndex) {
-            case MovieListFilterDescriptor.POPULAR:
-                return MovieListFilterDescriptor.POPULAR;
-            case MovieListFilterDescriptor.RATING:
-                return MovieListFilterDescriptor.RATING;
+            case MovieListFilterDescriptor.INSTANCE.getPOPULAR():
+                return MovieListFilterDescriptor.INSTANCE.getPOPULAR();
+            case MovieListFilterDescriptor.INSTANCE.getRATING():
+                return MovieListFilterDescriptor.INSTANCE.getRATING();
             default:
-                return MovieListFilterDescriptor.FAVORITE;
+                return MovieListFilterDescriptor.INSTANCE.getFAVORITE();
         }
     }
 

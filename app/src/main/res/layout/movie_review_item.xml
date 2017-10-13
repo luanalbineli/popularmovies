@@ -28,12 +28,6 @@
         app:layout_constraintStart_toEndOf="@+id/imageButton"
         app:layout_constraintTop_toBottomOf="@+id/imageButton" />
 
-    <!-- <com.albineli.udacity.popularmovies.ui.ExpandableTextView
-        android:id="@+id/tvMovieReviewContent"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        app:trimLength="2" />-->
     <com.borjabravo.readmoretextview.ReadMoreTextView
         android:id="@+id/tvMovieReviewContent"
         android:layout_width="0dp"
@@ -47,11 +41,4 @@
         app:trimExpandedText="@string/read_less"
         app:trimLength="2"
         app:trimMode="trimModeLine" />
-
-    <!--<TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:autoLink="all"
-        android:id="@+id/tvMovieReviewReadMore"
-        android:text="@string/read_more"/>-->
 </android.support.constraint.ConstraintLayout>

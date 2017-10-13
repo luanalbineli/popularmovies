@@ -32,7 +32,7 @@ public class MovieDetailPresenter extends BasePresenterImpl implements MovieDeta
         mView.showMovieDetail(movieModel);
 
         // If it is in the database, means that is favorite.
-        mMovieRepository.getMovieDetailById(movieModel.getId()).subscribe(movieModel1 -> mView.setFavoriteButtonState(true));
+        getMMovieRepository().getMovieDetailById(movieModel.getId()).subscribe(movieModel1 -> mView.setFavoriteButtonState(true));
 
         loadMovieReviews(movieModel.getId());
 
@@ -43,7 +43,7 @@ public class MovieDetailPresenter extends BasePresenterImpl implements MovieDeta
 
     private void loadMovieTrailers(int movieId) {
         mView.showLoadingTrailersIndicator();
-        mMovieRepository.getTrailersByMovieId(movieId).subscribe(
+        getMMovieRepository().getTrailersByMovieId(movieId).subscribe(
                 this::handleMovieTrailerRequestSuccess,
                 throwable -> {
                     Timber.e(throwable, "An error occurred while tried to get the movie trailers");
@@ -53,7 +53,7 @@ public class MovieDetailPresenter extends BasePresenterImpl implements MovieDeta
 
     private void loadMovieReviews(int movieId) {
         mView.showLoadingReviewsIndicator();
-        mMovieRepository.getReviewsByMovieId(1, movieId).subscribe(
+        getMMovieRepository().getReviewsByMovieId(1, movieId).subscribe(
                 this::handleMovieReviewRequestSuccess,
                 throwable -> {
                     Timber.e(throwable, "An error occurred while tried to get the movie reviews");
@@ -79,17 +79,17 @@ public class MovieDetailPresenter extends BasePresenterImpl implements MovieDeta
     }
 
     private void handleMovieReviewRequestSuccess(ArrayRequestAPI<MovieReviewModel> movieReviewModelArrayRequestAPI) {
-        if (movieReviewModelArrayRequestAPI.results.size() == 0) {
+        if (movieReviewModelArrayRequestAPI.getResults().size() == 0) {
             mView.showEmptyReviewListMessage();
             mView.setShowAllReviewsButtonVisibility(false);
             return;
         }
         mMovieReviewRequest = movieReviewModelArrayRequestAPI;
-        if (movieReviewModelArrayRequestAPI.results.size() > 2) {
-            mView.showMovieReview(mMovieReviewRequest.results.subList(0, 2));
+        if (movieReviewModelArrayRequestAPI.getResults().size() > 2) {
+            mView.showMovieReview(mMovieReviewRequest.getResults().subList(0, 2));
             mView.setShowAllReviewsButtonVisibility(true);
         } else {
-            mView.showMovieReview(mMovieReviewRequest.results);
+            mView.showMovieReview(mMovieReviewRequest.getResults());
             mView.setShowAllReviewsButtonVisibility(false);
         }
     }
@@ -101,7 +101,7 @@ public class MovieDetailPresenter extends BasePresenterImpl implements MovieDeta
 
     @Override
     public void removeFavoriteMovie(MovieModel movieModel) {
-        mMovieRepository.removeFavoriteMovie(movieModel).subscribe(
+        getMMovieRepository().removeFavoriteMovie(movieModel).subscribe(
                 mView::showSuccessMessageRemoveFavoriteMovie,
                 throwable -> {
                     Timber.e(throwable, "An error occurred while tried to remove the favorite movie");
@@ -112,7 +112,7 @@ public class MovieDetailPresenter extends BasePresenterImpl implements MovieDeta
 
     @Override
     public void saveFavoriteMovie(MovieModel movieModel) {
-        mMovieRepository.saveFavoriteMovie(movieModel).subscribe(
+        getMMovieRepository().saveFavoriteMovie(movieModel).subscribe(
                 mView::showSuccessMessageAddFavoriteMovie,
                 throwable -> {
                     Timber.e(throwable, "An error occurred while tried to add the favorite movie");
@@ -123,7 +123,7 @@ public class MovieDetailPresenter extends BasePresenterImpl implements MovieDeta
 
     @Override
     public void showAllReviews() {
-        mView.showAllReviews(mMovieReviewRequest.results, mMovieReviewRequest.hasMorePages());
+        mView.showAllReviews(mMovieReviewRequest.getResults(), mMovieReviewRequest.hasMorePages());
     }
 
     @Override

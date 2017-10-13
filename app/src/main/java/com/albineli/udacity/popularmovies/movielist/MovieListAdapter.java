@@ -28,15 +28,15 @@ class MovieListAdapter extends CustomRecyclerViewAdapter<MovieModel, MovieListVi
     @Override
     protected void onBindItemViewHolder(MovieListViewHolder movieListViewHolder, int position) {
         if (mPosterWidth == null) {
-            DisplayMetrics metrics = UIUtil.getDisplayMetrics(movieListViewHolder.getContext());
+            DisplayMetrics metrics = UIUtil.INSTANCE.getDisplayMetrics(movieListViewHolder.getContext());
             int posterWidthPx = metrics.widthPixels / MovieListFragment.getItensPerRow(movieListViewHolder.getContext());
 
-            mPosterWidth = ApiUtil.getDefaultPosterSize(posterWidthPx);
+            mPosterWidth = ApiUtil.INSTANCE.getDefaultPosterSize(posterWidthPx);
         }
 
         final MovieModel movieModel = getItemByPosition(position);
 
-        String posterUrl = ApiUtil.buildPosterImageUrl(movieModel.getPosterPath(), mPosterWidth);
+        String posterUrl = ApiUtil.INSTANCE.buildPosterImageUrl(movieModel.getPosterPath(), mPosterWidth);
         movieListViewHolder.mMoviePosterSimpleDraweeView.setImageURI(posterUrl);
     }
 }
