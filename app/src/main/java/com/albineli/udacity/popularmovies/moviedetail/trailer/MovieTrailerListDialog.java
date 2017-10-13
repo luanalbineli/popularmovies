@@ -40,7 +40,7 @@ public class MovieTrailerListDialog extends BaseFullscreenDialogWithList<MovieTr
 
         // The trailers endpoint is not paginated, so I don't need to implement the "Try again" constructor.
         mMovieReviewAdapter = new MovieTrailerAdapter();
-        mMovieReviewAdapter.setOnItemClickListener((position, item) -> YouTubeUtil.openYouTubeVideo(getActivity(), item.getKey()));
+        mMovieReviewAdapter.setOnItemClickListener((position, item) -> YouTubeUtil.INSTANCE.openYouTubeVideo(getActivity(), item.getKey()));
 
         mLinearLayoutManager = new LinearLayoutManager(getMRecyclerView().getContext(), LinearLayoutManager.VERTICAL, false);
 
@@ -70,7 +70,7 @@ public class MovieTrailerListDialog extends BaseFullscreenDialogWithList<MovieTr
     @Override
     protected void onInjectDependencies(ApplicationComponent applicationComponent) {
         DaggerFragmentComponent.builder()
-                .applicationComponent(PopularMovieApplication.getApplicationComponent(getActivity()))
+                .applicationComponent(PopularMovieApplication.Companion.getApplicationComponent(getActivity()))
                 .build()
                 .inject(this);
     }

@@ -57,7 +57,7 @@ public class MovieRepository extends RepositoryBase {
     }
 
     public Observable<List<MovieTrailerModel>> getTrailersByMovieId(int movieId) {
-        return observeOnMainThread(getMovieServiceInstance().getTrailersByMovieId(movieId).map(listArrayRequestAPI -> listArrayRequestAPI.results));
+        return observeOnMainThread(getMovieServiceInstance().getTrailersByMovieId(movieId).map(listArrayRequestAPI -> listArrayRequestAPI.getResults()));
     }
 
     public Observable<ArrayRequestAPI<MovieModel>> getFavoriteList() {
@@ -77,13 +77,13 @@ public class MovieRepository extends RepositoryBase {
             List<MovieModel> favoriteMovieModelList = new ArrayList<>(cursor.getCount());
             try {
                 while (cursor.moveToNext()) {
-                    favoriteMovieModelList.add(MovieModel.fromCursor(cursor));
+                    favoriteMovieModelList.add(MovieModel.Companion.fromCursor(cursor));
                 }
 
                 ArrayRequestAPI<MovieModel> arrayRequestAPI = new ArrayRequestAPI<>();
-                arrayRequestAPI.results = favoriteMovieModelList;
-                arrayRequestAPI.totalPages = 1;
-                arrayRequestAPI.page = 1;
+                arrayRequestAPI.setResults(favoriteMovieModelList);
+                arrayRequestAPI.setTotalPages(1);
+                arrayRequestAPI.setPage(1);
 
 
                 emitter.onNext(arrayRequestAPI);
@@ -147,7 +147,7 @@ public class MovieRepository extends RepositoryBase {
 
             try {
                 if (cursor.moveToNext()) {
-                    emitter.onNext(MovieModel.fromCursor(cursor));
+                    emitter.onNext(MovieModel.Companion.fromCursor(cursor));
                 }
             } catch (Exception ex) {
                 emitter.onError(ex);

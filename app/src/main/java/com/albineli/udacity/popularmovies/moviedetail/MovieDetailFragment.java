@@ -40,9 +40,6 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
 import me.zhanghai.android.materialratingbar.MaterialRatingBar;
 
 
@@ -73,40 +70,40 @@ public class MovieDetailFragment extends BaseFragment<MovieDetailContract.View> 
 
     private MovieModel mMovieModel;
 
-    @BindView(R.id.clMovieDetailContainer)
+    //// @BindView(R.id.clMovieDetailContainer)
     View mContainer;
 
-    @BindView(R.id.ivMovieDetailBackdrop)
+    // @BindView(R.id.ivMovieDetailBackdrop)
     SimpleDraweeView mBackdropSimpleDraweeView;
 
-    @BindView(R.id.lbMovieDetailFavorite)
+    // @BindView(R.id.lbMovieDetailFavorite)
     LikeButton mFavoriteButton;
 
-    @BindView(R.id.sdvMovieDetailPoster)
+    // @BindView(R.id.sdvMovieDetailPoster)
     SimpleDraweeView mPosterSimpleDraweeView;
 
-    @BindView(R.id.tvMovieDetailTitle)
+    // @BindView(R.id.tvMovieDetailTitle)
     TextView mTitleTextView;
 
-    @BindView(R.id.mrbMovieDetailRatingStar)
+    // @BindView(R.id.mrbMovieDetailRatingStar)
     MaterialRatingBar mRatingBar;
 
-    @BindView(R.id.tvMovieDetailRating)
+    // @BindView(R.id.tvMovieDetailRating)
     TextView mRatingTextView;
 
-    @BindView(R.id.tvMovieDetailSynopsis)
+    // @BindView(R.id.tvMovieDetailSynopsis)
     TextView mSynopsisTextView;
 
-    @BindView(R.id.rvMovieDetailReviews)
+    // @BindView(R.id.rvMovieDetailReviews)
     RecyclerView mReviewRecyclerView;
 
-    @BindView(R.id.tvMovieDetailShowAllReviews)
+    // @BindView(R.id.tvMovieDetailShowAllReviews)
     TextView mShowAllReviewsTextView;
 
-    @BindView(R.id.rvMovieDetailTrailers)
+    // @BindView(R.id.rvMovieDetailTrailers)
     RecyclerView mTrailerRecyclerView;
 
-    @BindView(R.id.tvMovieDetailShowAllTrailers)
+    // @BindView(R.id.tvMovieDetailShowAllTrailers)
     TextView mShowAllTrailersTextView;
 
     private MovieReviewAdapter mMovieReviewAdapter;
@@ -134,7 +131,7 @@ public class MovieDetailFragment extends BaseFragment<MovieDetailContract.View> 
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_movie_detail, container, false);
 
-        ButterKnife.bind(this, rootView);
+        //ButterKnife.bind(this, rootView);
 
         return rootView;
     }
@@ -156,7 +153,7 @@ public class MovieDetailFragment extends BaseFragment<MovieDetailContract.View> 
         setUpDefaultRecyclerViewConfiguration(mTrailerRecyclerView);
         mMovieTrailerAdapter = new MovieTrailerAdapter(R.string.there_is_no_trailers_to_show, mPresenter::tryToLoadTrailersAgain);
         mTrailerRecyclerView.setAdapter(mMovieTrailerAdapter);
-        mMovieTrailerAdapter.setOnItemClickListener((position, item) -> YouTubeUtil.openYouTubeVideo(getActivity(), item.getKey()));
+        mMovieTrailerAdapter.setOnItemClickListener((position, item) -> YouTubeUtil.INSTANCE.openYouTubeVideo(getActivity(), item.getKey()));
     }
 
     private void setUpDefaultRecyclerViewConfiguration(RecyclerView recyclerView) {
@@ -167,12 +164,12 @@ public class MovieDetailFragment extends BaseFragment<MovieDetailContract.View> 
         recyclerView.addItemDecoration(dividerItemDecoration);
     }
 
-    @OnClick(R.id.tvMovieDetailShowAllReviews)
+    //@OnClick(R.id.tvMovieDetailShowAllReviews)
     void onShowAllReviewsButtonClick() {
         mPresenter.showAllReviews();
     }
 
-    @OnClick(R.id.tvMovieDetailShowAllTrailers)
+    //@OnClick(R.id.tvMovieDetailShowAllTrailers)
     void onShowAllTrailersButtonClick() {
         mPresenter.showAllTrailers();
     }
@@ -181,12 +178,12 @@ public class MovieDetailFragment extends BaseFragment<MovieDetailContract.View> 
     public void showMovieDetail(final MovieModel movieModel) {
         getActivity().setTitle(movieModel.getTitle());
 
-        String posterWidth = ApiUtil.getDefaultPosterSize(mPosterSimpleDraweeView.getWidth());
-        String posterUrl = ApiUtil.buildPosterImageUrl(movieModel.getPosterPath(), posterWidth);
+        String posterWidth = ApiUtil.INSTANCE.getDefaultPosterSize(mPosterSimpleDraweeView.getWidth());
+        String posterUrl = ApiUtil.INSTANCE.buildPosterImageUrl(movieModel.getPosterPath(), posterWidth);
         mPosterSimpleDraweeView.setImageURI(posterUrl);
 
-        String backdropWidth = ApiUtil.getDefaultPosterSize(UIUtil.getDisplayMetrics(mPosterSimpleDraweeView.getContext()).widthPixels);
-        String backdropUrl = ApiUtil.buildPosterImageUrl(movieModel.getBackdropPath(), backdropWidth);
+        String backdropWidth = ApiUtil.INSTANCE.getDefaultPosterSize(UIUtil.INSTANCE.getDisplayMetrics(mPosterSimpleDraweeView.getContext()).widthPixels);
+        String backdropUrl = ApiUtil.INSTANCE.buildPosterImageUrl(movieModel.getBackdropPath(), backdropWidth);
         mBackdropSimpleDraweeView.setImageURI(backdropUrl);
 
 
@@ -284,7 +281,7 @@ public class MovieDetailFragment extends BaseFragment<MovieDetailContract.View> 
 
     @Override
     public void showAllReviews(List<MovieReviewModel> movieReviewList, boolean hasMore) {
-        MovieReviewListDialog movieReviewListDialog = MovieReviewListDialog.getInstance(movieReviewList, mMovieModel.getId(), hasMore);
+        MovieReviewListDialog movieReviewListDialog = MovieReviewListDialog.Companion.getInstance(movieReviewList, mMovieModel.getId(), hasMore);
         movieReviewListDialog.show(getChildFragmentManager(), "movie_review_dialog");
     }
 

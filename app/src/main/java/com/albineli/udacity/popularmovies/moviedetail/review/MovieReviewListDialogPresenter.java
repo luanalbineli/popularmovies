@@ -60,7 +60,7 @@ public class MovieReviewListDialogPresenter implements MovieReviewListDialogCont
     }
 
     private void handleSuccessLoadMovieReview(ArrayRequestAPI<MovieReviewModel> response) {
-        mView.addReviewsToList(response.results);
+        mView.addReviewsToList(response.getResults());
         if (!response.hasMorePages()) {
             mView.disableLoadMoreListener();
         }
