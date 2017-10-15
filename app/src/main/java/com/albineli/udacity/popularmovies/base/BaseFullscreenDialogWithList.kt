@@ -1,6 +1,5 @@
 package com.albineli.udacity.popularmovies.base
 
-//import com.albineli.udacity.popularmovies.R
 import android.app.DialogFragment
 import android.os.Bundle
 import android.os.Parcelable
@@ -14,7 +13,6 @@ import com.albineli.udacity.popularmovies.R
 import com.albineli.udacity.popularmovies.injector.components.ApplicationComponent
 import com.albineli.udacity.popularmovies.util.UIUtil
 import kotlinx.android.synthetic.main.fullscreen_fragment_dialog_with_list.*
-import timber.log.Timber
 import java.security.InvalidParameterException
 import java.util.*
 

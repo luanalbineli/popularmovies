@@ -7,7 +7,6 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-
 import com.albineli.udacity.popularmovies.PopularMovieApplication
 import com.albineli.udacity.popularmovies.R
 import com.albineli.udacity.popularmovies.base.BaseFullscreenDialogWithList
@@ -15,19 +14,11 @@ import com.albineli.udacity.popularmovies.base.BasePresenter
 import com.albineli.udacity.popularmovies.injector.components.ApplicationComponent
 import com.albineli.udacity.popularmovies.injector.components.DaggerFragmentComponent
 import com.albineli.udacity.popularmovies.model.MovieReviewModel
-import com.albineli.udacity.popularmovies.ui.RequestStatusView
-
 import java.security.InvalidParameterException
-
 import javax.inject.Inject
 
 class MovieReviewListDialog : BaseFullscreenDialogWithList<MovieReviewModel, MovieReviewListDialogContract.View>(), MovieReviewListDialogContract.View {
-
-    val mMovieReviewAdapter by lazy { MovieReviewAdapter(object: RequestStatusView.ITryAgainClickListener{
-        override fun tryAgain() {
-            mPresenter.tryLoadReviewsAgain()
-        }
-    }) }
+    private val mMovieReviewAdapter by lazy { MovieReviewAdapter({ mPresenter.tryLoadReviewsAgain() }) }
 
     val mLinearLayoutManager by lazy { LinearLayoutManager(recyclerView.context, LinearLayoutManager.VERTICAL, false) }
 

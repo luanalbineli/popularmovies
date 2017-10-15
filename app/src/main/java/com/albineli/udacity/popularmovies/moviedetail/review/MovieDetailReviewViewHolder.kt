@@ -1,15 +1,14 @@
 package com.albineli.udacity.popularmovies.moviedetail.review
 
 import android.view.View
-import android.widget.TextView
 import com.albineli.udacity.popularmovies.ui.recyclerview.CustomRecyclerViewHolder
-import com.borjabravo.readmoretextview.ReadMoreTextView
+import kotlinx.android.synthetic.main.movie_review_item.view.*
 
-class MovieDetailReviewViewHolder internal constructor(itemView: View)//  ButterKnife.bind(this, itemView);
+class MovieDetailReviewViewHolder internal constructor(itemView: View)
     : CustomRecyclerViewHolder(itemView) {
-    // @BindView(R.id.tvMovieReviewAuthor)
-    internal var mAuthorTextView: TextView? = null
 
-    //@BindView(R.id.tvMovieReviewContent)
-    internal var mContentTextView: ReadMoreTextView? = null
+    fun bind(author: String, content: String) {
+        itemView.tvMovieReviewAuthor.text = author
+        itemView.tvMovieReviewContent.text = content
+    }
 }
