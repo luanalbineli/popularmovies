@@ -22,7 +22,7 @@
             android:layout_marginBottom="24dp"
             android:adjustViewBounds="true"
             android:contentDescription="@string/movie_detail_backdrop_content_description"
-            app:layout_constraintBottom_toBottomOf="@+id/lbMovieDetailFavorite"
+            app:layout_constraintBottom_toBottomOf="@+id/lbMovieDetailFavoriteContainer"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
@@ -33,7 +33,7 @@
             fresco:placeholderImage="@android:color/darker_gray" />
 
         <include
-            android:id="@+id/lbMovieDetailFavorite"
+            android:id="@+id/lbMovieDetailFavoriteContainer"
             layout="@layout/like_button"
             android:layout_width="48dp"
             android:layout_height="48dp"
@@ -63,7 +63,7 @@
             android:layout_marginTop="7dp"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintLeft_toRightOf="@+id/sdvMovieDetailPoster"
-            app:layout_constraintRight_toLeftOf="@+id/lbMovieDetailFavorite"
+            app:layout_constraintRight_toLeftOf="@+id/lbMovieDetailFavoriteContainer"
             app:layout_constraintTop_toBottomOf="@+id/ivMovieDetailBackdrop"
             tools:text="FAST AND FURIOUS" />
 

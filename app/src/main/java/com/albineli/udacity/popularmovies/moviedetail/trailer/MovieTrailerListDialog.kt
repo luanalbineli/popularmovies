@@ -32,7 +32,7 @@ class MovieTrailerListDialog : BaseFullscreenDialogWithList<MovieTrailerModel, M
     override val viewImplementation: MovieTrailerListDialogContract.View
         get() = this
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val fullscreenDialogWithListView = super.onCreateView(inflater, container, savedInstanceState)
 
         mMovieReviewAdapter.setOnItemClickListener { _, item -> YouTubeUtil.openYouTubeVideo(activity, item.key) }

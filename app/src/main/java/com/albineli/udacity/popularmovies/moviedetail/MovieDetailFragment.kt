@@ -9,10 +9,10 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import com.albineli.udacity.popularmovies.R
 import com.albineli.udacity.popularmovies.base.BaseFragment
 import com.albineli.udacity.popularmovies.base.BasePresenter
+import com.albineli.udacity.popularmovies.event.FavoriteMovieEvent
 import com.albineli.udacity.popularmovies.injector.components.ApplicationComponent
 import com.albineli.udacity.popularmovies.injector.components.DaggerFragmentComponent
 import com.albineli.udacity.popularmovies.model.MovieModel
@@ -26,8 +26,11 @@ import com.albineli.udacity.popularmovies.ui.NonScrollableLLM
 import com.albineli.udacity.popularmovies.util.ApiUtil
 import com.albineli.udacity.popularmovies.util.UIUtil
 import com.albineli.udacity.popularmovies.util.YouTubeUtil
+import com.like.LikeButton
+import com.like.OnLikeListener
 import kotlinx.android.synthetic.main.fragment_movie_detail.*
-import me.zhanghai.android.materialratingbar.MaterialRatingBar
+import kotlinx.android.synthetic.main.like_button.*
+import org.greenrobot.eventbus.EventBus
 import java.security.InvalidParameterException
 import javax.inject.Inject
 
@@ -45,44 +48,32 @@ class MovieDetailFragment : BaseFragment<MovieDetailContract.View>(), MovieDetai
 
     private var mMovieModel: MovieModel? = null
 
-    //// @BindView(R.id.clMovieDetailContainer)
-    //internal var mContainer: View? = null
-
-    // @BindView(R.id.ivMovieDetailBackdrop)
-    //internal var mBackdropSimpleDraweeView: SimpleDraweeView? = null
-
-    // @BindView(R.id.lbMovieDetailFavorite)
-    //internal var mFavoriteButton: LikeButton? = null
-
-    // @BindView(R.id.sdvMovieDetailPoster)
-    //internal var mPosterSimpleDraweeView: SimpleDraweeView? = null
-
     // @BindView(R.id.tvMovieDetailTitle)
-    internal var mTitleTextView: TextView? = null
+    // internal var mTitleTextView: TextView? = null
 
     // @BindView(R.id.mrbMovieDetailRatingStar)
-    internal var mRatingBar: MaterialRatingBar? = null
+    //internal var mRatingBar: MaterialRatingBar? = null
 
     // @BindView(R.id.tvMovieDetailRating)
-    internal var mRatingTextView: TextView? = null
+    //internal var mRatingTextView: TextView? = null
 
     // @BindView(R.id.tvMovieDetailSynopsis)
-    internal var mSynopsisTextView: TextView? = null
+    //internal var mSynopsisTextView: TextView? = null
 
     // @BindView(R.id.rvMovieDetailReviews)
-    internal var mReviewRecyclerView: RecyclerView? = null
+    //internal var mReviewRecyclerView: RecyclerView? = null
 
     // @BindView(R.id.tvMovieDetailShowAllReviews)
-    internal var mShowAllReviewsTextView: TextView? = null
+    //internal var mShowAllReviewsTextView: TextView? = null
 
     // @BindView(R.id.rvMovieDetailTrailers)
-    internal var mTrailerRecyclerView: RecyclerView? = null
+    // internal var mTrailerRecyclerView: RecyclerView? = null
 
     // @BindView(R.id.tvMovieDetailShowAllTrailers)
-    internal var mShowAllTrailersTextView: TextView? = null
+    //internal var mShowAllTrailersTextView: TextView? = null
 
-    private var mMovieReviewAdapter: MovieReviewAdapter? = null
-    private var mMovieTrailerAdapter: MovieTrailerAdapter? = null
+    private val mMovieReviewAdapter by lazy { MovieReviewAdapter(R.string.there_is_no_reviews_to_show) { mPresenter.tryToLoadReviewAgain() } }
+    private val mMovieTrailerAdapter by lazy { MovieTrailerAdapter(R.string.there_is_no_trailers_to_show) { mPresenter.tryToLoadTrailersAgain() } }
 
     override fun onInjectDependencies(applicationComponent: ApplicationComponent) {
         DaggerFragmentComponent.builder()
@@ -99,10 +90,7 @@ class MovieDetailFragment : BaseFragment<MovieDetailContract.View>(), MovieDetai
         mMovieModel = arguments.getParcelable(MOVIE_KEY)
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle): View? {
-
-        //ButterKnife.bind(this, rootView);
-
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_movie_detail, container, false)
     }
 
@@ -111,18 +99,19 @@ class MovieDetailFragment : BaseFragment<MovieDetailContract.View>(), MovieDetai
 
         configureRecyclerViews()
 
+        tvMovieDetailShowAllReviews.setOnClickListener { mPresenter.showAllReviews() }
+        tvMovieDetailShowAllTrailers.setOnClickListener { mPresenter.showAllTrailers() }
+
         mPresenter.start(mMovieModel)
     }
 
     private fun configureRecyclerViews() {
-        setUpDefaultRecyclerViewConfiguration(mReviewRecyclerView)
-        mMovieReviewAdapter = MovieReviewAdapter(R.string.there_is_no_reviews_to_show) { mPresenter.tryToLoadReviewAgain() }
-        mReviewRecyclerView!!.adapter = mMovieReviewAdapter
+        setUpDefaultRecyclerViewConfiguration(rvMovieDetailReviews)
+        rvMovieDetailReviews.adapter = mMovieReviewAdapter
 
-        setUpDefaultRecyclerViewConfiguration(mTrailerRecyclerView)
-        mMovieTrailerAdapter = MovieTrailerAdapter(R.string.there_is_no_trailers_to_show) { mPresenter.tryToLoadTrailersAgain() }
-        mTrailerRecyclerView!!.adapter = mMovieTrailerAdapter
-        mMovieTrailerAdapter!!.setOnItemClickListener { position, item -> YouTubeUtil.openYouTubeVideo(activity, item.key) }
+        setUpDefaultRecyclerViewConfiguration(rvMovieDetailTrailers)
+        rvMovieDetailTrailers.adapter = mMovieTrailerAdapter
+        mMovieTrailerAdapter.setOnItemClickListener { _, item -> YouTubeUtil.openYouTubeVideo(activity, item.key) }
     }
 
     private fun setUpDefaultRecyclerViewConfiguration(recyclerView: RecyclerView?) {
@@ -131,16 +120,6 @@ class MovieDetailFragment : BaseFragment<MovieDetailContract.View>(), MovieDetai
 
         val dividerItemDecoration = DividerItemDecoration(recyclerView.context, linearLayoutManager.orientation)
         recyclerView.addItemDecoration(dividerItemDecoration)
-    }
-
-    //@OnClick(R.id.tvMovieDetailShowAllReviews)
-    internal fun onShowAllReviewsButtonClick() {
-        mPresenter.showAllReviews()
-    }
-
-    //@OnClick(R.id.tvMovieDetailShowAllTrailers)
-    internal fun onShowAllTrailersButtonClick() {
-        mPresenter.showAllTrailers()
     }
 
     override fun showMovieDetail(movieModel: MovieModel) {
@@ -155,15 +134,15 @@ class MovieDetailFragment : BaseFragment<MovieDetailContract.View>(), MovieDetai
         ivMovieDetailBackdrop.setImageURI(backdropUrl)
 
 
-        mTitleTextView!!.text = movieModel.title
-        mSynopsisTextView!!.text = movieModel.overview
+        tvMovieDetailTitle.text = movieModel.title
+        tvMovieDetailSynopsis.text = movieModel.overview
 
         val rating = movieModel.voteAverage.toFloat() / 2f // The range of vote average is 0..10, and of the rating is 0..5
-        mRatingBar!!.rating = rating
+        mrbMovieDetailRatingStar.rating = rating
 
-        mRatingTextView!!.text = movieModel.voteAverage.toString()
+        tvMovieDetailRating.text = movieModel.voteAverage.toString()
 
-        /*lbMovieDetailFavorite.setOnLikeListener(object : OnLikeListener {
+        lbMovieDetailFavorite.setOnLikeListener(object : OnLikeListener {
             override fun liked(likeButton: LikeButton) {
                 mPresenter.saveFavoriteMovie(movieModel)
                 EventBus.getDefault().post(FavoriteMovieEvent(movieModel, true))
@@ -173,17 +152,17 @@ class MovieDetailFragment : BaseFragment<MovieDetailContract.View>(), MovieDetai
                 mPresenter.removeFavoriteMovie(movieModel)
                 EventBus.getDefault().post(FavoriteMovieEvent(movieModel, false))
             }
-        })*/
+        })
     }
 
     override fun showMovieReview(movieReviewModelList: List<MovieReviewModel>) {
-        mMovieReviewAdapter!!.addItems(movieReviewModelList)
-        mMovieReviewAdapter!!.hideRequestStatus()
+        mMovieReviewAdapter.addItems(movieReviewModelList)
+        mMovieReviewAdapter.hideRequestStatus()
     }
 
     override fun showMovieTrailer(movieTrailerList: List<MovieTrailerModel>) {
-        mMovieTrailerAdapter!!.addItems(movieTrailerList)
-        mMovieTrailerAdapter!!.hideRequestStatus()
+        mMovieTrailerAdapter.addItems(movieTrailerList)
+        mMovieTrailerAdapter.hideRequestStatus()
     }
 
     override fun setFavoriteButtonState(favorite: Boolean) {
@@ -207,27 +186,27 @@ class MovieDetailFragment : BaseFragment<MovieDetailContract.View>(), MovieDetai
     }
 
     override fun showErrorMessageLoadReviews() {
-        mMovieReviewAdapter!!.showErrorMessage()
+        mMovieReviewAdapter.showErrorMessage()
     }
 
     override fun showErrorMessageLoadTrailers() {
-        mMovieTrailerAdapter!!.showErrorMessage()
+        mMovieTrailerAdapter.showErrorMessage()
     }
 
     override fun setShowAllReviewsButtonVisibility(visible: Boolean) {
-        mShowAllReviewsTextView!!.visibility = if (visible) View.VISIBLE else View.GONE
+        tvMovieDetailShowAllReviews.visibility = if (visible) View.VISIBLE else View.GONE
     }
 
     override fun setShowAllTrailersButtonVisibility(visible: Boolean) {
-        mShowAllTrailersTextView!!.visibility = if (visible) View.VISIBLE else View.GONE
+        tvMovieDetailShowAllTrailers.visibility = if (visible) View.VISIBLE else View.GONE
     }
 
     override fun showLoadingReviewsIndicator() {
-        mMovieReviewAdapter!!.showLoading()
+        mMovieReviewAdapter.showLoading()
     }
 
     override fun showLoadingTrailersIndicator() {
-        mMovieTrailerAdapter!!.showLoading()
+        mMovieTrailerAdapter.showLoading()
     }
 
     override fun showAllReviews(movieReviewList: List<MovieReviewModel>, hasMore: Boolean) {
@@ -241,11 +220,11 @@ class MovieDetailFragment : BaseFragment<MovieDetailContract.View>(), MovieDetai
     }
 
     override fun showEmptyReviewListMessage() {
-        mMovieReviewAdapter!!.showEmptyMessage()
+        mMovieReviewAdapter.showEmptyMessage()
     }
 
     override fun showEmptyTrailerListMessage() {
-        mMovieTrailerAdapter!!.showEmptyMessage()
+        mMovieTrailerAdapter.showEmptyMessage()
     }
 
     private fun showToastMessage(@StringRes messageResId: Int) {

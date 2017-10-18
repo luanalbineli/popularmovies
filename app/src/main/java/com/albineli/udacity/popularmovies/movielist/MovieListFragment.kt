@@ -45,7 +45,7 @@ class MovieListFragment : BaseFragment<MovieListContract.View>(), MovieListContr
 
     private val mMovieListAdapter by lazy {MovieListAdapter(R.string.the_list_is_empty, { mPresenter.tryAgain() })}
 
-    private val mGridLayoutManager by lazy { GridLayoutManager(rv_movie_list.context, getItensPerRow(rv_movie_list.context)) }
+    private val mGridLayoutManager by lazy { GridLayoutManager(activity, getItensPerRow(activity)) }
 
     override fun onInjectDependencies(applicationComponent: ApplicationComponent) {
         DaggerFragmentComponent.builder()
@@ -62,30 +62,27 @@ class MovieListFragment : BaseFragment<MovieListContract.View>(), MovieListContr
         }
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle): View? {
-        val rootView = inflater.inflate(R.layout.fragment_movie_list, container, false)
-        //   ButterKnife.bind(this, rootView);
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        return inflater.inflate(R.layout.fragment_movie_list, container, false)
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
         // List.
         mMovieListAdapter.setOnItemClickListener({ position, movieModel -> mPresenter.openMovieDetail(position, movieModel) })
 
         mGridLayoutManager.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
             override fun getSpanSize(position: Int): Int {
-                when (mMovieListAdapter.getItemViewType(position)) {
-                    CustomRecyclerViewAdapter.ViewType.ITEM -> return 1
+                return when (mMovieListAdapter.getItemViewType(position)) {
+                    CustomRecyclerViewAdapter.ViewType.ITEM -> 1
                     else // Grid status.
-                    -> return mGridLayoutManager.spanCount
+                    -> mGridLayoutManager.spanCount
                 }
             }
         }
         rv_movie_list.layoutManager = mGridLayoutManager
         rv_movie_list.adapter = mMovieListAdapter
-
-        return rootView
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
 
         var movieListStateModel = MovieListStateModel.getFromBundle(savedInstanceState)
         if (movieListStateModel == null) {

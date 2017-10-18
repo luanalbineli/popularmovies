@@ -42,7 +42,7 @@ class MovieReviewListDialog : BaseFullscreenDialogWithList<MovieReviewModel, Mov
         mMovieId = arguments.getInt(MOVIE_ID_BUNDLE_KEY)
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val fullScrennDialogView = super.onCreateView(inflater, container, savedInstanceState)
 
         val dividerItemDecoration = DividerItemDecoration(recyclerView.context, mLinearLayoutManager.orientation)

@@ -46,7 +46,7 @@ abstract class BaseFullscreenDialogWithList<TModel : Parcelable, TView> : Dialog
         presenterImplementation.setView(viewImplementation)
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val rootView = inflater.inflate(R.layout.fullscreen_fragment_dialog_with_list, container)
 
         val drawable = resources.getDrawable(R.drawable.arrow_left)
