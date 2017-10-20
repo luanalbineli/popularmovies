@@ -3,7 +3,7 @@
     package="com.albineli.udacity.popularmovies">
     <uses-permission android:name="android.permission.INTERNET"/>
     <application
-        android:name=".PopularMovieApplication"
+        android:name="com.themovielist.PopularMovieApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -11,7 +11,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".mainactivity.MainActivity"
+            android:name="com.themovielist.mainactivity.MainActivity"
             android:label="@string/title_activity_main"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
@@ -22,7 +22,7 @@
         </activity>
         <provider
             android:authorities="com.albineli.udacity.popuparmovies.provider"
-            android:name=".repository.data.MovieProvider"
+            android:name="com.themovielist.repository.data.MovieProvider"
             android:exported="false" />
     </application>
 
