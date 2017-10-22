@@ -18,6 +18,8 @@ android {
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
         buildConfigField("String", "API_KEY", API_KEY)
+
+        vectorDrawables.useSupportLibrary = true
     }
 
     buildTypes {
