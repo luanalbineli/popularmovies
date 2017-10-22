@@ -28,7 +28,7 @@ class RequestStatusView(context: Context, attrs: AttributeSet?) : FrameLayout(co
         inflater.inflate(R.layout.request_status, this)
     }
 
-    fun setRequestStatus(requestStatus: Int, matchParentHeight: Boolean) {
+    fun setRequestStatus(requestStatus: Int, matchParentHeight: Boolean = false) {
         this.mRequestStatus = requestStatus
         redrawStatus(matchParentHeight)
     }
@@ -57,4 +57,8 @@ class RequestStatusView(context: Context, attrs: AttributeSet?) : FrameLayout(co
         layoutParams.height = viewHeight
         this.layoutParams = layoutParams
         }
+
+    fun setTryAgainClickListener(tryAgainClick: (() -> Unit)?) {
+        mTryAgainClickListener = tryAgainClick
+    }
 }

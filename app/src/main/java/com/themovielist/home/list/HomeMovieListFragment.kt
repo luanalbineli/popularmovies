@@ -11,8 +11,8 @@ import com.themovielist.base.BasePresenter
 import com.themovielist.injector.components.ApplicationComponent
 import com.themovielist.injector.components.DaggerFragmentComponent
 import com.themovielist.model.MovieModel
+import com.themovielist.ui.recyclerview.HorizonalSpaceItemDecoration
 import kotlinx.android.synthetic.main.recycler_view.*
-import timber.log.Timber
 import javax.inject.Inject
 
 
@@ -45,6 +45,10 @@ class HomeMovieListFragment : BaseFragment<HomeMovieListContract.View>(), HomeMo
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        val dividerAmountOfSpace = activity.resources.getDimension(R.dimen.home_movie_list_image_space)
+        val spaceItemViewDecoration = HorizonalSpaceItemDecoration(dividerAmountOfSpace.toInt())
+
+        rvRecyclerView.addItemDecoration(spaceItemViewDecoration)
         rvRecyclerView.layoutManager = mLayoutManager
         rvRecyclerView.adapter = mMovieListAdapter
     }

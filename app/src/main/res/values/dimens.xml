@@ -4,4 +4,15 @@
     <dimen name="home_movie_list_image_width">120dp</dimen>
     <dimen name="home_movie_list_image_height">160dp</dimen>
     <dimen name="home_movie_list_text_margin_top">4dp</dimen>
+    <dimen name="home_movie_list_image_space">16dp</dimen>
+
+
+
+    <!-- MovieImageView -->
+    <dimen name="movie_image_view_favorite_button">20dp</dimen>
+    <dimen name="movie_image_view_detail_button">24sp</dimen>
+
+
+    <!-- Generic -->
+    <dimen name="smallest_text_size">12sp</dimen>
 </resources>

@@ -13,17 +13,19 @@ internal constructor(movieRepository: MovieRepository) : BasePresenterImpl(movie
     }
 
     override fun start() {
-        val mPopularMovieCall = mMovieRepository.getPopularList(DEFAULT_PAGE)
-        val mTopRatedMovieCall = mMovieRepository.getTopRatedList(DEFAULT_PAGE)
-        mPopularMovieCall
-                .flatMap({ mTopRatedMovieCall }, { popularMovieList, topRatedMovieList -> Pair(popularMovieList, topRatedMovieList) })
+        mView.showLoadingIndicator()
+        mMovieRepository.getPopularList(DEFAULT_PAGE)
+                .flatMap({ mMovieRepository.getTopRatedList(DEFAULT_PAGE) }, { popularMovieList, topRatedMovieList -> Pair(popularMovieList, topRatedMovieList) })
                 .subscribe({ result ->
                     mView.showPopularMovies(result.first.results)
                     mView.showTopRatedMovies(result.second.results)
+                    mView.hideLoadingIndicatorAndShowMovies()
                 }, { error -> mView.showErrorLoadingMovies(error) })
     }
 
     companion object {
         const val DEFAULT_PAGE = 1 // The api page is non zero based index
     }
+
+    override fun tryToLoadMoviesAgain() = start()
 }

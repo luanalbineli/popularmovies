@@ -13,7 +13,8 @@ class MovieListViewHolder(itemView: View)
     fun bind(movieModel: MovieModel, posterWidth: String) {
         val posterUrl = ApiUtil.buildPosterImageUrl(movieModel.posterPath!!, posterWidth)
         Timber.i("Poster url: $posterUrl")
-        itemView.sdvHomeMovieItemImage.setImageURI(posterUrl)
-        itemView.tvHomeMovieItemName.text = movieModel.title
+        itemView.mivHomeMovieItem.setImageURI(posterUrl)
+        itemView.mivHomeMovieItem.setMovieName(movieModel.title)
+        //itemView.tvHomeMovieItemName.text = movieModel.title
     }
 }
