@@ -2,6 +2,7 @@ package com.themovielist
 
 
 import android.app.Application
+import android.content.ContentResolver
 import android.content.Context
 
 import com.themovielist.injector.components.ApplicationComponent
@@ -9,6 +10,9 @@ import com.themovielist.injector.components.DaggerApplicationComponent
 import com.themovielist.injector.modules.ApplicationModule
 import com.facebook.drawee.backends.pipeline.Fresco
 import com.squareup.leakcanary.LeakCanary
+import com.themovielist.model.MovieModel
+import com.themovielist.repository.ArrayRequestAPI
+import io.reactivex.ObservableEmitter
 
 import timber.log.Timber
 
@@ -32,6 +36,16 @@ class PopularMovieApplication : Application() {
         applicationComponent = DaggerApplicationComponent.builder()
                 .applicationModule(ApplicationModule(this))
                 .build()
+    }
+
+    inline fun <T> safeContentResolver(emitter: ObservableEmitter<T>, safeFunction: ContentResolver.() -> Unit) {
+        val contentResolver = contentResolver
+        if (contentResolver == null) {
+            emitter.onError(RuntimeException("Cannot get the ContentResolver"))
+            return
+        }
+
+        safeFunction.invoke(contentResolver)
     }
 
     companion object {

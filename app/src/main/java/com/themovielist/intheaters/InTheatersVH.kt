@@ -1,4 +1,4 @@
-package com.themovielist.movielist
+package com.themovielist.intheaters
 
 import android.view.View
 import com.themovielist.model.MovieModel
@@ -7,7 +7,7 @@ import com.themovielist.util.ApiUtil
 import kotlinx.android.synthetic.main.home_movie_list_item.view.*
 import timber.log.Timber
 
-class MovieListViewHolder(itemView: View)
+class InTheatersVH(itemView: View)
     : CustomRecyclerViewHolder(itemView) {
 
     fun bind(movieModel: MovieModel, posterWidth: String) {

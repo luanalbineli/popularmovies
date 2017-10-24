@@ -1,16 +1,17 @@
 package com.themovielist.home.list
 
 import android.view.View
-import com.themovielist.model.MovieModel
+import com.themovielist.model.MovieImageViewModel
 import com.themovielist.ui.recyclerview.CustomRecyclerViewHolder
 import com.themovielist.util.ApiUtil
-import kotlinx.android.synthetic.main.movie_item.view.*
+import kotlinx.android.synthetic.main.home_movie_list_item.view.*
 
 class HomeMovieListVH(itemView: View)
     : CustomRecyclerViewHolder(itemView) {
 
-    fun bind(movieModel: MovieModel, mPosterWidth: String) {
-        val posterUrl = ApiUtil.buildPosterImageUrl(movieModel.posterPath!!, mPosterWidth)
-        itemView.sdvMovieItemPoster.setImageURI(posterUrl)
+    fun bind(movieImageViewModel: MovieImageViewModel, posterWidth: String) {
+        val posterUrl = ApiUtil.buildPosterImageUrl(movieImageViewModel.movieModel.posterPath, posterWidth)
+        itemView.mivHomeMovieItem.setImageURI(posterUrl)
+        itemView.mivHomeMovieItem.setMovieImageViewModel(movieImageViewModel)
     }
 }

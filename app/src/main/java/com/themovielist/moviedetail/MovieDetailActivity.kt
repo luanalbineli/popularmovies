@@ -1,16 +1,18 @@
 package com.themovielist.moviedetail
 
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.support.annotation.StringRes
 import android.support.design.widget.Snackbar
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import com.albineli.udacity.popularmovies.R
-import com.themovielist.base.BaseFragment
+import com.like.LikeButton
+import com.like.OnLikeListener
+import com.themovielist.base.BaseDaggerActivity
 import com.themovielist.base.BasePresenter
 import com.themovielist.event.FavoriteMovieEvent
 import com.themovielist.injector.components.ApplicationComponent
@@ -26,8 +28,6 @@ import com.themovielist.ui.NonScrollableLLM
 import com.themovielist.util.ApiUtil
 import com.themovielist.util.UIUtil
 import com.themovielist.util.YouTubeUtil
-import com.like.LikeButton
-import com.like.OnLikeListener
 import kotlinx.android.synthetic.main.fragment_movie_detail.*
 import kotlinx.android.synthetic.main.like_button.*
 import org.greenrobot.eventbus.EventBus
@@ -35,7 +35,7 @@ import java.security.InvalidParameterException
 import javax.inject.Inject
 
 
-class MovieDetailFragment : BaseFragment<MovieDetailContract.View>(), MovieDetailContract.View {
+class MovieDetailActivity : BaseDaggerActivity<MovieDetailContract.View>(), MovieDetailContract.View {
 
     override val presenterImplementation: BasePresenter<MovieDetailContract.View>
         get() = mPresenter
@@ -47,30 +47,6 @@ class MovieDetailFragment : BaseFragment<MovieDetailContract.View>(), MovieDetai
     lateinit var mPresenter: MovieDetailPresenter
 
     private var mMovieModel: MovieModel? = null
-
-    // @BindView(R.id.tvMovieDetailTitle)
-    // internal var mTitleTextView: TextView? = null
-
-    // @BindView(R.id.mrbMovieDetailRatingStar)
-    //internal var mRatingBar: MaterialRatingBar? = null
-
-    // @BindView(R.id.tvMovieDetailRating)
-    //internal var mRatingTextView: TextView? = null
-
-    // @BindView(R.id.tvMovieDetailSynopsis)
-    //internal var mSynopsisTextView: TextView? = null
-
-    // @BindView(R.id.rvMovieDetailReviews)
-    //internal var mReviewRecyclerView: RecyclerView? = null
-
-    // @BindView(R.id.tvMovieDetailShowAllReviews)
-    //internal var mShowAllReviewsTextView: TextView? = null
-
-    // @BindView(R.id.rvMovieDetailTrailers)
-    // internal var mTrailerRecyclerView: RecyclerView? = null
-
-    // @BindView(R.id.tvMovieDetailShowAllTrailers)
-    //internal var mShowAllTrailersTextView: TextView? = null
 
     private val mMovieReviewAdapter by lazy { MovieReviewAdapter(R.string.there_is_no_reviews_to_show) { mPresenter.tryToLoadReviewAgain() } }
     private val mMovieTrailerAdapter by lazy { MovieTrailerAdapter(R.string.there_is_no_trailers_to_show) { mPresenter.tryToLoadTrailersAgain() } }
@@ -84,23 +60,18 @@ class MovieDetailFragment : BaseFragment<MovieDetailContract.View>(), MovieDetai
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        if (arguments == null || !arguments.containsKey(MOVIE_KEY)) {
+
+        if (intent == null || !intent.hasExtra(MOVIE_KEY)) {
             throw InvalidParameterException("movie")
         }
-        mMovieModel = arguments.getParcelable(MOVIE_KEY)
-    }
+        mMovieModel = intent.getParcelableExtra(MOVIE_KEY)
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_movie_detail, container, false)
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        configureRecyclerViews()
+        setContentView(R.layout.fragment_movie_detail)
 
         tvMovieDetailShowAllReviews.setOnClickListener { mPresenter.showAllReviews() }
         tvMovieDetailShowAllTrailers.setOnClickListener { mPresenter.showAllTrailers() }
+
+        configureRecyclerViews()
 
         mPresenter.start(mMovieModel)
     }
@@ -111,7 +82,7 @@ class MovieDetailFragment : BaseFragment<MovieDetailContract.View>(), MovieDetai
 
         setUpDefaultRecyclerViewConfiguration(rvMovieDetailTrailers)
         rvMovieDetailTrailers.adapter = mMovieTrailerAdapter
-        mMovieTrailerAdapter.setOnItemClickListener { _, item -> YouTubeUtil.openYouTubeVideo(activity, item.key) }
+        mMovieTrailerAdapter.setOnItemClickListener { _, item -> YouTubeUtil.openYouTubeVideo(this, item.key) }
     }
 
     private fun setUpDefaultRecyclerViewConfiguration(recyclerView: RecyclerView?) {
@@ -123,7 +94,7 @@ class MovieDetailFragment : BaseFragment<MovieDetailContract.View>(), MovieDetai
     }
 
     override fun showMovieDetail(movieModel: MovieModel) {
-        activity.title = movieModel.title
+        this.title = movieModel.title
 
         val posterWidth = ApiUtil.getDefaultPosterSize(sdvMovieDetailPoster.width)
         val posterUrl = ApiUtil.buildPosterImageUrl(movieModel.posterPath!!, posterWidth)
@@ -211,12 +182,12 @@ class MovieDetailFragment : BaseFragment<MovieDetailContract.View>(), MovieDetai
 
     override fun showAllReviews(movieReviewList: List<MovieReviewModel>, hasMore: Boolean) {
         val movieReviewListDialog = MovieReviewListDialog.getInstance(movieReviewList, mMovieModel!!.id, hasMore)
-        movieReviewListDialog.show(childFragmentManager, "movie_review_dialog")
+        movieReviewListDialog.show(fragmentManager, "movie_review_dialog")
     }
 
     override fun showAllTrailers(movieTrailerList: List<MovieTrailerModel>) {
         val movieTrailerListDialog = MovieTrailerListDialog.getInstance(movieTrailerList)
-        movieTrailerListDialog.show(childFragmentManager, "movie_trailer_dialog")
+        movieTrailerListDialog.show(fragmentManager, "movie_trailer_dialog")
     }
 
     override fun showEmptyReviewListMessage() {
@@ -232,15 +203,11 @@ class MovieDetailFragment : BaseFragment<MovieDetailContract.View>(), MovieDetai
     }
 
     companion object {
-        fun getInstance(movieModel: MovieModel): MovieDetailFragment {
-            val bundle = Bundle()
-            bundle.putParcelable(MOVIE_KEY, movieModel)
-
-            val movieDetailFragment = MovieDetailFragment()
-            movieDetailFragment.arguments = bundle
-            return movieDetailFragment
+        const val MOVIE_KEY = "movie_model"
+        fun getDefaultIntent(context: Context, movieModel: MovieModel): Intent {
+            return Intent(context, MovieDetailActivity::class.java).also {
+                it.putExtra(MOVIE_KEY, movieModel)
+            }
         }
-
-        private val MOVIE_KEY = "movie_model"
     }
 }

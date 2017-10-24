@@ -13,7 +13,6 @@ import com.themovielist.injector.components.ApplicationComponent
 import com.themovielist.injector.components.DaggerFragmentComponent
 import com.themovielist.model.MovieModel
 import com.themovielist.util.setDisplay
-import kotlinx.android.synthetic.main.grid_status.*
 import kotlinx.android.synthetic.main.home_fragment.*
 import timber.log.Timber
 import javax.inject.Inject

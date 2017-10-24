@@ -9,6 +9,7 @@ import com.ashokvarma.bottomnavigation.BottomNavigationItem
 import com.themovielist.base.BaseActivity
 import com.themovielist.enums.TabTypeEnum
 import com.themovielist.home.HomeFragment
+import com.themovielist.intheaters.InTheatersFragment
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.content_main.*
 
@@ -62,6 +63,9 @@ class MainActivity : BaseActivity(), FragmentManager.OnBackStackChangedListener 
             TabTypeEnum.HOME -> checkChangeMainContent(HOME_FRAGMENT_TAG) {
                 HomeFragment.getInstance()
             }
+            TabTypeEnum.IN_THEATERS -> checkChangeMainContent(IN_THEATERS_FRAGMENT_TAG) {
+                InTheatersFragment.getInstance()
+            }
         }
     }
 
@@ -102,7 +106,7 @@ class MainActivity : BaseActivity(), FragmentManager.OnBackStackChangedListener 
         private val SELECTED_TAB_BUNDLE_KEY = "selected_tab"
         private val HOME_FRAGMENT_TAG = "home_fragment"
         private val BROWSE_FRAGMENT_TAG = "browse_fragment"
-        private val CINEMA_FRAGMENT_TAG = "cinema_fragment"
+        private val IN_THEATERS_FRAGMENT_TAG = "in_theaters_fragment"
         private val FRAVORITE_FRAGMENT_TAG = "favorite_fragment"
     }
 }

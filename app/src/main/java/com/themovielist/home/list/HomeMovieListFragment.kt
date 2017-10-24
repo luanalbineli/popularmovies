@@ -10,6 +10,7 @@ import com.themovielist.base.BaseFragment
 import com.themovielist.base.BasePresenter
 import com.themovielist.injector.components.ApplicationComponent
 import com.themovielist.injector.components.DaggerFragmentComponent
+import com.themovielist.model.MovieImageViewModel
 import com.themovielist.model.MovieModel
 import com.themovielist.ui.recyclerview.HorizonalSpaceItemDecoration
 import kotlinx.android.synthetic.main.recycler_view.*
@@ -58,7 +59,7 @@ class HomeMovieListFragment : BaseFragment<HomeMovieListContract.View>(), HomeMo
     }
 
     override fun showMovies(movieList: List<MovieModel>) {
-        mMovieListAdapter.addItems(movieList)
+        mMovieListAdapter.addItems(movieList.map { MovieImageViewModel(it) })
     }
 
     companion object {

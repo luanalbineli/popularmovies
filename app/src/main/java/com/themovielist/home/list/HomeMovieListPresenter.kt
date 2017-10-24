@@ -20,6 +20,7 @@ internal constructor(movieRepository: MovieRepository) : BasePresenterImpl(movie
     }
 
     override fun showMovies(movieList: List<MovieModel>) {
+        mMovieRepository.getFavoriteList()
         mView.showMovies(movieList)
     }
 }

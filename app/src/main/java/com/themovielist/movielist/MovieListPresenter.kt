@@ -82,7 +82,7 @@ internal constructor(movieRepository: MovieRepository) : BasePresenterImpl(movie
                 when (filter) {
                     MovieListFilterDescriptor.POPULAR -> mMovieRepository.getPopularList(pageIndex)
                     MovieListFilterDescriptor.RATING -> mMovieRepository.getTopRatedList(pageIndex)
-                    else -> mMovieRepository.favoriteList
+                    else -> mMovieRepository.getFavoriteList()
                 }
 
         mSubscription = observable

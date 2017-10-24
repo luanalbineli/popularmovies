@@ -18,7 +18,6 @@ import com.themovielist.injector.components.ApplicationComponent
 import com.themovielist.injector.components.DaggerFragmentComponent
 import com.themovielist.model.MovieListStateModel
 import com.themovielist.model.MovieModel
-import com.themovielist.moviedetail.MovieDetailFragment
 import com.themovielist.ui.recyclerview.CustomRecyclerViewAdapter
 import kotlinx.android.synthetic.main.fragment_movie_list.*
 import org.greenrobot.eventbus.EventBus
@@ -148,12 +147,12 @@ class MovieListFragment : BaseFragment<MovieListContract.View>(), MovieListContr
     }
 
     override fun showMovieDetail(movieModel: MovieModel) {
-        val movieDetailFragment = MovieDetailFragment.getInstance(movieModel)
+        /*val movieDetailFragment = MovieDetailFragment.getInstance(movieModel)
         fragmentManager.beginTransaction()
                 .setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out)
                 .add(R.id.flMainContent, movieDetailFragment)
                 .addToBackStack(null)
-                .commit()
+                .commit()*/
     }
 
     override fun clearMovieList() {
