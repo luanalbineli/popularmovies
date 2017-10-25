@@ -10,6 +10,6 @@ object MovieTrailerListDialogContract {
     }
 
     interface Presenter : BasePresenter<View> {
-        fun start(movieReviewList: List<MovieTrailerModel>)
+        fun start(movieTrailerList: List<MovieTrailerModel>)
     }
 }

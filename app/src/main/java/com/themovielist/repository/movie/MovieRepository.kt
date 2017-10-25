@@ -51,7 +51,7 @@ internal constructor(private val mRetrofit: Retrofit, private val mApplicationCo
         }).subscribeOn(Schedulers.io()))
     }
 
-    fun get(): Observable<Array<Int>> {
+    fun getFavoriteMovieIds(): Observable<Array<Int>> {
         return observeOnMainThread(Observable.create(ObservableOnSubscribe<Array<Int>> { emitter ->
             mApplicationContext.safeContentResolver(emitter) {
                 val cursor = query(MovieContract.MovieEntry.CONTENT_URI, arrayOf(MovieContract.MovieEntry._ID), null, null, null)

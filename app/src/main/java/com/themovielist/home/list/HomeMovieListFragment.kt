@@ -18,7 +18,6 @@ import javax.inject.Inject
 
 
 class HomeMovieListFragment : BaseFragment<HomeMovieListContract.View>(), HomeMovieListContract.View {
-
     override val presenterImplementation: BasePresenter<HomeMovieListContract.View>
         get() = mPresenter
 
@@ -58,8 +57,16 @@ class HomeMovieListFragment : BaseFragment<HomeMovieListContract.View>(), HomeMo
         mPresenter.showMovies(movieList)
     }
 
-    override fun showMovies(movieList: List<MovieModel>) {
-        mMovieListAdapter.addItems(movieList.map { MovieImageViewModel(it) })
+    override fun showMovies(movieImageViewList: List<MovieImageViewModel>) {
+        mMovieListAdapter.addItems(movieImageViewList)
+    }
+
+    override fun showLoadingIndicator() {
+        mMovieListAdapter.showLoading()
+    }
+
+    override fun showErrorLoadingFavoriteList(error: Throwable) {
+        mMovieListAdapter.showErrorMessage()
     }
 
     companion object {

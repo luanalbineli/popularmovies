@@ -11,10 +11,8 @@ import android.support.v7.widget.RecyclerView
 import android.view.View
 import com.albineli.udacity.popularmovies.R
 import com.like.LikeButton
-import com.like.OnLikeListener
 import com.themovielist.base.BaseDaggerActivity
 import com.themovielist.base.BasePresenter
-import com.themovielist.event.FavoriteMovieEvent
 import com.themovielist.injector.components.ApplicationComponent
 import com.themovielist.injector.components.DaggerFragmentComponent
 import com.themovielist.model.MovieModel
@@ -28,9 +26,8 @@ import com.themovielist.ui.NonScrollableLLM
 import com.themovielist.util.ApiUtil
 import com.themovielist.util.UIUtil
 import com.themovielist.util.YouTubeUtil
-import kotlinx.android.synthetic.main.fragment_movie_detail.*
-import kotlinx.android.synthetic.main.like_button.*
-import org.greenrobot.eventbus.EventBus
+import kotlinx.android.synthetic.main.activity_movie_detail.*
+import timber.log.Timber
 import java.security.InvalidParameterException
 import javax.inject.Inject
 
@@ -46,7 +43,8 @@ class MovieDetailActivity : BaseDaggerActivity<MovieDetailContract.View>(), Movi
     @Inject
     lateinit var mPresenter: MovieDetailPresenter
 
-    private var mMovieModel: MovieModel? = null
+    // TODO: CHANGE
+    private lateinit var mMovieModel: MovieModel
 
     private val mMovieReviewAdapter by lazy { MovieReviewAdapter(R.string.there_is_no_reviews_to_show) { mPresenter.tryToLoadReviewAgain() } }
     private val mMovieTrailerAdapter by lazy { MovieTrailerAdapter(R.string.there_is_no_trailers_to_show) { mPresenter.tryToLoadTrailersAgain() } }
@@ -66,7 +64,9 @@ class MovieDetailActivity : BaseDaggerActivity<MovieDetailContract.View>(), Movi
         }
         mMovieModel = intent.getParcelableExtra(MOVIE_KEY)
 
-        setContentView(R.layout.fragment_movie_detail)
+        setContentView(R.layout.activity_movie_detail)
+
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         tvMovieDetailShowAllReviews.setOnClickListener { mPresenter.showAllReviews() }
         tvMovieDetailShowAllTrailers.setOnClickListener { mPresenter.showAllTrailers() }
@@ -113,7 +113,8 @@ class MovieDetailActivity : BaseDaggerActivity<MovieDetailContract.View>(), Movi
 
         tvMovieDetailRating.text = movieModel.voteAverage.toString()
 
-        lbMovieDetailFavorite.setOnLikeListener(object : OnLikeListener {
+        Timber.i("lbMovieDetailFavoriteContainer: ${lbMovieDetailFavoriteContainer is LikeButton}")
+        /*lbMovieDetailFavorite.setOnLikeListener(object : OnLikeListener {
             override fun liked(likeButton: LikeButton) {
                 mPresenter.saveFavoriteMovie(movieModel)
                 EventBus.getDefault().post(FavoriteMovieEvent(movieModel, true))
@@ -123,7 +124,7 @@ class MovieDetailActivity : BaseDaggerActivity<MovieDetailContract.View>(), Movi
                 mPresenter.removeFavoriteMovie(movieModel)
                 EventBus.getDefault().post(FavoriteMovieEvent(movieModel, false))
             }
-        })
+        })*/
     }
 
     override fun showMovieReview(movieReviewModelList: List<MovieReviewModel>) {
@@ -200,6 +201,11 @@ class MovieDetailActivity : BaseDaggerActivity<MovieDetailContract.View>(), Movi
 
     private fun showToastMessage(@StringRes messageResId: Int) {
         Snackbar.make(clMovieDetailContainer, messageResId, Snackbar.LENGTH_SHORT).show()
+    }
+
+    override fun onSupportNavigateUp(): Boolean {
+        onBackPressed()
+        return true
     }
 
     companion object {

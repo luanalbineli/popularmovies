@@ -4,11 +4,9 @@ import android.content.ContentValues
 import android.database.Cursor
 import android.os.Parcel
 import android.os.Parcelable
-
-import com.themovielist.repository.data.MovieContract
 import com.google.gson.annotations.SerializedName
-
-import java.util.Date
+import com.themovielist.repository.data.MovieContract
+import java.util.*
 
 data class MovieModel constructor(@SerializedName("id")
                                   var id: Int = 0,
@@ -34,6 +32,16 @@ data class MovieModel constructor(@SerializedName("id")
                                   @SerializedName("vote_count")
                                   var voteCount: Int = 0) : Parcelable {
 
+    constructor(parcel: Parcel) : this(
+            parcel.readInt(),
+            parcel.readString(),
+            parcel.readString(),
+            parcel.readString(),
+            parcel.readDouble(),
+            Date(parcel.readLong()),
+            parcel.readString(),
+            parcel.readInt())
+
     private constructor(contentValues: ContentValues) : this(
             contentValues.getAsInteger(MovieContract.MovieEntry._ID),
             contentValues.getAsString(MovieContract.MovieEntry.COLUMN_POSTER_PATH),
@@ -53,33 +61,6 @@ data class MovieModel constructor(@SerializedName("id")
             Date(cursor.getLong(cursor.getColumnIndex(MovieContract.MovieEntry.COLUMN_RELEASE_DATE))),
             cursor.getString(cursor.getColumnIndex(MovieContract.MovieEntry.COLUMN_BACKDROP_PATH)),
             cursor.getInt(cursor.getColumnIndex(MovieContract.MovieEntry.COLUMN_VOTE_COUNT)))
-
-    private constructor(parcel: Parcel) : this(
-            parcel.readInt(),
-            parcel.readString(),
-            parcel.readString(),
-            parcel.readString(),
-            parcel.readDouble(),
-            Date(parcel.readLong()),
-            parcel.readString(),
-            parcel.readInt())
-
-    override fun describeContents(): Int {
-        return 0
-    }
-
-    override fun writeToParcel(parcel: Parcel, i: Int) {
-        parcel.writeInt(id)
-        parcel.writeString(posterPath)
-        parcel.writeString(overview)
-        parcel.writeString(title)
-
-        parcel.writeDouble(voteAverage)
-        parcel.writeLong(releaseDate!!.time)
-
-        parcel.writeString(backdropPath)
-        parcel.writeInt(voteCount)
-    }
 
     fun toContentValues(): ContentValues {
         val contentValues = ContentValues()
@@ -102,15 +83,28 @@ data class MovieModel constructor(@SerializedName("id")
         return contentValues
     }
 
-    companion object {
-        val CREATOR: Parcelable.Creator<MovieModel> = object : Parcelable.Creator<MovieModel> {
-            override fun createFromParcel(parcel: Parcel): MovieModel {
-                return MovieModel(parcel)
-            }
+    override fun writeToParcel(parcel: Parcel, flags: Int) {
+        parcel.writeInt(id)
+        parcel.writeString(posterPath)
+        parcel.writeString(overview)
+        parcel.writeString(title)
+        parcel.writeDouble(voteAverage)
+        parcel.writeLong(releaseDate!!.time)
+        parcel.writeString(backdropPath)
+        parcel.writeInt(voteCount)
+    }
 
-            override fun newArray(size: Int): Array<MovieModel> {
-                return Array(size) { MovieModel() }
-            }
+    override fun describeContents(): Int {
+        return 0
+    }
+
+    companion object CREATOR : Parcelable.Creator<MovieModel> {
+        override fun createFromParcel(parcel: Parcel): MovieModel {
+            return MovieModel(parcel)
+        }
+
+        override fun newArray(size: Int): Array<MovieModel?> {
+            return arrayOfNulls(size)
         }
 
         fun fromContentValues(contentValues: ContentValues): MovieModel {

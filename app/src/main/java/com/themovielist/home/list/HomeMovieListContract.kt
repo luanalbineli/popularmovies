@@ -1,11 +1,14 @@
 package com.themovielist.home.list
 
 import com.themovielist.base.BasePresenter
+import com.themovielist.model.MovieImageViewModel
 import com.themovielist.model.MovieModel
 
 interface HomeMovieListContract {
     interface View {
-        fun showMovies(movieList: List<MovieModel>)
+        fun showMovies(movieImageViewList: List<MovieImageViewModel>)
+        fun showLoadingIndicator()
+        fun showErrorLoadingFavoriteList(error: Throwable)
     }
 
     interface Presenter : BasePresenter<View> {

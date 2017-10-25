@@ -11,9 +11,9 @@ class MovieListViewHolder(itemView: View)
     : CustomRecyclerViewHolder(itemView) {
 
     fun bind(movieModel: MovieModel, posterWidth: String) {
-        val posterUrl = ApiUtil.buildPosterImageUrl(movieModel.posterPath!!, posterWidth)
+        val posterUrl = ApiUtil.buildPosterImageUrl(movieModel.posterPath, posterWidth)
         Timber.i("Poster url: $posterUrl")
         itemView.mivHomeMovieItem.setImageURI(posterUrl)
-        itemView.mivHomeMovieItem.setMovieName(movieModel.title)
+        //itemView.mivHomeMovieItem.setMovieName(movieModel.title)
     }
 }

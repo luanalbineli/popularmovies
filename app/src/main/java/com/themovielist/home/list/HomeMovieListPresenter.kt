@@ -1,14 +1,9 @@
 package com.themovielist.home.list
 
 import com.themovielist.base.BasePresenterImpl
-import com.themovielist.enums.MovieListFilterDescriptor
-import com.themovielist.model.MovieListStateModel
+import com.themovielist.model.MovieImageViewModel
 import com.themovielist.model.MovieModel
-import com.themovielist.repository.ArrayRequestAPI
 import com.themovielist.repository.movie.MovieRepository
-import io.reactivex.Observable
-import io.reactivex.disposables.Disposable
-import timber.log.Timber
 import javax.inject.Inject
 
 class HomeMovieListPresenter @Inject
@@ -20,7 +15,12 @@ internal constructor(movieRepository: MovieRepository) : BasePresenterImpl(movie
     }
 
     override fun showMovies(movieList: List<MovieModel>) {
-        mMovieRepository.getFavoriteList()
-        mView.showMovies(movieList)
+        mView.showLoadingIndicator()
+        mMovieRepository.getFavoriteMovieIds().subscribe({favoriteMovieIdArray ->
+            val movieImageViewList = movieList.map { MovieImageViewModel(it, favoriteMovieIdArray.contains(it.id)) }
+            mView.showMovies(movieImageViewList)
+        }, { error ->
+            mView.showErrorLoadingFavoriteList(error)
+        })
     }
 }
