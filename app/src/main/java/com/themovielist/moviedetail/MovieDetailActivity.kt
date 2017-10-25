@@ -11,8 +11,10 @@ import android.support.v7.widget.RecyclerView
 import android.view.View
 import com.albineli.udacity.popularmovies.R
 import com.like.LikeButton
+import com.like.OnLikeListener
 import com.themovielist.base.BaseDaggerActivity
 import com.themovielist.base.BasePresenter
+import com.themovielist.event.FavoriteMovieEvent
 import com.themovielist.injector.components.ApplicationComponent
 import com.themovielist.injector.components.DaggerFragmentComponent
 import com.themovielist.model.MovieModel
@@ -27,6 +29,8 @@ import com.themovielist.util.ApiUtil
 import com.themovielist.util.UIUtil
 import com.themovielist.util.YouTubeUtil
 import kotlinx.android.synthetic.main.activity_movie_detail.*
+import kotlinx.android.synthetic.main.like_button.*
+import org.greenrobot.eventbus.EventBus
 import timber.log.Timber
 import java.security.InvalidParameterException
 import javax.inject.Inject
@@ -113,8 +117,9 @@ class MovieDetailActivity : BaseDaggerActivity<MovieDetailContract.View>(), Movi
 
         tvMovieDetailRating.text = movieModel.voteAverage.toString()
 
+        // TODO: If you use an android:include="myXml", Kotlin does not parse the view type correctly
         Timber.i("lbMovieDetailFavoriteContainer: ${lbMovieDetailFavoriteContainer is LikeButton}")
-        /*lbMovieDetailFavorite.setOnLikeListener(object : OnLikeListener {
+        (lbMovieDetailFavoriteContainer as LikeButton).setOnLikeListener(object : OnLikeListener {
             override fun liked(likeButton: LikeButton) {
                 mPresenter.saveFavoriteMovie(movieModel)
                 EventBus.getDefault().post(FavoriteMovieEvent(movieModel, true))
@@ -124,7 +129,7 @@ class MovieDetailActivity : BaseDaggerActivity<MovieDetailContract.View>(), Movi
                 mPresenter.removeFavoriteMovie(movieModel)
                 EventBus.getDefault().post(FavoriteMovieEvent(movieModel, false))
             }
-        })*/
+        })
     }
 
     override fun showMovieReview(movieReviewModelList: List<MovieReviewModel>) {
@@ -138,7 +143,7 @@ class MovieDetailActivity : BaseDaggerActivity<MovieDetailContract.View>(), Movi
     }
 
     override fun setFavoriteButtonState(favorite: Boolean) {
-        //lbMovieDetailFavorite.isLiked = favorite
+        (lbMovieDetailFavoriteContainer as LikeButton).isLiked = favorite
     }
 
     override fun showSuccessMessageAddFavoriteMovie() {

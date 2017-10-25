@@ -7,15 +7,20 @@ import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.widget.FrameLayout
 import com.albineli.udacity.popularmovies.R
+import com.albineli.udacity.popularmovies.R.string.favorite
 import com.like.LikeButton
 import com.like.OnLikeListener
 import com.themovielist.PopularMovieApplication
+import com.themovielist.event.FavoriteMovieEvent
 import com.themovielist.injector.components.DaggerFragmentComponent
 import com.themovielist.model.MovieImageViewModel
 import com.themovielist.model.MovieModel
 import com.themovielist.moviedetail.MovieDetailActivity
 import com.themovielist.util.setDisplay
 import kotlinx.android.synthetic.main.movie_image_view.view.*
+import org.greenrobot.eventbus.EventBus
+import org.greenrobot.eventbus.Subscribe
+import org.greenrobot.eventbus.ThreadMode
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -80,10 +85,26 @@ class MovieImageView constructor(context: Context, attributeSet: AttributeSet) :
         clMovieImageViewMenuContainer.setDisplay(opened)
     }
 
-    override fun toggleMovieFavorite(favorite: Boolean) {
-        if (lbMovieImageViewFavorite.isLiked != favorite) {
-            lbMovieImageViewFavorite.isLiked = favorite
-        }
+    override fun onAttachedToWindow() {
+        super.onAttachedToWindow()
+        EventBus.getDefault().register(this)
+        Timber.d("The view attached to window")
+    }
+
+    override fun onDetachedFromWindow() {
+        super.onDetachedFromWindow()
+        EventBus.getDefault().unregister(this)
+        Timber.d("The view detached from window")
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    fun onFavoriteMovieEvent(favoriteMovieEvent: FavoriteMovieEvent) {
+        Timber.d("Reached the favorite movie event: $favoriteMovieEvent")
+        mPresenter.onFavoriteMovieEvent(favoriteMovieEvent.movie, favoriteMovieEvent.favorite)
+    }
+
+    override fun toggleMovieFavorite(favourite: Boolean) {
+        lbMovieImageViewFavorite.isLiked = favourite
     }
 
     override fun showErrorFavoriteMovie(error: Throwable) {
@@ -91,7 +112,7 @@ class MovieImageView constructor(context: Context, attributeSet: AttributeSet) :
         Snackbar.make(rootView, context.getString(R.string.error_add_favorite_movie), Snackbar.LENGTH_LONG)
     }
 
-    override fun toggleMovieFavoriteEnabled(enabled: Boolean) {
+    override fun toggleMovieFavouriteEnabled(enabled: Boolean) {
         lbMovieImageViewFavorite.isEnabled = enabled
     }
 }

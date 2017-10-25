@@ -8,7 +8,7 @@ interface HomeMovieListContract {
     interface View {
         fun showMovies(movieImageViewList: List<MovieImageViewModel>)
         fun showLoadingIndicator()
-        fun showErrorLoadingFavoriteList(error: Throwable)
+        fun showErrorLoadingMovieList(error: Throwable)
     }
 
     interface Presenter : BasePresenter<View> {

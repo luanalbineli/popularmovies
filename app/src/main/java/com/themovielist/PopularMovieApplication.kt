@@ -4,17 +4,16 @@ package com.themovielist
 import android.app.Application
 import android.content.ContentResolver
 import android.content.Context
-
+import android.database.Cursor
+import com.facebook.drawee.backends.pipeline.Fresco
+import com.squareup.leakcanary.LeakCanary
 import com.themovielist.injector.components.ApplicationComponent
 import com.themovielist.injector.components.DaggerApplicationComponent
 import com.themovielist.injector.modules.ApplicationModule
-import com.facebook.drawee.backends.pipeline.Fresco
-import com.squareup.leakcanary.LeakCanary
-import com.themovielist.model.MovieModel
-import com.themovielist.repository.ArrayRequestAPI
+import com.themovielist.util.tryExecute
 import io.reactivex.ObservableEmitter
-
 import timber.log.Timber
+import java.sql.SQLDataException
 
 class PopularMovieApplication : Application() {
     lateinit var applicationComponent: ApplicationComponent
@@ -46,6 +45,22 @@ class PopularMovieApplication : Application() {
         }
 
         safeFunction.invoke(contentResolver)
+    }
+
+    inline fun <T> tryQueryOnContentResolver(emitter: ObservableEmitter<T>, cursorInvoker: ContentResolver.() -> Cursor?, safeFunction: Cursor.() -> Unit) {
+        val contentResolver = contentResolver
+        if (contentResolver == null) {
+            emitter.onError(RuntimeException("Cannot get the ContentResolver"))
+            return
+        }
+
+        val cursor = cursorInvoker.invoke(contentResolver)
+        if (cursor == null) {
+            emitter.onError(SQLDataException("An internal error occurred."))
+            return
+        }
+
+        cursor.tryExecute(emitter, safeFunction)
     }
 
     companion object {

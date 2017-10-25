@@ -14,6 +14,7 @@ import com.themovielist.model.MovieImageViewModel
 import com.themovielist.model.MovieModel
 import com.themovielist.ui.recyclerview.HorizonalSpaceItemDecoration
 import kotlinx.android.synthetic.main.recycler_view.*
+import timber.log.Timber
 import javax.inject.Inject
 
 
@@ -65,7 +66,8 @@ class HomeMovieListFragment : BaseFragment<HomeMovieListContract.View>(), HomeMo
         mMovieListAdapter.showLoading()
     }
 
-    override fun showErrorLoadingFavoriteList(error: Throwable) {
+    override fun showErrorLoadingMovieList(error: Throwable) {
+        Timber.e(error, "An error occurred while tried to fetch the movie list")
         mMovieListAdapter.showErrorMessage()
     }
 

@@ -1,11 +1,12 @@
 package com.themovielist.ui.movieimageview
 
 import com.themovielist.model.MovieImageViewModel
+import com.themovielist.model.MovieModel
 import com.themovielist.repository.movie.MovieRepository
 import javax.inject.Inject
 
 
-class MovieImageViewPresenter @Inject constructor(val mMovieRepository: MovieRepository): MovieImageViewContract.Presenter {
+class MovieImageViewPresenter @Inject constructor(val mMovieRepository: MovieRepository) : MovieImageViewContract.Presenter {
     private lateinit var mView: MovieImageViewContract.View
 
     private lateinit var mMovieImageViewModel: MovieImageViewModel
@@ -18,19 +19,19 @@ class MovieImageViewPresenter @Inject constructor(val mMovieRepository: MovieRep
         mMovieImageViewModel = movieImageViewModel
 
         mView.toggleMenuOpened(mMovieImageViewModel.isMenuOpen)
-        mView.toggleMovieFavorite(mMovieImageViewModel.isFavorite)
+        mView.toggleMovieFavorite(mMovieImageViewModel.isFavourite)
     }
 
     override fun toggleMovieFavorite() {
-        mView.toggleMovieFavoriteEnabled(false)
-        mMovieRepository.saveFavoriteMovie(mMovieImageViewModel.movieModel)
-                .doOnTerminate { mView.toggleMovieFavoriteEnabled(true) }
+        mView.toggleMovieFavouriteEnabled(false)
+        val request = if (mMovieImageViewModel.isFavourite) mMovieRepository.removeFavoriteMovie(mMovieImageViewModel.movieModel) else mMovieRepository.saveFavoriteMovie(mMovieImageViewModel.movieModel)
+        request.doOnTerminate { mView.toggleMovieFavouriteEnabled(true) }
                 .subscribe({
                     // Update the model.
-                    mMovieImageViewModel.isFavorite = !mMovieImageViewModel.isFavorite
+                    mMovieImageViewModel.isFavourite = !mMovieImageViewModel.isFavourite
                 }, { error ->
                     // Return the like button to the old state.
-                    mView.toggleMovieFavorite(mMovieImageViewModel.isFavorite)
+                    mView.toggleMovieFavorite(mMovieImageViewModel.isFavourite)
                     mView.showErrorFavoriteMovie(error)
                 })
     }
@@ -48,5 +49,12 @@ class MovieImageViewPresenter @Inject constructor(val mMovieRepository: MovieRep
     override fun closeMenu() {
         mMovieImageViewModel.isMenuOpen = false
         mView.toggleMenuOpened(mMovieImageViewModel.isMenuOpen)
+    }
+
+    override fun onFavoriteMovieEvent(movie: MovieModel, favourite: Boolean) {
+        if (mMovieImageViewModel.movieModel == movie && mMovieImageViewModel.isFavourite != favourite) {
+            mMovieImageViewModel.isFavourite = favourite
+            mView.toggleMovieFavouriteEnabled(favourite)
+        }
     }
 }

@@ -17,10 +17,10 @@ internal constructor(movieRepository: MovieRepository) : BasePresenterImpl(movie
     override fun showMovies(movieList: List<MovieModel>) {
         mView.showLoadingIndicator()
         mMovieRepository.getFavoriteMovieIds().subscribe({favoriteMovieIdArray ->
-            val movieImageViewList = movieList.map { MovieImageViewModel(it, favoriteMovieIdArray.contains(it.id)) }
+            val movieImageViewList = movieList.map { MovieImageViewModel(it, favoriteMovieIdArray.contains(it.id)) }.take(1)
             mView.showMovies(movieImageViewList)
         }, { error ->
-            mView.showErrorLoadingFavoriteList(error)
+            mView.showErrorLoadingMovieList(error)
         })
     }
 }

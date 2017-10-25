@@ -33,7 +33,7 @@ internal constructor(private val mRetrofit: Retrofit, private val mApplicationCo
                     return@safeContentResolver
                 }
 
-                cursor.tryExecute({
+                cursor.tryExecute(emitter) {
                     val favoriteMovieModelList = cursor.toList {
                         MovieModel.fromCursor(cursor)
                     }
@@ -44,9 +44,7 @@ internal constructor(private val mRetrofit: Retrofit, private val mApplicationCo
                     arrayRequestAPI.page = 1
 
                     emitter.onNext(arrayRequestAPI)
-                }, { error ->
-                    emitter.onError(error)
-                })
+                }
             }
         }).subscribeOn(Schedulers.io()))
     }
@@ -60,14 +58,12 @@ internal constructor(private val mRetrofit: Retrofit, private val mApplicationCo
                     return@safeContentResolver
                 }
 
-                cursor.tryExecute({
+                cursor.tryExecute(emitter) {
                     val favoriteMovieModelList = cursor.toArray {
                         getInt(getColumnIndex(MovieContract.MovieEntry._ID))
                     }
                     emitter.onNext(favoriteMovieModelList)
-                }, { error ->
-                    emitter.onError(error)
-                })
+                }
             }
         }).subscribeOn(Schedulers.io()))
     }
@@ -126,27 +122,22 @@ internal constructor(private val mRetrofit: Retrofit, private val mApplicationCo
 
     fun getMovieDetailById(id: Int): Observable<MovieModel> {
         return observeOnMainThread(Observable.create(ObservableOnSubscribe<MovieModel> { emitter ->
-            val contentResolver = mApplicationContext.contentResolver
-            if (contentResolver == null) {
-                emitter.onError(RuntimeException("Cannot get the ContentResolver"))
-                return@ObservableOnSubscribe
-            }
+            mApplicationContext.tryQueryOnContentResolver(emitter, {
+                query(MovieContract.MovieEntry.buildMovieWithId(id), null, null, null, null)
+            }, {
+                val movieModel = if (moveToNext()) MovieModel.fromCursor(this) else MovieModel.EMPTY_MOVIE
+                emitter.onNext(movieModel)
+            })
+        }).subscribeOn(Schedulers.io()))
+    }
 
-            val cursor = contentResolver.query(MovieContract.MovieEntry.buildMovieWithId(id), null, null, null, null)
-            if (cursor == null) {
-                emitter.onError(SQLDataException("An internal error occurred."))
-                return@ObservableOnSubscribe
-            }
-
-            try {
-                if (cursor.moveToNext()) {
-                    emitter.onNext(MovieModel.fromCursor(cursor))
-                }
-            } catch (ex: Exception) {
-                emitter.onError(ex)
-            } finally {
-                cursor.close()
-            }
+    fun isMovieFavourite(id: Int): Observable<Boolean> {
+        return observeOnMainThread(Observable.create(ObservableOnSubscribe<Boolean> { emitter ->
+            mApplicationContext.tryQueryOnContentResolver(emitter, {
+                query(MovieContract.MovieEntry.buildMovieWithId(id), null, null, null, null)
+            }, {
+                emitter.onNext(moveToNext())
+            })
         }).subscribeOn(Schedulers.io()))
     }
 }

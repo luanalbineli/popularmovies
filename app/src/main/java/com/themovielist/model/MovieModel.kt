@@ -98,7 +98,18 @@ data class MovieModel constructor(@SerializedName("id")
         return 0
     }
 
+    override fun equals(other: Any?): Boolean {
+        if (other == null || !MovieModel::class.java.isAssignableFrom(other.javaClass)) {
+            return false
+        }
+
+        return id == (other as MovieModel).id
+    }
+
     companion object CREATOR : Parcelable.Creator<MovieModel> {
+        @JvmField
+        val EMPTY_MOVIE = MovieModel(Int.MIN_VALUE)
+
         override fun createFromParcel(parcel: Parcel): MovieModel {
             return MovieModel(parcel)
         }
