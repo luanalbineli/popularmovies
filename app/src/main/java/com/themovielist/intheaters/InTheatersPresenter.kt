@@ -11,4 +11,14 @@ internal constructor(movieRepository: MovieRepository) : BasePresenterImpl(movie
     override fun setView(view: InTheatersContract.View) {
         mView = view
     }
+
+    override fun start() {
+        mMovieRepository.getInTheatersList(1)
+                .subscribe({ inTheaterMovieList ->
+
+                }, { error ->
+
+                })
+
+    }
 }

@@ -16,7 +16,7 @@
         android:paddingBottom="16dp">
 
         <com.facebook.drawee.view.SimpleDraweeView
-            android:id="@+id/ivMovieDetailBackdrop"
+            android:id="@+id/sdvMovieDetailBackdrop"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_marginBottom="24dp"
@@ -64,7 +64,7 @@
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintLeft_toRightOf="@+id/sdvMovieDetailPoster"
             app:layout_constraintRight_toLeftOf="@+id/lbMovieDetailFavoriteContainer"
-            app:layout_constraintTop_toBottomOf="@+id/ivMovieDetailBackdrop"
+            app:layout_constraintTop_toBottomOf="@+id/sdvMovieDetailBackdrop"
             tools:text="FAST AND FURIOUS" />
 
         <me.zhanghai.android.materialratingbar.MaterialRatingBar

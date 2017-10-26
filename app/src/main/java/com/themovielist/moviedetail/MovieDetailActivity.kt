@@ -105,7 +105,7 @@ class MovieDetailActivity : BaseDaggerActivity<MovieDetailContract.View>(), Movi
 
         val backdropWidth = ApiUtil.getDefaultPosterSize(UIUtil.getDisplayMetrics(sdvMovieDetailPoster.context).widthPixels)
         val backdropUrl = ApiUtil.buildPosterImageUrl(movieModel.backdropPath!!, backdropWidth)
-        ivMovieDetailBackdrop.setImageURI(backdropUrl)
+        sdvMovieDetailBackdrop.setImageURI(backdropUrl)
 
 
         tvMovieDetailTitle.text = movieModel.title

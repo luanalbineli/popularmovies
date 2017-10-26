@@ -1,7 +1,6 @@
 package com.themovielist.repository.movie
 
 
-import android.location.Location
 import com.themovielist.PopularMovieApplication
 import com.themovielist.model.MovieModel
 import com.themovielist.model.MovieReviewModel
@@ -22,9 +21,7 @@ import java.util.*
 import javax.inject.Inject
 
 class MovieRepository @Inject
-internal constructor(private val mRetrofit: Retrofit, private val mApplicationContext: PopularMovieApplication) : RepositoryBase() {
-
-    private val movieServiceInstance by lazy { mRetrofit.create(IMovieService::class.java) }
+internal constructor(mRetrofit: Retrofit, private val mApplicationContext: PopularMovieApplication) : RepositoryBase<IMovieService>(mRetrofit) {
 
     fun getFavoriteList(): Observable<ArrayRequestAPI<MovieModel>> {
         return observeOnMainThread(Observable.create(ObservableOnSubscribe<ArrayRequestAPI<MovieModel>> { emitter ->
@@ -71,23 +68,23 @@ internal constructor(private val mRetrofit: Retrofit, private val mApplicationCo
     }
 
     fun getTopRatedList(pageIndex: Int): Observable<ArrayRequestAPI<MovieModel>> {
-        return observeOnMainThread(movieServiceInstance.getTopRatedList(pageIndex))
+        return observeOnMainThread(mApiInstance.getTopRatedList(pageIndex))
     }
 
     fun getPopularList(pageIndex: Int): Observable<ArrayRequestAPI<MovieModel>> {
-        return observeOnMainThread(movieServiceInstance.getPopularList(pageIndex))
+        return observeOnMainThread(mApiInstance.getPopularList(pageIndex))
     }
 
     fun getInTheatersList(pageIndex: Int): Observable<ArrayRequestAPI<MovieModel>> {
-        return observeOnMainThread(movieServiceInstance.getInTheatersList(Locale.getDefault().country))
+        return observeOnMainThread(mApiInstance.getInTheatersList(Locale.getDefault().country))
     }
 
     fun getReviewsByMovieId(pageIndex: Int, movieId: Int): Observable<ArrayRequestAPI<MovieReviewModel>> {
-        return observeOnMainThread(movieServiceInstance.getReviewsByMovieId(movieId, pageIndex))
+        return observeOnMainThread(mApiInstance.getReviewsByMovieId(movieId, pageIndex))
     }
 
     fun getTrailersByMovieId(movieId: Int): Observable<List<MovieTrailerModel>> {
-        return observeOnMainThread(movieServiceInstance.getTrailersByMovieId(movieId).map { listArrayRequestAPI -> listArrayRequestAPI.results })
+        return observeOnMainThread(mApiInstance.getTrailersByMovieId(movieId).map { listArrayRequestAPI -> listArrayRequestAPI.results })
     }
 
     fun removeFavoriteMovie(movieModel: MovieModel): Completable {
@@ -146,4 +143,7 @@ internal constructor(private val mRetrofit: Retrofit, private val mApplicationCo
             })
         }).subscribeOn(Schedulers.io()))
     }
+
+    override val getApiInstanceType: Class<IMovieService>
+        get() = IMovieService::class.java
 }

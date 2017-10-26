@@ -55,3 +55,6 @@ dependencies {
     kapt daggerCompiler
     implementation dagger
 }
+repositories {
+    mavenCentral()
+}

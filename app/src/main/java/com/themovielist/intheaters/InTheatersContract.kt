@@ -10,5 +10,6 @@ interface InTheatersContract {
     }
 
     interface Presenter : BasePresenter<View> {
+        fun start()
     }
 }

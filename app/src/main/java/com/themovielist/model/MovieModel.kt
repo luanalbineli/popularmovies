@@ -8,7 +8,7 @@ import com.google.gson.annotations.SerializedName
 import com.themovielist.repository.data.MovieContract
 import java.util.*
 
-data class MovieModel constructor(@SerializedName("id")
+open class MovieModel constructor(@SerializedName("id")
                                   var id: Int = 0,
 
                                   @SerializedName("poster_path")
@@ -104,6 +104,13 @@ data class MovieModel constructor(@SerializedName("id")
         }
 
         return id == (other as MovieModel).id
+    }
+
+    override fun hashCode(): Int {
+        val prime = 31
+        var result = 1
+        result = prime * result + id.hashCode()
+        return result
     }
 
     companion object CREATOR : Parcelable.Creator<MovieModel> {

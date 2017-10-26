@@ -40,6 +40,12 @@ class InTheatersFragment : BaseFragment<InTheatersContract.View>(), InTheatersCo
         return inflater.inflate(R.layout.in_theaters_fragment, container, false)
     }
 
+    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        mPresenter.start()
+    }
+
     companion object {
         fun getInstance(): InTheatersFragment {
             return InTheatersFragment()
