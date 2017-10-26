@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:fresco="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:animateLayoutChanges="true">
@@ -18,7 +19,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@drawable/movie_image_view_menu_background"
-        android:padding="4dp">
+        android:padding="8dp">
 
         <com.like.LikeButton xmlns:android="http://schemas.android.com/apk/res/android"
             xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -27,24 +28,25 @@
             android:layout_height="@dimen/movie_image_view_favorite_button"
             app:icon_size="@dimen/movie_image_view_favorite_button"
             app:icon_type="star"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintRight_toRightOf="parent"/>
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <ImageView
             android:layout_width="@dimen/movie_image_view_favorite_button"
             android:layout_height="@dimen/movie_image_view_favorite_button"
-            fresco:srcCompat="@drawable/close"
-            android:tint="@android:color/white"/>
+            android:tint="@android:color/white"
+            fresco:srcCompat="@drawable/close" />
 
         <TextView
             android:id="@+id/tvMovieImageViewDetailButton"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:text="@string/detail"
             android:textColor="@android:color/white"
-            android:textSize="@dimen/movie_image_view_detail_button"
-            android:textStyle="bold"
+            style="@style/Base.TextAppearance.AppCompat.Medium"
+            android:drawablePadding="8dp"
+            android:text="@string/detail"
+            android:drawableRight="@drawable/arrow_right"
             fresco:layout_constraintBottom_toBottomOf="parent"
             fresco:layout_constraintLeft_toLeftOf="parent"
             fresco:layout_constraintRight_toRightOf="parent"
@@ -58,8 +60,9 @@
             android:singleLine="true"
             android:textColor="@android:color/white"
             android:textSize="@dimen/smallest_text_size"
+            fresco:layout_constraintBottom_toBottomOf="parent"
             fresco:layout_constraintEnd_toEndOf="parent"
             fresco:layout_constraintStart_toStartOf="parent"
-            fresco:layout_constraintBottom_toBottomOf="parent" />
+            tools:text="Name of the @string/error_add_favorite_movie" />
     </android.support.constraint.ConstraintLayout>
 </FrameLayout>

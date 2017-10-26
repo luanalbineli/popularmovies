@@ -1,13 +1,11 @@
 package com.themovielist.ui.movieimageview
 
 import android.content.Context
-import android.graphics.Paint
 import android.support.design.widget.Snackbar
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.widget.FrameLayout
 import com.albineli.udacity.popularmovies.R
-import com.albineli.udacity.popularmovies.R.string.favorite
 import com.like.LikeButton
 import com.like.OnLikeListener
 import com.themovielist.PopularMovieApplication
@@ -26,6 +24,7 @@ import javax.inject.Inject
 
 
 class MovieImageView constructor(context: Context, attributeSet: AttributeSet) : FrameLayout(context, attributeSet), MovieImageViewContract.View {
+
     @Inject
     lateinit var mPresenter: MovieImageViewPresenter
 
@@ -41,7 +40,6 @@ class MovieImageView constructor(context: Context, attributeSet: AttributeSet) :
             mPresenter.closeMenu()
         }
 
-        tvMovieImageViewDetailButton.paintFlags = tvMovieImageViewDetailButton.paintFlags or Paint.UNDERLINE_TEXT_FLAG
         tvMovieImageViewDetailButton.setOnClickListener {
             mPresenter.showMovieDetail()
         }
@@ -114,5 +112,11 @@ class MovieImageView constructor(context: Context, attributeSet: AttributeSet) :
 
     override fun toggleMovieFavouriteEnabled(enabled: Boolean) {
         lbMovieImageViewFavorite.isEnabled = enabled
+    }
+
+    override fun showMovieInfo(movieImageViewModel: MovieImageViewModel) {
+        tvMovieImageViewName.text = movieImageViewModel.movieModel.title
+        toggleMenuOpened(movieImageViewModel.isMenuOpen)
+        toggleMovieFavorite(movieImageViewModel.isFavourite)
     }
 }

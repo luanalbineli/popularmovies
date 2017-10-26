@@ -13,6 +13,7 @@ object MovieImageViewContract {
         fun toggleMovieFavorite(favourite: Boolean)
         fun toggleMovieFavouriteEnabled(enabled: Boolean)
         fun showErrorFavoriteMovie(error: Throwable)
+        fun showMovieInfo(movieImageViewModel: MovieImageViewModel)
     }
 
     interface Presenter: BasePresenter<View> {

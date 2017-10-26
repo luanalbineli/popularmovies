@@ -17,9 +17,7 @@ class MovieImageViewPresenter @Inject constructor(val mMovieRepository: MovieRep
 
     override fun setMovieImageViewModel(movieImageViewModel: MovieImageViewModel) {
         mMovieImageViewModel = movieImageViewModel
-
-        mView.toggleMenuOpened(mMovieImageViewModel.isMenuOpen)
-        mView.toggleMovieFavorite(mMovieImageViewModel.isFavourite)
+        mView.showMovieInfo(movieImageViewModel)
     }
 
     override fun toggleMovieFavorite() {
