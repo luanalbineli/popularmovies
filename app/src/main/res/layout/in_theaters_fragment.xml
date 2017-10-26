@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:fresco="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <com.facebook.drawee.view.SimpleDraweeView
+        android:id="@+id/ivMovieDetailBackdrop"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/in_theaters_backdrop_height"
+        android:adjustViewBounds="true"
+        android:contentDescription="@string/movie_detail_backdrop_content_description"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        fresco:actualImageScaleType="centerCrop"
+        fresco:overlayImage="@drawable/movie_image_view_menu_background"
+        fresco:placeholderImage="@android:color/darker_gray" />
+</android.support.constraint.ConstraintLayout>

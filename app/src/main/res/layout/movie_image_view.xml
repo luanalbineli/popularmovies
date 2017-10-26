@@ -1,68 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:fresco="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:animateLayoutChanges="true">
 
     <com.facebook.drawee.view.SimpleDraweeView xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/sdvMovieImageView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_width="@dimen/home_movie_list_image_width"
+        android:layout_height="@dimen/home_movie_list_image_height"
         fresco:actualImageScaleType="centerCrop"
+        fresco:layout_constraintBottom_toTopOf="@+id/tvMovieImageViewName"
+        fresco:layout_constraintEnd_toEndOf="parent"
+        fresco:layout_constraintStart_toStartOf="parent"
+        fresco:layout_constraintTop_toTopOf="parent"
         fresco:placeholderImage="@android:color/darker_gray"
         fresco:roundedCornerRadius="2dp" />
 
-    <android.support.constraint.ConstraintLayout
-        android:id="@+id/clMovieImageViewMenuContainer"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@drawable/movie_image_view_menu_background"
-        android:padding="8dp">
+    <com.github.ivbaranov.mfb.MaterialFavoriteButton
+        android:id="@+id/mfbMovieImageViewFavorite"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        fresco:layout_constraintEnd_toEndOf="@+id/sdvMovieImageView"
+        fresco:layout_constraintTop_toTopOf="@+id/sdvMovieImageView"
+        fresco:mfb_animate_favorite="false"
+        fresco:mfb_animate_unfavorite="false"
+        fresco:mfb_favorite_image="@drawable/heart"
+        fresco:mfb_not_favorite_image="@drawable/heart_outline"
+        fresco:mfb_padding="4"
+        fresco:mfb_size="36"
+        fresco:mfb_type="heart" />
 
-        <com.like.LikeButton xmlns:android="http://schemas.android.com/apk/res/android"
-            xmlns:app="http://schemas.android.com/apk/res-auto"
-            android:id="@+id/lbMovieImageViewFavorite"
-            android:layout_width="@dimen/movie_image_view_favorite_button"
-            android:layout_height="@dimen/movie_image_view_favorite_button"
-            app:icon_size="@dimen/movie_image_view_favorite_button"
-            app:icon_type="star"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <ImageView
-            android:layout_width="@dimen/movie_image_view_favorite_button"
-            android:layout_height="@dimen/movie_image_view_favorite_button"
-            android:tint="@android:color/white"
-            fresco:srcCompat="@drawable/close" />
-
-        <TextView
-            android:id="@+id/tvMovieImageViewDetailButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:textColor="@android:color/white"
-            style="@style/Base.TextAppearance.AppCompat.Medium"
-            android:drawablePadding="8dp"
-            android:text="@string/detail"
-            android:drawableRight="@drawable/arrow_right"
-            fresco:layout_constraintBottom_toBottomOf="parent"
-            fresco:layout_constraintLeft_toLeftOf="parent"
-            fresco:layout_constraintRight_toRightOf="parent"
-            fresco:layout_constraintTop_toTopOf="parent" />
-
-        <TextView
-            android:id="@+id/tvMovieImageViewName"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:singleLine="true"
-            android:textColor="@android:color/white"
-            android:textSize="@dimen/smallest_text_size"
-            fresco:layout_constraintBottom_toBottomOf="parent"
-            fresco:layout_constraintEnd_toEndOf="parent"
-            fresco:layout_constraintStart_toStartOf="parent"
-            tools:text="Name of the @string/error_add_favorite_movie" />
-    </android.support.constraint.ConstraintLayout>
-</FrameLayout>
+    <TextView
+        android:id="@+id/tvMovieImageViewName"
+        style="@style/LightMediumText"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:ellipsize="end"
+        android:gravity="center"
+        android:lines="2"
+        android:maxLines="2"
+        fresco:layout_constraintBottom_toBottomOf="parent"
+        fresco:layout_constraintEnd_toEndOf="parent"
+        fresco:layout_constraintStart_toStartOf="parent" />
+</android.support.constraint.ConstraintLayout>

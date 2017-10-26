@@ -38,7 +38,7 @@ class HomeMovieListFragment : BaseFragment<HomeMovieListContract.View>(), HomeMo
                 .build()
                 .inject(this)
     }
-GIT ST
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.recycler_view, container, false)
     }

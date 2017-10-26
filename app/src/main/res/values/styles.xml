@@ -25,4 +25,8 @@
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
+    <style name="LightMediumText" parent="Base.TextAppearance.AppCompat.Medium">
+        <item name="android:fontFamily">sans-serif-light</item>
+    </style>
+
 </resources>

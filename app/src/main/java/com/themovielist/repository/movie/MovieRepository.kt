@@ -1,6 +1,7 @@
 package com.themovielist.repository.movie
 
 
+import android.location.Location
 import com.themovielist.PopularMovieApplication
 import com.themovielist.model.MovieModel
 import com.themovielist.model.MovieReviewModel
@@ -17,6 +18,7 @@ import io.reactivex.ObservableOnSubscribe
 import io.reactivex.schedulers.Schedulers
 import retrofit2.Retrofit
 import java.sql.SQLDataException
+import java.util.*
 import javax.inject.Inject
 
 class MovieRepository @Inject
@@ -74,6 +76,10 @@ internal constructor(private val mRetrofit: Retrofit, private val mApplicationCo
 
     fun getPopularList(pageIndex: Int): Observable<ArrayRequestAPI<MovieModel>> {
         return observeOnMainThread(movieServiceInstance.getPopularList(pageIndex))
+    }
+
+    fun getInTheatersList(pageIndex: Int): Observable<ArrayRequestAPI<MovieModel>> {
+        return observeOnMainThread(movieServiceInstance.getInTheatersList(Locale.getDefault().country))
     }
 
     fun getReviewsByMovieId(pageIndex: Int, movieId: Int): Observable<ArrayRequestAPI<MovieReviewModel>> {

@@ -3,6 +3,8 @@ package com.themovielist.mainactivity
 import android.app.Fragment
 import android.app.FragmentManager
 import android.os.Bundle
+import android.support.v4.graphics.drawable.DrawableCompat
+import android.support.v7.content.res.AppCompatResources
 import com.albineli.udacity.popularmovies.R
 import com.ashokvarma.bottomnavigation.BottomNavigationBar
 import com.ashokvarma.bottomnavigation.BottomNavigationItem
@@ -29,10 +31,10 @@ class MainActivity : BaseActivity(), FragmentManager.OnBackStackChangedListener 
         }
 
         bb_bottom_menu.setMode(BottomNavigationBar.MODE_FIXED)
-                .addItem(BottomNavigationItem(R.drawable.home, R.string.home))
-                .addItem(BottomNavigationItem(R.drawable.magnify, R.string.browse))
-                .addItem(BottomNavigationItem(R.drawable.theater, R.string.cinema))
-                .addItem(BottomNavigationItem(R.drawable.ic_heart_black_24dp, R.string.favorite))
+                .addItem(BottomNavigationItem(AppCompatResources.getDrawable(this, R.drawable.home), R.string.home))
+                .addItem(BottomNavigationItem(AppCompatResources.getDrawable(this, R.drawable.magnify), R.string.browse))
+                .addItem(BottomNavigationItem(AppCompatResources.getDrawable(this, R.drawable.theater), R.string.cinema))
+                .addItem(BottomNavigationItem(AppCompatResources.getDrawable(this, R.drawable.heart), R.string.favorite))
                 .initialise()
 
         bb_bottom_menu.selectTab(mSelectedTabIndex, false)

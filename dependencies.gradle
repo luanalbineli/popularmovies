@@ -25,7 +25,8 @@ ext {
             likeButton              : '0.2.3',
             bottomBar               : '2.0.2',
             readMoreTextView        : '2.0.1',
-            leakCanary              : '1.5.4'
+            leakCanary              : '1.5.4',
+            favoriteButton          : '0.1.4'
     ]
 
     supportV13 = "com.android.support:support-v13:$versions.support"
@@ -83,6 +84,8 @@ ext {
     materialRatingBar = "me.zhanghai.android.materialratingbar:library:$versions.materialRatingBar"
 
     likeButton = "com.github.jd-alexander:LikeButton:$versions.likeButton"
+
+    favoriteButton = "com.github.ivbaranov:materialfavoritebutton:$versions.favoriteButton"
 
     bottomBar = "com.ashokvarma.android:bottom-navigation-bar:$versions.bottomBar"
 

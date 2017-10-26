@@ -6,7 +6,7 @@ import com.themovielist.repository.movie.MovieRepository
 import javax.inject.Inject
 
 
-class MovieImageViewPresenter @Inject constructor(val mMovieRepository: MovieRepository) : MovieImageViewContract.Presenter {
+class MovieImageViewPresenter @Inject constructor(private val mMovieRepository: MovieRepository) : MovieImageViewContract.Presenter {
     private lateinit var mView: MovieImageViewContract.View
 
     private lateinit var mMovieImageViewModel: MovieImageViewModel
@@ -34,19 +34,9 @@ class MovieImageViewPresenter @Inject constructor(val mMovieRepository: MovieRep
                 })
     }
 
-    override fun openMenu() {
-        mMovieImageViewModel.isMenuOpen = true
-        mView.toggleMenuOpened(mMovieImageViewModel.isMenuOpen)
-    }
-
     override fun showMovieDetail() {
         mView.openMovieDetail(mMovieImageViewModel.movieModel)
 
-    }
-
-    override fun closeMenu() {
-        mMovieImageViewModel.isMenuOpen = false
-        mView.toggleMenuOpened(mMovieImageViewModel.isMenuOpen)
     }
 
     override fun onFavoriteMovieEvent(movie: MovieModel, favourite: Boolean) {

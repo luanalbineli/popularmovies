@@ -37,7 +37,7 @@ class InTheatersFragment : BaseFragment<InTheatersContract.View>(), InTheatersCo
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_movie_list, container, false)
+        return inflater.inflate(R.layout.in_theaters_fragment, container, false)
     }
 
     companion object {

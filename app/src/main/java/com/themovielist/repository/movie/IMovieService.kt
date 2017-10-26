@@ -23,4 +23,7 @@ interface IMovieService {
 
     @GET("movie/{movieId}/videos")
     fun getTrailersByMovieId(@Path("movieId") movieId: Int): Observable<ArrayRequestAPI<MovieTrailerModel>>
+
+    @GET("movie/now_playing?region={region}")
+    fun getInTheatersList(@Query("region") region: String): Observable<ArrayRequestAPI<MovieModel>>
 }

@@ -28,8 +28,7 @@ import com.themovielist.ui.NonScrollableLLM
 import com.themovielist.util.ApiUtil
 import com.themovielist.util.UIUtil
 import com.themovielist.util.YouTubeUtil
-import kotlinx.android.synthetic.main.activity_movie_detail.*
-import kotlinx.android.synthetic.main.like_button.*
+import kotlinx.android.synthetic.main.movie_detail_activity.*
 import org.greenrobot.eventbus.EventBus
 import timber.log.Timber
 import java.security.InvalidParameterException
@@ -68,7 +67,7 @@ class MovieDetailActivity : BaseDaggerActivity<MovieDetailContract.View>(), Movi
         }
         mMovieModel = intent.getParcelableExtra(MOVIE_KEY)
 
-        setContentView(R.layout.activity_movie_detail)
+        setContentView(R.layout.movie_detail_activity)
 
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
