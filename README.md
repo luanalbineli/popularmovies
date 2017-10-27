@@ -2,40 +2,61 @@
 -----
 
 This is the second project of the Udacity's Android Nanodegree, that is basically an Android application that consumes the services exposed by [TMDb](https://www.themoviedb.org).\
-Built using Dagger2, RxJava, MVP pattern, Retrofit and so on.
 
-Adding your DB Movie API Key
------
- 
-To add your key, you need to create a **gradle.properties** file on root folder, and 
-add the following line:
+### Patters, libraries and technology:
+  * MVP
+  * Dagger 2.x
+  * Kotlin
+  * RxJava
+  * Retrofit
+  * And so on
 
-API_KEY = "YOUR_API_KEY"
+##### Why architecture patterns?
+Separation of responsabilities. When you follow an architecture pattern, 
+I's easier to understand the flow of information, the responsabilities of each class/object, to maintain the code and test.  
+  
 
 ### Features
 
 The application was divided in four tabs:
 
-  * Home
+  * :heavy_minus_sign: Home - The default tab of the application
     * :white_check_mark: List of the first twenty movies ordered by popularity;
     * :white_check_mark: List of the first twenty movies ordered by rating;
     * :soon: Option to see all movies ordered by popularity (infinite scroll);
-    * :soon: Option to see all movies ordered by popularity (infinite scroll);
+    * :soon: Option to see all movies ordered by rating (infinite scroll);
     
-  * Browse
-  * Cinema
-  * Favorite
-    * :x: List of your favorite movies
+  * :x: Browse - Tab to the user search for new movies
+    * :x: Filter by genre
+    * :x: More filters...
     
- * Movie detail screen   
-   * :x: Option to favorite the movie;
+  * :x: Cinema
+    * :x: List of the movies in theaters
+    * :x: Show the upcoming movies
+    
+  * :x: Favorite
+    * :x: List your favorite movies
+    * :x: Option to select the order by (default, release date)
+    
+ * Movie detail screen
    * :white_check_mark: Show the backdrop and poster;
    * :white_check_mark: Show the user's average rating;
    * :white_check_mark: Show the first two reviews;
    * :white_check_mark: Show all reviews;
    * :white_check_mark: Show the first two trailers;
    * :white_check_mark: Show all trailers;
+   * :x: Option to favorite the movie;
    * :x: Show the cast;
+   * :x: Show recommendations (of movies, based on the movie you are seeing);
+   
+### Building yourself
+
+To build/run this project, you I'll need [Android Studio 3.0](https://developer.android.com/studio/index.html).
+Besides, you need to create a [TMDb account](https://www.themoviedb.org/account/signup) and get an API key.
+Then, with your API key in hands, just create a `gradle.properties` file on root folder, and add the following line:
+
+API_KEY = "YOUR_API_KEY"                                              
+                                              
    
 Some screenshots:
 
