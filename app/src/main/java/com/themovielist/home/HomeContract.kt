@@ -2,7 +2,6 @@ package com.themovielist.home
 
 import com.themovielist.base.BasePresenter
 import com.themovielist.model.MovieModel
-import com.themovielist.repository.ArrayRequestAPI
 
 interface HomeContract {
     interface View {

@@ -29,7 +29,7 @@
         <item name="android:fontFamily">sans-serif-light</item>
     </style>
 
-    <style name="BlackMediumText" parent="Base.TextAppearance.AppCompat.Medium">
+    <style name="BlackLargeText" parent="Base.TextAppearance.AppCompat.Large">
         <item name="android:fontFamily">sans-serif-black</item>
     </style>
 

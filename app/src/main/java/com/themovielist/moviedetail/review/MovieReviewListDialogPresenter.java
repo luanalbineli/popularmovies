@@ -1,7 +1,7 @@
 package com.themovielist.moviedetail.review;
 
 import com.themovielist.model.MovieReviewModel;
-import com.themovielist.repository.ArrayRequestAPI;
+import com.themovielist.model.response.PaginatedArrayResponseModel;
 import com.themovielist.repository.movie.MovieRepository;
 
 import java.util.List;
@@ -52,14 +52,14 @@ public class MovieReviewListDialogPresenter implements MovieReviewListDialogCont
 
         mPageIndex++;
 
-        Observable<ArrayRequestAPI<MovieReviewModel>> observable = mMovieRepository.getReviewsByMovieId(mPageIndex, mMovieId);
+        Observable<PaginatedArrayResponseModel<MovieReviewModel>> observable = mMovieRepository.getReviewsByMovieId(mPageIndex, mMovieId);
 
         mSubscription = observable.subscribe(
                 this::handleSuccessLoadMovieReview,
                 this::handleErrorLoadMovieReview);
     }
 
-    private void handleSuccessLoadMovieReview(ArrayRequestAPI<MovieReviewModel> response) {
+    private void handleSuccessLoadMovieReview(PaginatedArrayResponseModel<MovieReviewModel> response) {
         mView.addReviewsToList(response.getResults());
         if (!response.hasMorePages()) {
             mView.disableLoadMoreListener();

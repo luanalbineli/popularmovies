@@ -10,12 +10,15 @@ import com.themovielist.base.BaseFragment
 import com.themovielist.base.BasePresenter
 import com.themovielist.injector.components.ApplicationComponent
 import com.themovielist.injector.components.DaggerFragmentComponent
+import com.themovielist.model.MovieWithGenreModel
 import com.themovielist.movielist.MovieListFragment.Companion.getItensPerRow
+import com.themovielist.util.ApiUtil
+import kotlinx.android.synthetic.main.in_theaters_fragment.*
+import timber.log.Timber
 import javax.inject.Inject
 
 
 class InTheatersFragment : BaseFragment<InTheatersContract.View>(), InTheatersContract.View {
-
     override val presenterImplementation: BasePresenter<InTheatersContract.View>
         get() = mPresenter
 
@@ -42,8 +45,29 @@ class InTheatersFragment : BaseFragment<InTheatersContract.View>(), InTheatersCo
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        activity.setTitle(R.string.cinema)
 
         mPresenter.start()
+    }
+
+    override fun showMainMovieDetail(movieWithGenreModel: MovieWithGenreModel) {
+        val posterWidth = ApiUtil.getDefaultPosterSize(sdvMovieDetailBackdrop.width)
+        val posterUrl = ApiUtil.buildPosterImageUrl(movieWithGenreModel.posterPath, posterWidth)
+
+        sdvMovieDetailBackdrop.setImageURI(posterUrl)
+
+        tvInTheatersMovieDuration.text = "1h 20m" // TODO: TEST
+        tvInTheatersMovieName.text = movieWithGenreModel.title
+        tvInTheatersMovieGenres.text = movieWithGenreModel.genreList?.map { it.name }?.reduce {a, b -> "$a, $b"} ?: ""
+    }
+
+    override fun showMovieList(results: List<MovieWithGenreModel>) {
+
+    }
+
+    override fun showErrorLoadingMovies(error: Throwable) {
+        Timber.e(error, "An error occurred while tried to fetch the in theaters movies: ${error.message}")
+        // TODO: Handle error.
     }
 
     companion object {

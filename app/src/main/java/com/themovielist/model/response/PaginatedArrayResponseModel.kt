@@ -1,8 +1,8 @@
-package com.themovielist.repository
+package com.themovielist.model.response
 
 import com.google.gson.annotations.SerializedName
 
-class ArrayRequestAPI<T> {
+class PaginatedArrayResponseModel<T> {
     @SerializedName("results")
     lateinit var results: List<T>
 

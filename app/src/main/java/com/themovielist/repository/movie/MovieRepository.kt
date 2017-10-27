@@ -5,7 +5,7 @@ import com.themovielist.PopularMovieApplication
 import com.themovielist.model.MovieModel
 import com.themovielist.model.MovieReviewModel
 import com.themovielist.model.MovieTrailerModel
-import com.themovielist.repository.ArrayRequestAPI
+import com.themovielist.model.response.PaginatedArrayResponseModel
 import com.themovielist.repository.RepositoryBase
 import com.themovielist.repository.data.MovieContract
 import com.themovielist.util.toArray
@@ -17,14 +17,13 @@ import io.reactivex.ObservableOnSubscribe
 import io.reactivex.schedulers.Schedulers
 import retrofit2.Retrofit
 import java.sql.SQLDataException
-import java.util.*
 import javax.inject.Inject
 
 class MovieRepository @Inject
 internal constructor(mRetrofit: Retrofit, private val mApplicationContext: PopularMovieApplication) : RepositoryBase<IMovieService>(mRetrofit) {
 
-    fun getFavoriteList(): Observable<ArrayRequestAPI<MovieModel>> {
-        return observeOnMainThread(Observable.create(ObservableOnSubscribe<ArrayRequestAPI<MovieModel>> { emitter ->
+    fun getFavoriteList(): Observable<PaginatedArrayResponseModel<MovieModel>> {
+        return observeOnMainThread(Observable.create(ObservableOnSubscribe<PaginatedArrayResponseModel<MovieModel>> { emitter ->
             mApplicationContext.safeContentResolver(emitter) {
                 val cursor = query(MovieContract.MovieEntry.CONTENT_URI, null, null, null, null)
                 if (cursor == null) {
@@ -37,7 +36,7 @@ internal constructor(mRetrofit: Retrofit, private val mApplicationContext: Popul
                         MovieModel.fromCursor(cursor)
                     }
 
-                    val arrayRequestAPI = ArrayRequestAPI<MovieModel>()
+                    val arrayRequestAPI = PaginatedArrayResponseModel<MovieModel>()
                     arrayRequestAPI.results = favoriteMovieModelList
                     arrayRequestAPI.totalPages = 1
                     arrayRequestAPI.page = 1
@@ -67,19 +66,15 @@ internal constructor(mRetrofit: Retrofit, private val mApplicationContext: Popul
         }).subscribeOn(Schedulers.io()))
     }
 
-    fun getTopRatedList(pageIndex: Int): Observable<ArrayRequestAPI<MovieModel>> {
+    fun getTopRatedList(pageIndex: Int): Observable<PaginatedArrayResponseModel<MovieModel>> {
         return observeOnMainThread(mApiInstance.getTopRatedList(pageIndex))
     }
 
-    fun getPopularList(pageIndex: Int): Observable<ArrayRequestAPI<MovieModel>> {
+    fun getPopularList(pageIndex: Int): Observable<PaginatedArrayResponseModel<MovieModel>> {
         return observeOnMainThread(mApiInstance.getPopularList(pageIndex))
     }
 
-    fun getInTheatersList(pageIndex: Int): Observable<ArrayRequestAPI<MovieModel>> {
-        return observeOnMainThread(mApiInstance.getInTheatersList(Locale.getDefault().country))
-    }
-
-    fun getReviewsByMovieId(pageIndex: Int, movieId: Int): Observable<ArrayRequestAPI<MovieReviewModel>> {
+    fun getReviewsByMovieId(pageIndex: Int, movieId: Int): Observable<PaginatedArrayResponseModel<MovieReviewModel>> {
         return observeOnMainThread(mApiInstance.getReviewsByMovieId(movieId, pageIndex))
     }
 

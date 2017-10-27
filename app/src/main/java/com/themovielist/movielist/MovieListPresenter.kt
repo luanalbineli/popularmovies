@@ -4,7 +4,7 @@ import com.themovielist.base.BasePresenterImpl
 import com.themovielist.enums.MovieListFilterDescriptor
 import com.themovielist.model.MovieListStateModel
 import com.themovielist.model.MovieModel
-import com.themovielist.repository.ArrayRequestAPI
+import com.themovielist.model.response.PaginatedArrayResponseModel
 import com.themovielist.repository.movie.MovieRepository
 import io.reactivex.Observable
 import io.reactivex.disposables.Disposable
@@ -78,7 +78,7 @@ internal constructor(movieRepository: MovieRepository) : BasePresenterImpl(movie
             pageIndex++
         }
 
-        val observable: Observable<ArrayRequestAPI<MovieModel>> =
+        val observable: Observable<PaginatedArrayResponseModel<MovieModel>> =
                 when (filter) {
                     MovieListFilterDescriptor.POPULAR -> mMovieRepository.getPopularList(pageIndex)
                     MovieListFilterDescriptor.RATING -> mMovieRepository.getTopRatedList(pageIndex)

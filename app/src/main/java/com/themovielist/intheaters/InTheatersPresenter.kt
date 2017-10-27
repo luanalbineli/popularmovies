@@ -1,23 +1,23 @@
 package com.themovielist.intheaters
 
-import com.themovielist.base.BasePresenterImpl
-import com.themovielist.repository.movie.MovieRepository
+import com.themovielist.repository.intheaters.InTheatersRepository
 import javax.inject.Inject
 
 class InTheatersPresenter @Inject
-internal constructor(movieRepository: MovieRepository) : BasePresenterImpl(movieRepository), InTheatersContract.Presenter {
-    private var mView: InTheatersContract.View? = null
+internal constructor(private val mInTheatersRepository: InTheatersRepository) : InTheatersContract.Presenter {
+    private lateinit var mView: InTheatersContract.View
 
     override fun setView(view: InTheatersContract.View) {
         mView = view
     }
 
     override fun start() {
-        mMovieRepository.getInTheatersList(1)
+        mInTheatersRepository.getInTheatersMovieList(1)
                 .subscribe({ inTheaterMovieList ->
-
+                    mView.showMainMovieDetail(inTheaterMovieList.results[0])
+                    mView.showMovieList(inTheaterMovieList.results)
                 }, { error ->
-
+                    mView.showErrorLoadingMovies(error)
                 })
 
     }

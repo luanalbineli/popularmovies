@@ -77,9 +77,7 @@ class MainActivity : BaseActivity(), FragmentManager.OnBackStackChangedListener 
 
     private fun checkShouldDisplayBackButton() {
         val shouldDisplayBackButton = fragmentManager.backStackEntryCount > 0
-        if (supportActionBar != null) {
-            supportActionBar!!.setDisplayHomeAsUpEnabled(shouldDisplayBackButton)
-        }
+        supportActionBar?.setDisplayHomeAsUpEnabled(shouldDisplayBackButton)
     }
 
     override fun onSupportNavigateUp(): Boolean {

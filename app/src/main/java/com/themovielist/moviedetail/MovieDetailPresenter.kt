@@ -5,7 +5,7 @@ import com.themovielist.base.BasePresenterImpl
 import com.themovielist.model.MovieModel
 import com.themovielist.model.MovieReviewModel
 import com.themovielist.model.MovieTrailerModel
-import com.themovielist.repository.ArrayRequestAPI
+import com.themovielist.model.response.PaginatedArrayResponseModel
 import com.themovielist.repository.movie.MovieRepository
 import timber.log.Timber
 import javax.inject.Inject
@@ -13,7 +13,7 @@ import javax.inject.Inject
 class MovieDetailPresenter @Inject
 internal constructor(movieRepository: MovieRepository) : BasePresenterImpl(movieRepository), MovieDetailContract.Presenter {
     private lateinit var mView: MovieDetailContract.View
-    private var mMovieReviewRequest: ArrayRequestAPI<MovieReviewModel>? = null
+    private var mMovieReviewRequest: PaginatedArrayResponseModel<MovieReviewModel>? = null
     private var mMovieTrailerList: List<MovieTrailerModel>? = null
     private var mMovieId: Int = 0
 
@@ -69,7 +69,7 @@ internal constructor(movieRepository: MovieRepository) : BasePresenterImpl(movie
         }
     }
 
-    private fun handleMovieReviewRequestSuccess(movieReviewModelArrayRequestAPI: ArrayRequestAPI<MovieReviewModel>) {
+    private fun handleMovieReviewRequestSuccess(movieReviewModelArrayRequestAPI: PaginatedArrayResponseModel<MovieReviewModel>) {
         if (movieReviewModelArrayRequestAPI.results.isEmpty()) {
             mView.showEmptyReviewListMessage()
             mView.setShowAllReviewsButtonVisibility(false)

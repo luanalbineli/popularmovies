@@ -9,53 +9,64 @@
         android:id="@+id/sdvMovieDetailBackdrop"
         android:layout_width="0dp"
         android:layout_height="@dimen/in_theaters_backdrop_height"
-        android:adjustViewBounds="true"
         android:contentDescription="@string/movie_detail_backdrop_content_description"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        fresco:actualImageScaleType="centerCrop"
-        fresco:overlayImage="@drawable/movie_image_view_menu_background"
+        fresco:actualImageScaleType="focusCrop"
         fresco:placeholderImage="@android:color/darker_gray" />
+
+    <View
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@drawable/movie_image_view_menu_background"
+        app:layout_constraintStart_toStartOf="@id/sdvMovieDetailBackdrop"
+        app:layout_constraintEnd_toEndOf="@id/sdvMovieDetailBackdrop"
+        app:layout_constraintTop_toTopOf="@id/sdvMovieDetailBackdrop"
+        app:layout_constraintBottom_toBottomOf="@id/sdvMovieDetailBackdrop" />
 
     <TextView
         android:id="@+id/tvInTheatersMovieDuration"
+        style="@style/LightMediumText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        style="@style/LightMediumText"
-        fresco:text="1h 20m"
+        android:layout_marginBottom="16dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
-        android:layout_marginBottom="16dp"
+        android:textColor="@android:color/white"
+        app:layout_constraintBottom_toBottomOf="@+id/sdvMovieDetailBackdrop"
         app:layout_constraintStart_toStartOf="@+id/sdvMovieDetailBackdrop"
-        app:layout_constraintBottom_toBottomOf="@+id/sdvMovieDetailBackdrop"/>
+        fresco:text="1h 20m" />
 
     <TextView
         android:id="@+id/separator"
         style="@style/Base.TextAppearance.AppCompat.Medium"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:textColor="@android:color/white"
         app:layout_constraintBottom_toBottomOf="@id/tvInTheatersMovieDuration"
         app:layout_constraintStart_toEndOf="@id/tvInTheatersMovieDuration"
-        android:layout_marginStart="8dp"
-        fresco:text="|" />
+        android:text="@string/dont_know_the_name_separator" />
+
     <TextView
         android:id="@+id/tvInTheatersMovieGenres"
         style="@style/LightMediumText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:textColor="@android:color/white"
         app:layout_constraintBottom_toBottomOf="@id/separator"
         app:layout_constraintStart_toEndOf="@id/separator"
-        android:layout_marginStart="8dp"
         fresco:text="Action, Sci-Fi" />
 
     <TextView
         android:id="@+id/tvInTheatersMovieName"
-        style="@style/BlackMediumText"
+        style="@style/BlackLargeText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
-        android:fontFamily="sans-serif-black"
+        android:textColor="@android:color/white"
         app:layout_constraintBottom_toTopOf="@+id/tvInTheatersMovieDuration"
         app:layout_constraintStart_toStartOf="@+id/tvInTheatersMovieDuration"
         fresco:text="Dunkirk" />

@@ -1,6 +1,8 @@
 package com.themovielist.repository
 
 
+import android.util.SparseArray
+import com.themovielist.model.MovieWithGenreModel
 import io.reactivex.Completable
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers

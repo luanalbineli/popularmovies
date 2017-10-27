@@ -42,4 +42,5 @@
     <string name="all_reviews">All reviews</string>
     <string name="all_trailers">All trailers</string>
     <string name="detail">Detail</string>
+    <string name="dont_know_the_name_separator">|</string>
 </resources>
