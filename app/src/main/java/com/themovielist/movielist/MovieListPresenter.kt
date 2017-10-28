@@ -1,7 +1,7 @@
 package com.themovielist.movielist
 
 import com.themovielist.base.BasePresenterImpl
-import com.themovielist.enums.MovieListFilterDescriptor
+import com.themovielist.enums.MovieSortEnum
 import com.themovielist.model.MovieListStateModel
 import com.themovielist.model.MovieModel
 import com.themovielist.model.response.PaginatedArrayResponseModel
@@ -17,9 +17,9 @@ import javax.inject.Inject
 
 class MovieListPresenter @Inject
 internal constructor(movieRepository: MovieRepository) : BasePresenterImpl(movieRepository), MovieListContract.Presenter {
-    private var mView: MovieListContract.View? = null
+    private lateinit var mView: MovieListContract.View
 
-    @MovieListFilterDescriptor.MovieListFilter
+    @MovieSortEnum.MovieSort
     internal var filter: Int = 0
 
     private var mHasError = false
@@ -35,7 +35,8 @@ internal constructor(movieRepository: MovieRepository) : BasePresenterImpl(movie
     }
 
     override fun init(movieListStateModel: MovieListStateModel) {
-        mView!!.setTitleByFilter(movieListStateModel.filter)
+        Timber.i("Movie list filter ${movieListStateModel.filter}")
+        mView.setTitleByFilter(movieListStateModel.filter)
 
         filter = movieListStateModel.filter
 
@@ -52,7 +53,7 @@ internal constructor(movieRepository: MovieRepository) : BasePresenterImpl(movie
         handleSuccessLoadMovieList(movieListStateModel.movieList, true, true)
 
         if (movieListStateModel.firstVisibleMovieIndex != Integer.MIN_VALUE) {
-            mView!!.scrollToMovieIndex(movieListStateModel.firstVisibleMovieIndex)
+            mView.scrollToMovieIndex(movieListStateModel.firstVisibleMovieIndex)
         }
 
         pageIndex = movieListStateModel.pageIndex
@@ -64,13 +65,13 @@ internal constructor(movieRepository: MovieRepository) : BasePresenterImpl(movie
         }
     }
 
-    private fun loadMovieList(startOver: Boolean, @MovieListFilterDescriptor.MovieListFilter filter: Int) {
+    private fun loadMovieList(startOver: Boolean, @MovieSortEnum.MovieSort filter: Int) {
         Timber.i("loadMovieList - Loading the movie list")
         if (mSubscription != null) {
             return
         }
 
-        mView!!.showLoadingIndicator()
+        mView.showLoadingIndicator()
 
         if (startOver) {
             pageIndex = 1
@@ -80,8 +81,8 @@ internal constructor(movieRepository: MovieRepository) : BasePresenterImpl(movie
 
         val observable: Observable<PaginatedArrayResponseModel<MovieModel>> =
                 when (filter) {
-                    MovieListFilterDescriptor.POPULAR -> mMovieRepository.getPopularList(pageIndex)
-                    MovieListFilterDescriptor.RATING -> mMovieRepository.getTopRatedList(pageIndex)
+                    MovieSortEnum.POPULAR -> mMovieRepository.getPopularList(pageIndex)
+                    MovieSortEnum.RATING -> mMovieRepository.getTopRatedList(pageIndex)
                     else -> mMovieRepository.getFavoriteList()
                 }
 
@@ -95,16 +96,16 @@ internal constructor(movieRepository: MovieRepository) : BasePresenterImpl(movie
     private fun handleSuccessLoadMovieList(movieList: List<MovieModel>?, hasMorePages: Boolean, startOver: Boolean) {
         Timber.i("handleSuccessLoadMovieList - CHANGED")
         if (movieList!!.size == 0) {
-            mView!!.clearMovieList() // Make sure that the list is empty.
-            mView!!.showEmptyListMessage()
+            mView.clearMovieList() // Make sure that the list is empty.
+            mView.showEmptyListMessage()
         } else {
-            mView!!.showMovieList(movieList, startOver)
+            mView.showMovieList(movieList, startOver)
         }
 
         if (hasMorePages) {
-            mView!!.enableLoadMoreListener()
+            mView.enableLoadMoreListener()
         } else {
-            mView!!.disableLoadMoreListener()
+            mView.disableLoadMoreListener()
         }
     }
 
@@ -116,18 +117,18 @@ internal constructor(movieRepository: MovieRepository) : BasePresenterImpl(movie
             pageIndex--
         }
 
-        if (filter == MovieListFilterDescriptor.FAVORITE) {
-            mView!!.clearMovieList()
+        if (filter == MovieSortEnum.FAVORITE) {
+            mView.clearMovieList()
         }
 
-        mView!!.showLoadingMovieListError()
+        mView.showLoadingMovieListError()
     }
 
     override fun loadMovieList(startOver: Boolean) {
         loadMovieList(startOver, filter)
     }
 
-    override fun changeFilterList(@MovieListFilterDescriptor.MovieListFilter movieListFilter: Int) {
+    override fun changeFilterList(@MovieSortEnum.MovieSort movieListFilter: Int) {
         if (filter == movieListFilter) { // If it's the same order, do nothing.
             return
         }
@@ -139,17 +140,17 @@ internal constructor(movieRepository: MovieRepository) : BasePresenterImpl(movie
         }
 
         filter = movieListFilter
-        mView!!.clearMovieList()
+        mView.clearMovieList()
 
         // Reload the movie list.
         loadMovieList(true)
 
-        mView!!.setTitleByFilter(movieListFilter)
+        mView.setTitleByFilter(movieListFilter)
     }
 
     override fun openMovieDetail(selectedMovieIndex: Int, movieModel: MovieModel) {
         this.selectedMovieIndex = selectedMovieIndex
-        mView!!.showMovieDetail(movieModel)
+        mView.showMovieDetail(movieModel)
     }
 
     override fun onListEndReached() {
@@ -161,30 +162,30 @@ internal constructor(movieRepository: MovieRepository) : BasePresenterImpl(movie
 
     override fun tryAgain() {
         mHasError = false
-        mView!!.hideRequestStatus()
+        mView.hideRequestStatus()
 
         loadMovieList(false)
     }
 
     override fun favoriteMovie(movie: MovieModel, favorite: Boolean) {
-        if (filter != MovieListFilterDescriptor.FAVORITE) { // Only if the user is at favorite list it needs an update.
+        if (filter != MovieSortEnum.FAVORITE) { // Only if the user is at favorite list it needs an update.
             return
         }
 
         if (favorite) {
-            mView!!.addMovieToListByIndex(selectedMovieIndex, movie)
+            mView.addMovieToListByIndex(selectedMovieIndex, movie)
         } else {
-            mView!!.removeMovieFromListByIndex(selectedMovieIndex)
+            mView.removeMovieFromListByIndex(selectedMovieIndex)
         }
 
-        if (mView!!.movieListCount == 0) {
-            mView!!.showEmptyListMessage()
+        if (mView.movieListCount == 0) {
+            mView.showEmptyListMessage()
         }
     }
 
     override fun onVisibilityChanged(visible: Boolean) {
         if (visible) {
-            mView!!.setTitleByFilter(filter)
+            mView.setTitleByFilter(filter)
         }
     }
 }

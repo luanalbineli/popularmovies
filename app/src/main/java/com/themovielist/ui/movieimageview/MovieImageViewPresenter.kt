@@ -3,6 +3,7 @@ package com.themovielist.ui.movieimageview
 import com.themovielist.model.MovieImageViewModel
 import com.themovielist.model.MovieModel
 import com.themovielist.repository.movie.MovieRepository
+import timber.log.Timber
 import javax.inject.Inject
 
 
@@ -21,6 +22,7 @@ class MovieImageViewPresenter @Inject constructor(private val mMovieRepository: 
     }
 
     override fun toggleMovieFavorite() {
+        Timber.d("Toggling the movie favorite state: ${mMovieImageViewModel.movieModel}")
         mView.toggleMovieFavouriteEnabled(false)
         val request = if (mMovieImageViewModel.isFavourite) mMovieRepository.removeFavoriteMovie(mMovieImageViewModel.movieModel) else mMovieRepository.saveFavoriteMovie(mMovieImageViewModel.movieModel)
         request.doOnTerminate { mView.toggleMovieFavouriteEnabled(true) }

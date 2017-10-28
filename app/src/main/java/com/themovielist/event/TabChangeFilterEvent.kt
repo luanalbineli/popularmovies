@@ -1,5 +1,5 @@
 package com.themovielist.event
 
-import com.themovielist.enums.MovieListFilterDescriptor
+import com.themovielist.enums.MovieSortEnum
 
-data class TabChangeFilterEvent(@MovieListFilterDescriptor.MovieListFilter val filter: Int)
+data class TabChangeFilterEvent(@MovieSortEnum.MovieSort val filter: Int)

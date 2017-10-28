@@ -14,7 +14,7 @@
         android:layout_weight="1" />
 
     <com.ashokvarma.bottomnavigation.BottomNavigationBar
-        android:id="@+id/bb_bottom_menu"
+        android:id="@+id/bnbBottomBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 

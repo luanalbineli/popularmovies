@@ -16,6 +16,7 @@ import io.reactivex.Observable
 import io.reactivex.ObservableOnSubscribe
 import io.reactivex.schedulers.Schedulers
 import retrofit2.Retrofit
+import timber.log.Timber
 import java.sql.SQLDataException
 import javax.inject.Inject
 
@@ -84,6 +85,7 @@ internal constructor(mRetrofit: Retrofit, private val mApplicationContext: Popul
 
     fun removeFavoriteMovie(movieModel: MovieModel): Completable {
         return observeOnMainThread(Completable.create { emitter ->
+            Timber.d("Trying to remove movie from favorite: $movieModel")
             val contentResolver = mApplicationContext.contentResolver
             if (contentResolver == null) {
                 emitter.onError(RuntimeException("Cannot get the ContentResolver"))
@@ -91,6 +93,7 @@ internal constructor(mRetrofit: Retrofit, private val mApplicationContext: Popul
             }
 
             val numberOfRemovedItems = contentResolver.delete(MovieContract.MovieEntry.buildMovieWithId(movieModel.id), null, null)
+            Timber.d("Number of removed movies: $numberOfRemovedItems")
             if (numberOfRemovedItems != 1) {
                 emitter.onError(SQLDataException("An internal error occurred."))
                 return@create
@@ -102,6 +105,7 @@ internal constructor(mRetrofit: Retrofit, private val mApplicationContext: Popul
 
     fun saveFavoriteMovie(movieModel: MovieModel): Completable {
         return observeOnMainThread(Completable.create { emitter ->
+            Timber.d("Trying to set movie as favorite: $movieModel")
             val contentResolver = mApplicationContext.contentResolver
             if (contentResolver == null) {
                 emitter.onError(RuntimeException("Cannot get the ContentResolver"))
@@ -109,6 +113,7 @@ internal constructor(mRetrofit: Retrofit, private val mApplicationContext: Popul
             }
 
             val uri = contentResolver.insert(MovieContract.MovieEntry.CONTENT_URI, movieModel.toContentValues())
+            Timber.d("Result of the insertion: $uri")
             if (uri == null) {
                 emitter.onError(SQLDataException("An internal error occurred."))
                 return@create

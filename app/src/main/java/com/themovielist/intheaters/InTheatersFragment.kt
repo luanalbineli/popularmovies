@@ -11,7 +11,6 @@ import com.themovielist.base.BasePresenter
 import com.themovielist.injector.components.ApplicationComponent
 import com.themovielist.injector.components.DaggerFragmentComponent
 import com.themovielist.model.MovieWithGenreModel
-import com.themovielist.movielist.MovieListFragment.Companion.getItensPerRow
 import com.themovielist.util.ApiUtil
 import kotlinx.android.synthetic.main.in_theaters_fragment.*
 import timber.log.Timber
@@ -30,7 +29,7 @@ class InTheatersFragment : BaseFragment<InTheatersContract.View>(), InTheatersCo
 
     private val mMovieListAdapter by lazy { InTheatersAdapter(R.string.the_list_is_empty, { /*mPresenter.tryAgain()*/ })}
 
-    private val mGridLayoutManager by lazy { GridLayoutManager(activity, getItensPerRow(activity)) }
+    private val mGridLayoutManager by lazy { GridLayoutManager(activity, 2) }
 
     override fun onInjectDependencies(applicationComponent: ApplicationComponent) {
         DaggerFragmentComponent.builder()

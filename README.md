@@ -1,7 +1,6 @@
 # Popular Movies
------
 
-This is the second project of the Udacity's Android Nanodegree, that is basically an Android application that consumes the services exposed by [TMDb](https://www.themoviedb.org).\
+This is the second project of the Udacity's Android Nanodegree, that is basically an Android application that consumes the services exposed by [TMDb](https://www.themoviedb.org).
 
 ### Patters, libraries and technology:
   * MVP
@@ -12,33 +11,33 @@ This is the second project of the Udacity's Android Nanodegree, that is basicall
   * And so on
 
 ##### Why architecture patterns?
-Separation of responsabilities. When you follow an architecture pattern, 
-I's easier to understand the flow of information, the responsabilities of each class/object, to maintain the code and test.  
-  
+Separation of responsabilities. When you follow an architecture pattern,
+I's easier to understand the flow of information, the responsabilities of each class/object, to maintain the code and test.
+
 
 ### Features
 
-The application was divided in four tabs:
+The application was divided into four tabs:
 
   * :heavy_minus_sign: Home - The default tab of the application
     * :white_check_mark: List of the first twenty movies ordered by popularity;
     * :white_check_mark: List of the first twenty movies ordered by rating;
     * :soon: Option to see all movies ordered by popularity (infinite scroll);
     * :soon: Option to see all movies ordered by rating (infinite scroll);
-    
+
   * :x: Browse - Tab to the user search for new movies
     * :x: Filter by genre
     * :x: More filters...
-    
+
   * :x: Cinema
     * :x: List of the movies in theaters
     * :x: Show the upcoming movies
-    
+
   * :x: Favorite
     * :x: List your favorite movies
     * :x: Option to select the order by (default, release date)
-    
- * Movie detail screen
+
+ * :heavy_minus_sign: Movie detail screen
    * :white_check_mark: Show the backdrop and poster;
    * :white_check_mark: Show the user's average rating;
    * :white_check_mark: Show the first two reviews;
@@ -63,5 +62,3 @@ Some screenshots:
 <img src="https://raw.github.com/luanalbineli/popularmovies/master/screenshots/Screenshot_1496981404.png" width="250">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="https://raw.github.com/luanalbineli/popularmovies/master/screenshots/Screenshot_1496981408.png" width="250">
 \
 <img src="https://raw.github.com/luanalbineli/popularmovies/master/screenshots/Screenshot_1496981411.png" width="250">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="https://raw.github.com/luanalbineli/popularmovies/master/screenshots/Screenshot_1496981418.png" width="250">
-
-

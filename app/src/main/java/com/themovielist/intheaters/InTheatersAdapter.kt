@@ -4,7 +4,6 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import com.albineli.udacity.popularmovies.R
 import com.themovielist.model.MovieModel
-import com.themovielist.movielist.MovieListFragment
 import com.themovielist.movielist.MovieListViewHolder
 import com.themovielist.ui.recyclerview.CustomRecyclerViewAdapter
 import com.themovielist.util.ApiUtil
@@ -21,7 +20,7 @@ internal class InTheatersAdapter(emptyMessageResId: Int, tryAgainClickListener: 
     override fun onBindItemViewHolder(holder: MovieListViewHolder, position: Int) {
         if (mPosterWidth == null) {
             val metrics = UIUtil.getDisplayMetrics(holder.context)
-            val posterWidthPx = metrics.widthPixels / MovieListFragment.getItensPerRow(holder.context)
+            val posterWidthPx = metrics.widthPixels / 2
 
             mPosterWidth = ApiUtil.getDefaultPosterSize(posterWidthPx)
         }

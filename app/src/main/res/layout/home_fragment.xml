@@ -33,7 +33,7 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <com.themovielist.ui.DrawableCompatTextView
-                android:id="@+id/textView3"
+                android:id="@+id/tvHomeSeeMovieListByPopularity"
                 style="@style/LightMediumText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -73,7 +73,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/divider" />
 
             <com.themovielist.ui.DrawableCompatTextView
-                android:id="@+id/textView5"
+                android:id="@+id/tvHomeSeeMovieListByRating"
                 style="@style/LightMediumText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

@@ -1,7 +1,7 @@
 package com.themovielist.movielist
 
 import com.themovielist.base.BasePresenter
-import com.themovielist.enums.MovieListFilterDescriptor
+import com.themovielist.enums.MovieSortEnum
 import com.themovielist.model.MovieListStateModel
 import com.themovielist.model.MovieModel
 
@@ -9,7 +9,7 @@ interface MovieListContract {
     interface View {
 
         val movieListCount: Int
-        fun setTitleByFilter(@MovieListFilterDescriptor.MovieListFilter filter: Int)
+        fun setTitleByFilter(@MovieSortEnum.MovieSort filter: Int)
 
         fun showLoadingMovieListError()
         fun showMovieList(movieList: List<MovieModel>, replaceData: Boolean)
@@ -37,7 +37,7 @@ interface MovieListContract {
         fun init(movieListStateModel: MovieListStateModel)
         fun onStop()
         fun loadMovieList(startOver: Boolean)
-        fun changeFilterList(@MovieListFilterDescriptor.MovieListFilter filter: Int)
+        fun changeFilterList(@MovieSortEnum.MovieSort filter: Int)
 
         fun openMovieDetail(selectedMovieIndex: Int, movieModel: MovieModel)
 

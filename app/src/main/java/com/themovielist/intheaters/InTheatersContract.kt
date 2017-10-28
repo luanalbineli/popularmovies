@@ -1,9 +1,6 @@
 package com.themovielist.intheaters
 
 import com.themovielist.base.BasePresenter
-import com.themovielist.enums.MovieListFilterDescriptor
-import com.themovielist.model.MovieListStateModel
-import com.themovielist.model.MovieModel
 import com.themovielist.model.MovieWithGenreModel
 
 interface InTheatersContract {

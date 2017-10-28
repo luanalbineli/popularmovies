@@ -3,7 +3,6 @@ package com.themovielist.mainactivity
 import android.app.Fragment
 import android.app.FragmentManager
 import android.os.Bundle
-import android.support.v4.graphics.drawable.DrawableCompat
 import android.support.v7.content.res.AppCompatResources
 import com.albineli.udacity.popularmovies.R
 import com.ashokvarma.bottomnavigation.BottomNavigationBar
@@ -24,21 +23,19 @@ class MainActivity : BaseActivity(), FragmentManager.OnBackStackChangedListener 
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
 
-        super.setTitle(null)
-
         if (savedInstanceState != null && savedInstanceState.containsKey(SELECTED_TAB_BUNDLE_KEY)) {
             mSelectedTabIndex = savedInstanceState.getInt(SELECTED_TAB_BUNDLE_KEY)
         }
 
-        bb_bottom_menu.setMode(BottomNavigationBar.MODE_FIXED)
+        bnbBottomBar.setMode(BottomNavigationBar.MODE_FIXED)
                 .addItem(BottomNavigationItem(AppCompatResources.getDrawable(this, R.drawable.home), R.string.home))
                 .addItem(BottomNavigationItem(AppCompatResources.getDrawable(this, R.drawable.magnify), R.string.browse))
                 .addItem(BottomNavigationItem(AppCompatResources.getDrawable(this, R.drawable.theater), R.string.cinema))
                 .addItem(BottomNavigationItem(AppCompatResources.getDrawable(this, R.drawable.heart), R.string.favorite))
                 .initialise()
 
-        bb_bottom_menu.selectTab(mSelectedTabIndex, false)
-        bb_bottom_menu.setTabSelectedListener(object : BottomNavigationBar.OnTabSelectedListener {
+        bnbBottomBar.selectTab(mSelectedTabIndex, false)
+        bnbBottomBar.setTabSelectedListener(object : BottomNavigationBar.OnTabSelectedListener {
             override fun onTabSelected(index: Int) {
                 mSelectedTabIndex = index
                 setUpMainContentFragment()
@@ -92,14 +89,6 @@ class MainActivity : BaseActivity(), FragmentManager.OnBackStackChangedListener 
     public override fun onSaveInstanceState(outState: Bundle?) {
         super.onSaveInstanceState(outState)
         outState?.putInt(SELECTED_TAB_BUNDLE_KEY, mSelectedTabIndex)
-    }
-
-    override fun setTitle(titleId: Int) {
-        title = getString(titleId)
-    }
-
-    override fun setTitle(title: CharSequence) {
-        toolbar_title.text = title
     }
 
     companion object {

@@ -7,25 +7,21 @@ import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.widget.FrameLayout
 import com.albineli.udacity.popularmovies.R
+import com.facebook.drawee.backends.pipeline.Fresco
+import com.facebook.imagepipeline.common.ResizeOptions
+import com.facebook.imagepipeline.request.ImageRequestBuilder
 import com.themovielist.PopularMovieApplication
 import com.themovielist.event.FavoriteMovieEvent
 import com.themovielist.injector.components.DaggerFragmentComponent
 import com.themovielist.model.MovieImageViewModel
 import com.themovielist.model.MovieModel
 import com.themovielist.moviedetail.MovieDetailActivity
-import com.themovielist.util.dpToPx
 import kotlinx.android.synthetic.main.movie_image_view.view.*
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
 import timber.log.Timber
 import javax.inject.Inject
-import com.facebook.drawee.backends.pipeline.Fresco
-import com.facebook.imagepipeline.common.ResizeOptions
-import com.facebook.imagepipeline.request.ImageRequestBuilder
-import com.facebook.imagepipeline.request.ImageRequest
-
-
 
 
 class MovieImageView constructor(context: Context, attributeSet: AttributeSet) : FrameLayout(context, attributeSet), MovieImageViewContract.View {
@@ -33,11 +29,18 @@ class MovieImageView constructor(context: Context, attributeSet: AttributeSet) :
     @Inject
     lateinit var mPresenter: MovieImageViewPresenter
 
+    private var mIsFavoritingManually = false
+
     init {
         injectDependencies()
         LayoutInflater.from(context).inflate(R.layout.movie_image_view, this)
 
-        mfbMovieImageViewFavorite.setOnFavoriteChangeListener { _, _ -> mPresenter.toggleMovieFavorite() }
+        mfbMovieImageViewFavorite.setOnFavoriteChangeListener { _, _ ->
+            if (mIsFavoritingManually) {
+                return@setOnFavoriteChangeListener
+            }
+            mPresenter.toggleMovieFavorite()
+        }
 
         sdvMovieImageView.setOnClickListener { mPresenter.showMovieDetail() }
     }
@@ -79,13 +82,11 @@ class MovieImageView constructor(context: Context, attributeSet: AttributeSet) :
     override fun onAttachedToWindow() {
         super.onAttachedToWindow()
         EventBus.getDefault().register(this)
-        Timber.d("The view attached to window")
     }
 
     override fun onDetachedFromWindow() {
         super.onDetachedFromWindow()
         EventBus.getDefault().unregister(this)
-        Timber.d("The view detached from window")
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -95,7 +96,9 @@ class MovieImageView constructor(context: Context, attributeSet: AttributeSet) :
     }
 
     override fun toggleMovieFavorite(favourite: Boolean) {
+        mIsFavoritingManually = true
         mfbMovieImageViewFavorite.isFavorite = favourite
+        mIsFavoritingManually = false
     }
 
     override fun showErrorFavoriteMovie(error: Throwable) {

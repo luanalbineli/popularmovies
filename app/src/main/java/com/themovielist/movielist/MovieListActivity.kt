@@ -1,34 +1,31 @@
 package com.themovielist.movielist
 
 import android.content.Context
-import android.content.res.Configuration
+import android.content.Intent
 import android.os.Bundle
 import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.RecyclerView
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import com.albineli.udacity.popularmovies.R
-import com.themovielist.base.BaseFragment
+import com.themovielist.base.BaseDaggerActivity
 import com.themovielist.base.BasePresenter
-import com.themovielist.enums.MovieListFilterDescriptor
+import com.themovielist.enums.MovieSortEnum
 import com.themovielist.event.FavoriteMovieEvent
 import com.themovielist.event.TabChangeFilterEvent
 import com.themovielist.injector.components.ApplicationComponent
 import com.themovielist.injector.components.DaggerFragmentComponent
 import com.themovielist.model.MovieListStateModel
 import com.themovielist.model.MovieModel
+import com.themovielist.moviedetail.MovieDetailActivity
 import com.themovielist.ui.recyclerview.CustomRecyclerViewAdapter
-import kotlinx.android.synthetic.main.fragment_movie_list.*
+import kotlinx.android.synthetic.main.movie_list_activity.*
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
 import timber.log.Timber
-import java.security.InvalidParameterException
 import javax.inject.Inject
 
 
-class MovieListFragment : BaseFragment<MovieListContract.View>(), MovieListContract.View {
+class MovieListActivity : BaseDaggerActivity<MovieListContract.View>(), MovieListContract.View {
 
     override val presenterImplementation: BasePresenter<MovieListContract.View>
         get() = mPresenter
@@ -41,7 +38,7 @@ class MovieListFragment : BaseFragment<MovieListContract.View>(), MovieListContr
 
     private val mMovieListAdapter by lazy {MovieListAdapter(R.string.the_list_is_empty, { mPresenter.tryAgain() })}
 
-    private val mGridLayoutManager by lazy { GridLayoutManager(activity, getItensPerRow(activity)) }
+    private val mGridLayoutManager by lazy { GridLayoutManager(this, 2) }
 
     override fun onInjectDependencies(applicationComponent: ApplicationComponent) {
         DaggerFragmentComponent.builder()
@@ -50,20 +47,10 @@ class MovieListFragment : BaseFragment<MovieListContract.View>(), MovieListContr
                 .inject(this)
     }
 
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
 
-        if (arguments == null || !arguments.containsKey(FILTER_BUNDLE_KEY)) {
-            throw InvalidParameterException("filter")
-        }
-    }
-
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_movie_list, container, false)
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+        setContentView(R.layout.movie_list_activity)
 
         // List.
         mMovieListAdapter.setOnItemClickListener({ position, movieModel -> mPresenter.openMovieDetail(position, movieModel) })
@@ -77,13 +64,13 @@ class MovieListFragment : BaseFragment<MovieListContract.View>(), MovieListContr
                 }
             }
         }
-        rv_movie_list.layoutManager = mGridLayoutManager
-        rv_movie_list.adapter = mMovieListAdapter
+        rvMovieList.layoutManager = mGridLayoutManager
+        rvMovieList.adapter = mMovieListAdapter
 
-        var movieListStateModel = MovieListStateModel.getFromBundle(savedInstanceState)
-        if (movieListStateModel == null) {
-            movieListStateModel = MovieListStateModel.getFromArguments(arguments)
-        }
+        val movieListStateModel = if (savedInstanceState != null)
+            MovieListStateModel.getFromBundle(savedInstanceState)
+        else
+            MovieListStateModel.getFromIntent(intent)
 
         mPresenter.init(movieListStateModel)
     }
@@ -91,26 +78,19 @@ class MovieListFragment : BaseFragment<MovieListContract.View>(), MovieListContr
     override fun onStart() {
         super.onStart()
         EventBus.getDefault().register(this)
-
-        fragmentManager
-                .addOnBackStackChangedListener {
-                    Timber.i("Changed the backstack: " + fragmentManager.backStackEntryCount)
-                    val visible = fragmentManager.backStackEntryCount == 0
-                    mPresenter.onVisibilityChanged(visible)
-                }
     }
 
-    override fun setTitleByFilter(@MovieListFilterDescriptor.MovieListFilter filter: Int) {
+    override fun setTitleByFilter(@MovieSortEnum.MovieSort filter: Int) {
         var titleStringResId = R.string.popular
-        if (filter == MovieListFilterDescriptor.RATING) {
+        if (filter == MovieSortEnum.RATING) {
             titleStringResId = R.string.rating
-        } else if (filter == MovieListFilterDescriptor.FAVORITE) {
+        } else if (filter == MovieSortEnum.FAVORITE) {
             titleStringResId = R.string.favorite
         }
 
         val title = getString(titleStringResId)
         Timber.d("Setting the title: " + title)
-        activity.title = title
+        supportActionBar?.title = title
     }
 
     override fun onStop() {
@@ -147,12 +127,8 @@ class MovieListFragment : BaseFragment<MovieListContract.View>(), MovieListContr
     }
 
     override fun showMovieDetail(movieModel: MovieModel) {
-        /*val movieDetailFragment = MovieDetailFragment.getInstance(movieModel)
-        fragmentManager.beginTransaction()
-                .setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out)
-                .add(R.id.flMainContent, movieDetailFragment)
-                .addToBackStack(null)
-                .commit()*/
+        val movieDetailIntent = MovieDetailActivity.getDefaultIntent(this, movieModel)
+        startActivity(movieDetailIntent)
     }
 
     override fun clearMovieList() {
@@ -174,7 +150,7 @@ class MovieListFragment : BaseFragment<MovieListContract.View>(), MovieListContr
     override fun enableLoadMoreListener() {
         // https://codentrick.com/load-more-recyclerview-bottom-progressbar
         disableLoadMoreListener()
-        rv_movie_list.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+        rvMovieList.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView?, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
                 if (dy == 0) { // Check if the user scrolled down.
@@ -185,14 +161,14 @@ class MovieListFragment : BaseFragment<MovieListContract.View>(), MovieListContr
                 if (totalItemCount <= lastVisibleItem + mGridLayoutManager.spanCount) {
                     /*java.lang.IllegalStateException: Cannot call this method in a scroll callback. Scroll callbacks mightbe run during a measure & layout pass where you cannot change theRecyclerView data.
                     Any method call that might change the structureof the RecyclerView or the adapter contents should be postponed tothe next frame. */
-                    rv_movie_list.post { mPresenter.onListEndReached() }
+                    rvMovieList.post { mPresenter.onListEndReached() }
                 }
             }
         })
     }
 
     override fun disableLoadMoreListener() {
-        rv_movie_list.clearOnScrollListeners()
+        rvMovieList.clearOnScrollListeners()
     }
 
     override fun removeMovieFromListByIndex(index: Int) {
@@ -220,24 +196,12 @@ class MovieListFragment : BaseFragment<MovieListContract.View>(), MovieListContr
     }
 
     companion object {
-        private val FILTER_BUNDLE_KEY = "movie_list_filter_bundle"
+        const val FILTER_BUNDLE_KEY = "movie_list_filter_bundle"
 
-        fun getInstance(@MovieListFilterDescriptor.MovieListFilter filter: Int): MovieListFragment {
-            val bundle = Bundle()
-            bundle.putInt(FILTER_BUNDLE_KEY, filter)
-            val movieListFragment = MovieListFragment()
-            movieListFragment.arguments = bundle
-
-            return movieListFragment
-        }
-
-        fun getItensPerRow(context: Context): Int {
-            val isPortrait = context.resources.configuration.orientation == Configuration.ORIENTATION_PORTRAIT
-            val isTablet = context.resources.getBoolean(R.bool.isTablet)
-            if (isTablet) {
-                return if (isPortrait) 5 else 6
-            }
-            return if (isPortrait) 3 else 4
+        fun getIntent(context: Context, @MovieSortEnum.MovieSort filter: Int): Intent {
+            val intent = Intent(context, MovieListActivity::class.java)
+            intent.putExtra(FILTER_BUNDLE_KEY, filter)
+            return intent
         }
     }
 }

@@ -19,7 +19,7 @@ internal class MovieListAdapter (emptyMessageResId: Int, tryAgainClickListener: 
     override fun onBindItemViewHolder(holder: MovieListViewHolder, position: Int) {
         if (mPosterWidth == null) {
             val metrics = UIUtil.getDisplayMetrics(holder.context)
-            val posterWidthPx = metrics.widthPixels / MovieListFragment.getItensPerRow(holder.context)
+            val posterWidthPx = metrics.widthPixels / 2
 
             mPosterWidth = ApiUtil.getDefaultPosterSize(posterWidthPx)
         }
