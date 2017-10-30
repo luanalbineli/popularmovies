@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.RecyclerView
+import android.view.Menu
 import com.albineli.udacity.popularmovies.R
 import com.themovielist.base.BaseDaggerActivity
 import com.themovielist.base.BasePresenter
@@ -78,6 +79,16 @@ class MovieListActivity : BaseDaggerActivity<MovieListContract.View>(), MovieLis
     override fun onStart() {
         super.onStart()
         EventBus.getDefault().register(this)
+    }
+
+    private var mMenu: Menu? = null
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        mMenu = menu
+
+        menuInflater.inflate(R.menu.movie_list, menu)
+
+        return true
     }
 
     override fun setTitleByFilter(@MovieSortEnum.MovieSort filter: Int) {

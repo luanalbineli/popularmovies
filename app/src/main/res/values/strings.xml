@@ -43,4 +43,5 @@
     <string name="all_trailers">All trailers</string>
     <string name="detail">Detail</string>
     <string name="dont_know_the_name_separator">|</string>
+    <string name="list_view_type">List view type</string>
 </resources>
