@@ -14,13 +14,14 @@ import com.themovielist.base.BasePresenter
 import com.themovielist.injector.components.ApplicationComponent
 import com.themovielist.injector.components.DaggerFragmentComponent
 import com.themovielist.model.MovieReviewModel
+import kotlinx.android.synthetic.main.fullscreen_fragment_dialog_with_list.*
 import java.security.InvalidParameterException
 import javax.inject.Inject
 
 class MovieReviewListDialog : BaseFullscreenDialogWithList<MovieReviewModel, MovieReviewListDialogContract.View>(), MovieReviewListDialogContract.View {
     private val mMovieReviewAdapter by lazy { MovieReviewAdapter({ mPresenter.tryLoadReviewsAgain() }) }
 
-    val mLinearLayoutManager by lazy { LinearLayoutManager(recyclerView.context, LinearLayoutManager.VERTICAL, false) }
+    val mLinearLayoutManager by lazy { LinearLayoutManager(rvFullscreenFragmentDialog.context, LinearLayoutManager.VERTICAL, false) }
 
     private var mHasMore: Boolean = false
 
@@ -45,11 +46,11 @@ class MovieReviewListDialog : BaseFullscreenDialogWithList<MovieReviewModel, Mov
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val fullScrennDialogView = super.onCreateView(inflater, container, savedInstanceState)
 
-        val dividerItemDecoration = DividerItemDecoration(recyclerView.context, mLinearLayoutManager.orientation)
+        val dividerItemDecoration = DividerItemDecoration(rvFullscreenFragmentDialog.context, mLinearLayoutManager.orientation)
 
-        recyclerView.addItemDecoration(dividerItemDecoration)
-        recyclerView.layoutManager = mLinearLayoutManager
-        recyclerView.adapter = mMovieReviewAdapter
+        rvFullscreenFragmentDialog.addItemDecoration(dividerItemDecoration)
+        rvFullscreenFragmentDialog.layoutManager = mLinearLayoutManager
+        rvFullscreenFragmentDialog.adapter = mMovieReviewAdapter
 
         return fullScrennDialogView
     }
@@ -67,7 +68,7 @@ class MovieReviewListDialog : BaseFullscreenDialogWithList<MovieReviewModel, Mov
     }
 
     override fun enableLoadMoreListener() {
-        recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+        rvFullscreenFragmentDialog.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
                 if (dy == 0) { // Check if the user scrolled down.
@@ -85,7 +86,7 @@ class MovieReviewListDialog : BaseFullscreenDialogWithList<MovieReviewModel, Mov
     }
 
     override fun disableLoadMoreListener() {
-        recyclerView.clearOnScrollListeners()
+        rvFullscreenFragmentDialog.clearOnScrollListeners()
     }
 
     override fun showLoadingIndicator() {

@@ -2,6 +2,7 @@ package com.themovielist.repository.movie
 
 import android.util.SparseArray
 import com.themovielist.model.GenreModel
+import com.themovielist.model.MovieModel
 import com.themovielist.model.MovieWithGenreModel
 import com.themovielist.model.response.PaginatedArrayResponseModel
 import com.themovielist.repository.RepositoryBase
@@ -32,12 +33,16 @@ constructor(retrofit: Retrofit) : RepositoryBase<ICommonMovieService>(retrofit) 
 
     fun fillMovieGenresList(movieListResponseModel: PaginatedArrayResponseModel<MovieWithGenreModel>, genreMap: SparseArray<GenreModel>): PaginatedArrayResponseModel<MovieWithGenreModel> {
         movieListResponseModel.results.forEach { movieModel ->
-            movieModel.genreList = movieModel.genreIdList.mapToListNotNull { genreId ->
-                if (genreMap.indexOfKey(genreId) > -1) genreMap.get(genreId) else null
-            }
+            movieModel.genreList = fillMovieGenresList(movieModel, genreMap)
         }
 
         return movieListResponseModel
+    }
+
+    fun fillMovieGenresList(movieModel: MovieModel, genreMap: SparseArray<GenreModel>): List<GenreModel> {
+        return movieModel.genreIdList.mapToListNotNull { genreId ->
+            if (genreMap.indexOfKey(genreId) > -1) genreMap.get(genreId) else null
+        }
     }
 
     override val getApiInstanceType: Class<ICommonMovieService>

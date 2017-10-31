@@ -44,4 +44,5 @@
     <string name="detail">Detail</string>
     <string name="dont_know_the_name_separator">|</string>
     <string name="list_view_type">List view type</string>
+    <string name="default_date_format">yyyy-MM-dd</string>
 </resources>

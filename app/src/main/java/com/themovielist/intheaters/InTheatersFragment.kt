@@ -50,14 +50,14 @@ class InTheatersFragment : BaseFragment<InTheatersContract.View>(), InTheatersCo
     }
 
     override fun showMainMovieDetail(movieWithGenreModel: MovieWithGenreModel) {
-        val posterWidth = ApiUtil.getDefaultPosterSize(sdvMovieDetailBackdrop.width)
+        val posterWidth = ApiUtil.getDefaultPosterSize(sdvMovieHeaderBackdrop.width)
         val posterUrl = ApiUtil.buildPosterImageUrl(movieWithGenreModel.posterPath, posterWidth)
 
-        sdvMovieDetailBackdrop.setImageURI(posterUrl)
+        sdvMovieHeaderBackdrop.setImageURI(posterUrl)
 
-        tvInTheatersMovieDuration.text = "1h 20m" // TODO: TEST
-        tvInTheatersMovieName.text = movieWithGenreModel.title
-        tvInTheatersMovieGenres.text = movieWithGenreModel.genreList?.map { it.name }?.reduce {a, b -> "$a, $b"} ?: ""
+        tvMovieHeaderReleaseDate.text = "1h 20m" // TODO: TEST
+        tvMovieHeaderMovieName.text = movieWithGenreModel.title
+        tvMovieHeaderMovieGenres.text = movieWithGenreModel.genreList?.map { it.name }?.reduce { a, b -> "$a, $b"} ?: ""
     }
 
     override fun showMovieList(results: List<MovieWithGenreModel>) {

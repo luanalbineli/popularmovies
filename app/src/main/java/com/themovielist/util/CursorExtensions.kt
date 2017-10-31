@@ -13,16 +13,6 @@ inline fun <T> Cursor.tryExecute(emitter: ObservableEmitter<T>, invoker: Cursor.
     }
 }
 
-inline fun Cursor.tryExecute(invoker: Cursor.() -> Unit, onError: ((Exception) -> Unit)) {
-    try {
-        invoker.invoke(this)
-    } catch (ex: Exception) {
-        onError.invoke(ex)
-    } finally {
-        this.close()
-    }
-}
-
 inline fun <T> Cursor.toList(invoker: Cursor.() -> T): ArrayList<T> {
     val list = ArrayList<T>(this.count)
     while (this.moveToNext()) {
@@ -36,4 +26,10 @@ inline fun <reified T> Cursor.toArray(invoker: Cursor.() -> T): Array<T> {
         this.moveToNext()
         invoker.invoke(this)
     })
+}
+
+fun Cursor.getIntArray(columnName: String): IntArray {
+    val columnIndex = this.getColumnIndex(columnName)
+    val stringContent = this.getString(columnIndex)
+    return stringToIntArray(stringContent)
 }

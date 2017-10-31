@@ -5,31 +5,37 @@ import com.themovielist.base.BasePresenterImpl
 import com.themovielist.model.MovieModel
 import com.themovielist.model.MovieReviewModel
 import com.themovielist.model.MovieTrailerModel
+import com.themovielist.model.MovieWithGenreModel
 import com.themovielist.model.response.PaginatedArrayResponseModel
+import com.themovielist.repository.movie.CommonRepository
 import com.themovielist.repository.movie.MovieRepository
 import timber.log.Timber
 import javax.inject.Inject
 
 class MovieDetailPresenter @Inject
-internal constructor(movieRepository: MovieRepository) : BasePresenterImpl(movieRepository), MovieDetailContract.Presenter {
+internal constructor(movieRepository: MovieRepository, private val mCommonRepository: CommonRepository) : BasePresenterImpl(movieRepository), MovieDetailContract.Presenter {
     private lateinit var mView: MovieDetailContract.View
+    private lateinit var mMovieWithGenreModel: MovieWithGenreModel
     private var mMovieReviewRequest: PaginatedArrayResponseModel<MovieReviewModel>? = null
     private var mMovieTrailerList: List<MovieTrailerModel>? = null
     private var mMovieId: Int = 0
+    private var isFavorite = false
 
     override fun start(movieModel: MovieModel) {
-        mView.showMovieDetail(movieModel)
+        mCommonRepository.getAllGenres().subscribe({ genreMap ->
+            val genreList = mCommonRepository.fillMovieGenresList(movieModel, genreMap)
+            mMovieWithGenreModel = MovieWithGenreModel(movieModel, genreList)
+            mView.showMovieDetail(mMovieWithGenreModel)
+        })
 
-        // If it is in the database, means that is favorite.
         mMovieRepository.isMovieFavourite(movieModel.id).subscribe({
             mView.setFavoriteButtonState(it)
+            isFavorite = it
         })
 
         loadMovieReviews(movieModel.id)
 
         loadMovieTrailers(movieModel.id)
-
-        mMovieId = movieModel.id
     }
 
     private fun loadMovieTrailers(movieId: Int) {
@@ -89,26 +95,6 @@ internal constructor(movieRepository: MovieRepository) : BasePresenterImpl(movie
         mView = view
     }
 
-    override fun removeFavoriteMovie(movieModel: MovieModel) {
-        mMovieRepository.removeFavoriteMovie(movieModel).subscribe(
-                { mView.showSuccessMessageRemoveFavoriteMovie() }
-        ) { throwable ->
-            Timber.e(throwable, "An error occurred while tried to remove the favorite movie")
-            mView.showErrorMessageRemoveFavoriteMovie()
-            mView.setFavoriteButtonState(true)
-        }
-    }
-
-    override fun saveFavoriteMovie(movieModel: MovieModel) {
-        mMovieRepository.saveFavoriteMovie(movieModel).subscribe(
-                { mView.showSuccessMessageAddFavoriteMovie() }
-        ) { throwable ->
-            Timber.e(throwable, "An error occurred while tried to add the favorite movie")
-            mView.showErrorMessageAddFavoriteMovie()
-            mView.setFavoriteButtonState(false)
-        }
-    }
-
     override fun showAllReviews() {
         mView.showAllReviews(mMovieReviewRequest!!.results, mMovieReviewRequest!!.hasMorePages())
     }
@@ -123,5 +109,33 @@ internal constructor(movieRepository: MovieRepository) : BasePresenterImpl(movie
 
     override fun tryToLoadReviewAgain() {
         loadMovieReviews(mMovieId)
+    }
+
+    fun toggleFavoriteMovie() {
+        val request = if (isFavorite) {
+            mMovieRepository.removeFavoriteMovie(mMovieWithGenreModel)
+        } else {
+            mMovieRepository.removeFavoriteMovie(mMovieWithGenreModel)
+        }
+
+        mView.setFavoriteButtonEnabled(false)
+        request
+                .doOnTerminate {
+                    mView.setFavoriteButtonState(isFavorite)
+                    mView.setFavoriteButtonEnabled(true)
+                }
+                .subscribe(
+                        {
+                            if (isFavorite) {
+                                mView.showSuccessMessageRemoveFavoriteMovie()
+                            } else {
+                                mView.showSuccessMessageAddFavoriteMovie()
+                            }
+                            isFavorite = !isFavorite
+                        }
+                ) { throwable ->
+                    Timber.e(throwable, "An error occurred while tried to remove the favorite movie")
+                    mView.showErrorMessageRemoveFavoriteMovie()
+                }
     }
 }

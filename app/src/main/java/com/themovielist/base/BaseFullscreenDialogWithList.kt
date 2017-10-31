@@ -21,8 +21,6 @@ abstract class BaseFullscreenDialogWithList<TModel : Parcelable, TView> : Dialog
 
     protected lateinit var mList: ArrayList<TModel>
 
-    val recyclerView: RecyclerView = rvFullscreenFragmentDialog
-
     override fun onStart() {
         super.onStart()
         val dialog = dialog

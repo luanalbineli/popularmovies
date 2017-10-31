@@ -6,6 +6,7 @@ import android.os.Parcel
 import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
 import com.themovielist.repository.data.MovieContract
+import com.themovielist.util.*
 import java.util.*
 
 open class MovieModel constructor(@SerializedName("id")
@@ -30,7 +31,10 @@ open class MovieModel constructor(@SerializedName("id")
                                   var backdropPath: String = "",
 
                                   @SerializedName("vote_count")
-                                  var voteCount: Int = 0) : Parcelable {
+                                  var voteCount: Int = 0,
+
+                                  @SerializedName("genre_ids")
+                                  val genreIdList: IntArray) : Parcelable {
 
     constructor(parcel: Parcel) : this(
             parcel.readInt(),
@@ -40,7 +44,8 @@ open class MovieModel constructor(@SerializedName("id")
             parcel.readDouble(),
             Date(parcel.readLong()),
             parcel.readString(),
-            parcel.readInt())
+            parcel.readInt(),
+            parcel.readIntArray())
 
     private constructor(contentValues: ContentValues) : this(
             contentValues.getAsInteger(MovieContract.MovieEntry._ID),
@@ -50,9 +55,10 @@ open class MovieModel constructor(@SerializedName("id")
             contentValues.getAsDouble(MovieContract.MovieEntry.COLUMN_VOTE_AVERAGE),
             Date(contentValues.getAsLong(MovieContract.MovieEntry.COLUMN_RELEASE_DATE)),
             contentValues.getAsString(MovieContract.MovieEntry.COLUMN_BACKDROP_PATH),
-            contentValues.getAsInteger(MovieContract.MovieEntry.COLUMN_VOTE_COUNT))
+            contentValues.getAsInteger(MovieContract.MovieEntry.COLUMN_VOTE_COUNT),
+            contentValues.getAsIntArray(MovieContract.MovieEntry.COLUMN_GENRE_ID_LIST))
 
-    constructor(cursor: Cursor) : this(
+    private constructor(cursor: Cursor) : this(
             cursor.getInt(cursor.getColumnIndex(MovieContract.MovieEntry._ID)),
             cursor.getString(cursor.getColumnIndex(MovieContract.MovieEntry.COLUMN_POSTER_PATH)),
             cursor.getString(cursor.getColumnIndex(MovieContract.MovieEntry.COLUMN_OVERVIEW)),
@@ -60,7 +66,8 @@ open class MovieModel constructor(@SerializedName("id")
             cursor.getDouble(cursor.getColumnIndex(MovieContract.MovieEntry.COLUMN_VOTE_AVERAGE)),
             Date(cursor.getLong(cursor.getColumnIndex(MovieContract.MovieEntry.COLUMN_RELEASE_DATE))),
             cursor.getString(cursor.getColumnIndex(MovieContract.MovieEntry.COLUMN_BACKDROP_PATH)),
-            cursor.getInt(cursor.getColumnIndex(MovieContract.MovieEntry.COLUMN_VOTE_COUNT)))
+            cursor.getInt(cursor.getColumnIndex(MovieContract.MovieEntry.COLUMN_VOTE_COUNT)),
+            cursor.getIntArray(MovieContract.MovieEntry.COLUMN_VOTE_COUNT))
 
     fun toContentValues(): ContentValues {
         val contentValues = ContentValues()
@@ -80,6 +87,8 @@ open class MovieModel constructor(@SerializedName("id")
 
         contentValues.put(MovieContract.MovieEntry.COLUMN_VOTE_COUNT, voteCount)
 
+        contentValues.put(MovieContract.MovieEntry.COLUMN_GENRE_ID_LIST, genreIdList)
+
         return contentValues
     }
 
@@ -92,6 +101,7 @@ open class MovieModel constructor(@SerializedName("id")
         parcel.writeLong(releaseDate!!.time)
         parcel.writeString(backdropPath)
         parcel.writeInt(voteCount)
+        parcel.writeIntArrayWithLength(genreIdList)
     }
 
     override fun describeContents(): Int {
@@ -115,7 +125,7 @@ open class MovieModel constructor(@SerializedName("id")
 
     companion object CREATOR : Parcelable.Creator<MovieModel> {
         @JvmField
-        val EMPTY_MOVIE = MovieModel(Int.MIN_VALUE)
+        val EMPTY_MOVIE = MovieModel(Int.MIN_VALUE, genreIdList = IntArray(0))
 
         override fun createFromParcel(parcel: Parcel): MovieModel {
             return MovieModel(parcel)
@@ -123,10 +133,6 @@ open class MovieModel constructor(@SerializedName("id")
 
         override fun newArray(size: Int): Array<MovieModel?> {
             return arrayOfNulls(size)
-        }
-
-        fun fromContentValues(contentValues: ContentValues): MovieModel {
-            return MovieModel(contentValues)
         }
 
         fun fromCursor(cursor: Cursor): MovieModel {

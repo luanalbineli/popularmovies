@@ -4,6 +4,7 @@ import com.themovielist.base.BasePresenter
 import com.themovielist.model.MovieModel
 import com.themovielist.model.MovieReviewModel
 import com.themovielist.model.MovieTrailerModel
+import com.themovielist.model.MovieWithGenreModel
 
 /**
  * Presenter of the Movie Detail Fragment.
@@ -13,7 +14,7 @@ abstract class MovieDetailContract {
     interface View {
         fun showMovieReview(movieReviewModelList: List<MovieReviewModel>)
 
-        fun showMovieDetail(movieModel: MovieModel)
+        fun showMovieDetail(movieWithGenreModel: MovieWithGenreModel)
 
         fun showMovieTrailer(movieTrailerList: List<MovieTrailerModel>)
 
@@ -47,14 +48,11 @@ abstract class MovieDetailContract {
         fun showEmptyReviewListMessage()
 
         fun showEmptyTrailerListMessage()
+        fun setFavoriteButtonEnabled(enabled: Boolean)
     }
 
     interface Presenter : BasePresenter<View> {
         fun start(movieModel: MovieModel)
-
-        fun removeFavoriteMovie(movieModel: MovieModel)
-
-        fun saveFavoriteMovie(movieModel: MovieModel)
 
         fun showAllReviews()
 

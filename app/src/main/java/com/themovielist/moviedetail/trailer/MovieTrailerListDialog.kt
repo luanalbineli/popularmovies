@@ -15,13 +15,14 @@ import com.themovielist.injector.components.ApplicationComponent
 import com.themovielist.injector.components.DaggerFragmentComponent
 import com.themovielist.model.MovieTrailerModel
 import com.themovielist.util.YouTubeUtil
+import kotlinx.android.synthetic.main.fullscreen_fragment_dialog_with_list.*
 
 import javax.inject.Inject
 
 class MovieTrailerListDialog : BaseFullscreenDialogWithList<MovieTrailerModel, MovieTrailerListDialogContract.View>(), MovieTrailerListDialogContract.View {
     private val mMovieReviewAdapter by lazy { MovieTrailerAdapter() }
 
-    private val mLinearLayoutManager by lazy { LinearLayoutManager(recyclerView.context, LinearLayoutManager.VERTICAL, false) }
+    private val mLinearLayoutManager by lazy { LinearLayoutManager(rvFullscreenFragmentDialog.context, LinearLayoutManager.VERTICAL, false) }
 
     @Inject
     lateinit var mPresenter: MovieTrailerListDialogPresenter
@@ -37,11 +38,11 @@ class MovieTrailerListDialog : BaseFullscreenDialogWithList<MovieTrailerModel, M
 
         mMovieReviewAdapter.setOnItemClickListener { _, item -> YouTubeUtil.openYouTubeVideo(activity, item.key) }
 
-        val dividerItemDecoration = DividerItemDecoration(recyclerView.getContext(), mLinearLayoutManager.orientation)
+        val dividerItemDecoration = DividerItemDecoration(rvFullscreenFragmentDialog.getContext(), mLinearLayoutManager.orientation)
 
-        recyclerView.addItemDecoration(dividerItemDecoration)
-        recyclerView.layoutManager = mLinearLayoutManager
-        recyclerView.adapter = mMovieReviewAdapter
+        rvFullscreenFragmentDialog.addItemDecoration(dividerItemDecoration)
+        rvFullscreenFragmentDialog.layoutManager = mLinearLayoutManager
+        rvFullscreenFragmentDialog.adapter = mMovieReviewAdapter
 
         return fullscreenDialogWithListView
     }

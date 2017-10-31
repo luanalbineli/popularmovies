@@ -2,19 +2,28 @@ package com.themovielist.model
 
 import android.os.Parcel
 import android.os.Parcelable
-import com.google.gson.annotations.SerializedName
 import com.themovielist.util.readIntArray
 import java.util.*
 
-class MovieWithGenreModel constructor(id: Int = 0, posterPath: String, overview: String,
-                                      title: String, voteAverage: Double, releaseDate: Date? = null,
-                                      backdropPath: String, voteCount: Int,
-                                      @SerializedName("genre_ids")
-                                      val genreIdList: IntArray) :
-        MovieModel(id, posterPath, overview, title, voteAverage, releaseDate, backdropPath, voteCount) {
+class MovieWithGenreModel(id: Int = 0, posterPath: String, overview: String,
+                          title: String, voteAverage: Double, releaseDate: Date? = null,
+                          backdropPath: String, voteCount: Int, genreIdList: IntArray) :
+        MovieModel(id, posterPath, overview, title, voteAverage, releaseDate, backdropPath, voteCount, genreIdList) {
 
     @Transient
     var genreList: List<GenreModel>? = null
+
+    constructor(movieModel: MovieModel, genreList: List<GenreModel>) : this(movieModel.id,
+            movieModel.posterPath,
+            movieModel.overview,
+            movieModel.title,
+            movieModel.voteAverage,
+            movieModel.releaseDate,
+            movieModel.backdropPath,
+            movieModel.voteCount,
+            movieModel.genreIdList) {
+        this.genreList = genreList
+    }
 
     constructor(parcel: Parcel) : this(parcel.readInt(),
             parcel.readString(),
@@ -51,5 +60,9 @@ class MovieWithGenreModel constructor(id: Int = 0, posterPath: String, overview:
         override fun newArray(size: Int): Array<MovieWithGenreModel?> {
             return arrayOfNulls(size)
         }
+    }
+
+    fun concattedGenres(): CharSequence? {
+        return genreList?.map { it.name }?.reduce { a, b -> "$a, $b"} ?: ""
     }
 }

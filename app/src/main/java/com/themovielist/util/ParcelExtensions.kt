@@ -2,9 +2,9 @@ package com.themovielist.util
 
 import android.os.Parcel
 
-fun Parcel?.writeIntArray(intArray: IntArray) {
-    this?.writeInt(intArray.size)
-    this?.writeIntArray(intArray)
+fun Parcel.writeIntArrayWithLength(intArray: IntArray) {
+    this.writeInt(intArray.size)
+    this.writeIntArray(intArray)
 }
 
 fun Parcel.readIntArray(): IntArray {
