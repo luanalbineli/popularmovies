@@ -10,29 +10,32 @@
 
     <ImageView
         android:id="@+id/imageButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
         android:layout_marginTop="8dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/ic_account_outline_black_18dp" />
+        app:srcCompat="@drawable/account_circle" />
 
     <TextView
         android:id="@+id/tvMovieReviewAuthor"
+        style="@style/LightMediumTextBold"
         android:layout_width="0dp"
-        android:textStyle="bold"
         android:layout_height="wrap_content"
-        android:layout_marginStart="4dp"
+        android:layout_marginStart="8dp"
+        android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/imageButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/imageButton"
-        app:layout_constraintTop_toBottomOf="@+id/imageButton" />
+        app:layout_constraintTop_toBottomOf="@+id/imageButton"
+        tools:text="Name of the guy that wrote the stuff" />
 
     <com.borjabravo.readmoretextview.ReadMoreTextView
         android:id="@+id/tvMovieReviewContent"
+        style="@style/LightMediumText"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="16dp"
         app:colorClickableText="@color/colorAccent"
         app:layout_constraintEnd_toEndOf="@+id/tvMovieReviewAuthor"
         app:layout_constraintStart_toStartOf="@+id/imageButton"
@@ -40,5 +43,6 @@
         app:trimCollapsedText="@string/read_more"
         app:trimExpandedText="@string/read_less"
         app:trimLength="2"
-        app:trimMode="trimModeLine" />
+        app:trimMode="trimModeLine"
+        tools:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam eget ligula eu lectus lobortis condimentum. Aliquam nonummy auctor massa. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Nulla at risus. Quisque purus magna, auctor et, sagittis ac, posuere eu, lectus. Nam mattis, felis ut adipiscing." />
 </android.support.constraint.ConstraintLayout>

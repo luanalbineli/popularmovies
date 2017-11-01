@@ -43,20 +43,14 @@ class MovieReviewListDialog : BaseFullscreenDialogWithList<MovieReviewModel, Mov
         mMovieId = arguments.getInt(MOVIE_ID_BUNDLE_KEY)
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val fullScrennDialogView = super.onCreateView(inflater, container, savedInstanceState)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
         val dividerItemDecoration = DividerItemDecoration(rvFullscreenFragmentDialog.context, mLinearLayoutManager.orientation)
 
         rvFullscreenFragmentDialog.addItemDecoration(dividerItemDecoration)
         rvFullscreenFragmentDialog.layoutManager = mLinearLayoutManager
         rvFullscreenFragmentDialog.adapter = mMovieReviewAdapter
-
-        return fullScrennDialogView
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
 
         mPresenter.start(mList, mMovieId, mHasMore)
 

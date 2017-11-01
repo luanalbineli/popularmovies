@@ -29,10 +29,19 @@
         <item name="android:fontFamily">sans-serif-light</item>
     </style>
 
+    <style name="LightMediumTextBold" parent="LightMediumText">
+        <item name="android:textStyle">bold</item>
+    </style>
+
     <style name="BlackLargeText" parent="Base.TextAppearance.AppCompat.Large">
         <item name="android:fontFamily">sans-serif-black</item>
     </style>
 
-
+    <style name="ContentDivider">
+        <item name="android:layout_marginTop">16dp</item>
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">1dp</item>
+        <item name="android:background">@drawable/content_divider</item>
+    </style>
 
 </resources>

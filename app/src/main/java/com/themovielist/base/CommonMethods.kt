@@ -2,6 +2,11 @@ package com.themovielist.base
 
 import android.app.Fragment
 import android.app.FragmentManager
+import android.content.Context
+import android.support.v4.content.ContextCompat
+import android.support.v7.widget.Toolbar
+import com.albineli.udacity.popularmovies.R
+import com.themovielist.util.UIUtil
 import timber.log.Timber
 
 interface CommonMethods {
@@ -27,6 +32,13 @@ interface CommonMethods {
 
             newFragment
         }()
+    }
+
+    fun configureToolbarBackButton(context: Context, toolbar: Toolbar, onBackPressed: () -> Unit) {
+        val drawable = ContextCompat.getDrawable(context, R.drawable.arrow_left)
+        UIUtil.paintDrawable(drawable, context.resources.getColor(android.R.color.white))
+        toolbar.navigationIcon = drawable
+        toolbar.setNavigationOnClickListener { _ -> onBackPressed() }
     }
 
     private fun <T: Fragment> tryToRetrieveFragmentInstance(fragmentManager: FragmentManager, fragmentTag: String) : T? {

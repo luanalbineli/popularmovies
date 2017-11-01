@@ -4,6 +4,7 @@ package com.themovielist.repository.movie
 import com.themovielist.model.MovieModel
 import com.themovielist.model.MovieReviewModel
 import com.themovielist.model.MovieTrailerModel
+import com.themovielist.model.response.MovieDetailResponseModel
 import com.themovielist.model.response.PaginatedArrayResponseModel
 
 import io.reactivex.Observable
@@ -21,6 +22,6 @@ interface IMovieService {
     @GET("movie/{movieId}/reviews")
     fun getReviewsByMovieId(@Path("movieId") movieId: Int, @Query("page") pageNumber: Int?): Observable<PaginatedArrayResponseModel<MovieReviewModel>>
 
-    @GET("movie/{movieId}/videos")
-    fun getTrailersByMovieId(@Path("movieId") movieId: Int): Observable<PaginatedArrayResponseModel<MovieTrailerModel>>
+    @GET("movie/{movieId}?append_to_response=reviews,trailers")
+    fun getMovieDetail(@Path("movieId") movieId: Int): Observable<MovieDetailResponseModel>
 }

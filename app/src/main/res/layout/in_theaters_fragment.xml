@@ -47,7 +47,7 @@
         android:textColor="@android:color/white"
         app:layout_constraintBottom_toBottomOf="@id/tvMovieHeaderReleaseDate"
         app:layout_constraintStart_toEndOf="@id/tvMovieHeaderReleaseDate"
-        android:text="@string/dont_know_the_name_separator" />
+        android:text="@string/pipe_separator" />
 
     <TextView
         android:id="@+id/tvMovieHeaderMovieGenres"

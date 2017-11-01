@@ -3,12 +3,9 @@ package com.themovielist.moviedetail.trailer
 import android.os.Bundle
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
-
-import com.themovielist.PopularMovieApplication
 import com.albineli.udacity.popularmovies.R
+import com.themovielist.PopularMovieApplication
 import com.themovielist.base.BaseFullscreenDialogWithList
 import com.themovielist.base.BasePresenter
 import com.themovielist.injector.components.ApplicationComponent
@@ -16,7 +13,6 @@ import com.themovielist.injector.components.DaggerFragmentComponent
 import com.themovielist.model.MovieTrailerModel
 import com.themovielist.util.YouTubeUtil
 import kotlinx.android.synthetic.main.fullscreen_fragment_dialog_with_list.*
-
 import javax.inject.Inject
 
 class MovieTrailerListDialog : BaseFullscreenDialogWithList<MovieTrailerModel, MovieTrailerListDialogContract.View>(), MovieTrailerListDialogContract.View {
@@ -33,24 +29,18 @@ class MovieTrailerListDialog : BaseFullscreenDialogWithList<MovieTrailerModel, M
     override val viewImplementation: MovieTrailerListDialogContract.View
         get() = this
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val fullscreenDialogWithListView = super.onCreateView(inflater, container, savedInstanceState)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
         mMovieReviewAdapter.setOnItemClickListener { _, item -> YouTubeUtil.openYouTubeVideo(activity, item.key) }
 
-        val dividerItemDecoration = DividerItemDecoration(rvFullscreenFragmentDialog.getContext(), mLinearLayoutManager.orientation)
+        val dividerItemDecoration = DividerItemDecoration(rvFullscreenFragmentDialog.context, mLinearLayoutManager.orientation)
 
         rvFullscreenFragmentDialog.addItemDecoration(dividerItemDecoration)
         rvFullscreenFragmentDialog.layoutManager = mLinearLayoutManager
         rvFullscreenFragmentDialog.adapter = mMovieReviewAdapter
 
-        return fullscreenDialogWithListView
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        mPresenter!!.start(mList)
+        mPresenter.start(mList)
 
         setTitle(R.string.all_trailers)
     }

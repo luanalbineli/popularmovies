@@ -3,10 +3,8 @@ package com.themovielist.moviedetail
 
 import com.themovielist.base.BasePresenterImpl
 import com.themovielist.model.MovieModel
-import com.themovielist.model.MovieReviewModel
-import com.themovielist.model.MovieTrailerModel
 import com.themovielist.model.MovieWithGenreModel
-import com.themovielist.model.response.PaginatedArrayResponseModel
+import com.themovielist.model.response.MovieDetailResponseModel
 import com.themovielist.repository.movie.CommonRepository
 import com.themovielist.repository.movie.MovieRepository
 import timber.log.Timber
@@ -16,106 +14,75 @@ class MovieDetailPresenter @Inject
 internal constructor(movieRepository: MovieRepository, private val mCommonRepository: CommonRepository) : BasePresenterImpl(movieRepository), MovieDetailContract.Presenter {
     private lateinit var mView: MovieDetailContract.View
     private lateinit var mMovieWithGenreModel: MovieWithGenreModel
-    private var mMovieReviewRequest: PaginatedArrayResponseModel<MovieReviewModel>? = null
-    private var mMovieTrailerList: List<MovieTrailerModel>? = null
-    private var mMovieId: Int = 0
     private var isFavorite = false
 
     override fun start(movieModel: MovieModel) {
         mCommonRepository.getAllGenres().subscribe({ genreMap ->
             val genreList = mCommonRepository.fillMovieGenresList(movieModel, genreMap)
             mMovieWithGenreModel = MovieWithGenreModel(movieModel, genreList)
-            mView.showMovieDetail(mMovieWithGenreModel)
+            mView.showMovieInfo(mMovieWithGenreModel)
         })
 
-        mMovieRepository.isMovieFavourite(movieModel.id).subscribe({
+        mView.showLoadingMovieDetailIndicator()
+        mMovieRepository.getMovieDetail(movieModel.id)
+                .doOnTerminate { mView.hideLoadingMovieDetailIndicator() }
+                .subscribe(this::handleGetMovieDetailResponseSuccess, { error ->
+                    mView.showErrorLoadingMovieDetail(error)
+                })
+
+        mMovieRepository.isMovieFavorite(movieModel.id).subscribe({
             mView.setFavoriteButtonState(it)
             isFavorite = it
+            Timber.i("IS MOVIE FAVORITE: $it")
         })
-
-        loadMovieReviews(movieModel.id)
-
-        loadMovieTrailers(movieModel.id)
     }
 
-    private fun loadMovieTrailers(movieId: Int) {
-        mView.showLoadingTrailersIndicator()
-        mMovieRepository.getTrailersByMovieId(movieId).subscribe(
-                { this.handleMovieTrailerRequestSuccess(it) }
-        ) {
-            Timber.e(it, "An error occurred while tried to get the movie trailers")
-            mView.showErrorMessageLoadTrailers()
-        }
-    }
+    private lateinit var mMovieDetailResponseModel: MovieDetailResponseModel
 
-    private fun loadMovieReviews(movieId: Int) {
-        mView.showLoadingReviewsIndicator()
-        mMovieRepository.getReviewsByMovieId(1, movieId).subscribe(
-                { this.handleMovieReviewRequestSuccess(it) }
-        ) {
-            Timber.e(it, "An error occurred while tried to get the movie reviews")
-            mView.showErrorMessageLoadReviews()
-        }
-    }
+    private fun handleGetMovieDetailResponseSuccess(movieDetailResponseModel: MovieDetailResponseModel) {
+        mMovieDetailResponseModel = movieDetailResponseModel
+        mView.showMovieDetailInfo()
 
-    private fun handleMovieTrailerRequestSuccess(movieTrailerModels: List<MovieTrailerModel>) {
-        if (movieTrailerModels.isEmpty()) {
-            mView.showEmptyTrailerListMessage()
-            mView.setShowAllTrailersButtonVisibility(false)
-            return
-        }
-
-        mMovieTrailerList = movieTrailerModels
-        if (mMovieTrailerList!!.size > 2) {
-            mView.showMovieTrailer(mMovieTrailerList!!.subList(0, 2))
-            mView.setShowAllTrailersButtonVisibility(true)
+        if (mMovieDetailResponseModel.reviewsResponseModel.results.isEmpty()) {
+            mView.showMessageEmptyReview()
+            mView.hideSeeAllReviewsButton()
         } else {
-            mView.showMovieTrailer(mMovieTrailerList!!)
-            mView.setShowAllTrailersButtonVisibility(false)
+            if (mMovieDetailResponseModel.reviewsResponseModel.results.size > 1) {
+                mView.showReadAllReviewsButton(mMovieDetailResponseModel.reviewsResponseModel.results.size)
+            } else {
+                mView.hideSeeAllReviewsButton()
+            }
+            mView.showFirstReviewInfo(mMovieDetailResponseModel.reviewsResponseModel.results[0])
         }
+
+        val hourMinute = convertRuntimeToHourMinute(movieDetailResponseModel.runtime)
+        mView.showMovieRuntime(hourMinute)
     }
 
-    private fun handleMovieReviewRequestSuccess(movieReviewModelArrayRequestAPI: PaginatedArrayResponseModel<MovieReviewModel>) {
-        if (movieReviewModelArrayRequestAPI.results.isEmpty()) {
-            mView.showEmptyReviewListMessage()
-            mView.setShowAllReviewsButtonVisibility(false)
-            return
-        }
-        mMovieReviewRequest = movieReviewModelArrayRequestAPI
-        if (movieReviewModelArrayRequestAPI.results.size > 2) {
-            mView.showMovieReview(mMovieReviewRequest!!.results.subList(0, 2))
-            mView.setShowAllReviewsButtonVisibility(true)
-        } else {
-            mView.showMovieReview(mMovieReviewRequest!!.results)
-            mView.setShowAllReviewsButtonVisibility(false)
-        }
+    private fun convertRuntimeToHourMinute(runtime: Int): Pair<Int, Int> {
+        val hours = runtime / 60
+        val minutes = runtime % 60
+        return Pair(hours, minutes)
     }
+
 
     override fun setView(view: MovieDetailContract.View) {
         mView = view
     }
 
     override fun showAllReviews() {
-        mView.showAllReviews(mMovieReviewRequest!!.results, mMovieReviewRequest!!.hasMorePages())
+        mView.showAllReviews(mMovieDetailResponseModel.reviewsResponseModel.results, mMovieDetailResponseModel.reviewsResponseModel.hasMorePages())
     }
 
     override fun showAllTrailers() {
-        mView.showAllTrailers(mMovieTrailerList!!)
-    }
-
-    override fun tryToLoadTrailersAgain() {
-        loadMovieTrailers(mMovieId)
-    }
-
-    override fun tryToLoadReviewAgain() {
-        loadMovieReviews(mMovieId)
+        mView.showAllTrailers(mMovieDetailResponseModel.trailersResponseModel.results)
     }
 
     fun toggleFavoriteMovie() {
         val request = if (isFavorite) {
             mMovieRepository.removeFavoriteMovie(mMovieWithGenreModel)
         } else {
-            mMovieRepository.removeFavoriteMovie(mMovieWithGenreModel)
+            mMovieRepository.saveFavoriteMovie(mMovieWithGenreModel)
         }
 
         mView.setFavoriteButtonEnabled(false)

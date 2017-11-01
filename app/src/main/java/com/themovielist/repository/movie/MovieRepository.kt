@@ -5,6 +5,7 @@ import com.themovielist.PopularMovieApplication
 import com.themovielist.model.MovieModel
 import com.themovielist.model.MovieReviewModel
 import com.themovielist.model.MovieTrailerModel
+import com.themovielist.model.response.MovieDetailResponseModel
 import com.themovielist.model.response.PaginatedArrayResponseModel
 import com.themovielist.repository.RepositoryBase
 import com.themovielist.repository.data.MovieContract
@@ -79,10 +80,6 @@ internal constructor(mRetrofit: Retrofit, private val mApplicationContext: Popul
         return observeOnMainThread(mApiInstance.getReviewsByMovieId(movieId, pageIndex))
     }
 
-    fun getTrailersByMovieId(movieId: Int): Observable<List<MovieTrailerModel>> {
-        return observeOnMainThread(mApiInstance.getTrailersByMovieId(movieId).map { listArrayRequestAPI -> listArrayRequestAPI.results })
-    }
-
     fun removeFavoriteMovie(movieModel: MovieModel): Completable {
         return observeOnMainThread(Completable.create { emitter ->
             Timber.d("Trying to remove movie from favorite: $movieModel")
@@ -134,7 +131,7 @@ internal constructor(mRetrofit: Retrofit, private val mApplicationContext: Popul
         }).subscribeOn(Schedulers.io()))
     }
 
-    fun isMovieFavourite(id: Int): Observable<Boolean> {
+    fun isMovieFavorite(id: Int): Observable<Boolean> {
         return observeOnMainThread(Observable.create(ObservableOnSubscribe<Boolean> { emitter ->
             mApplicationContext.tryQueryOnContentResolver(emitter, {
                 query(MovieContract.MovieEntry.buildMovieWithId(id), null, null, null, null)
@@ -146,4 +143,8 @@ internal constructor(mRetrofit: Retrofit, private val mApplicationContext: Popul
 
     override val getApiInstanceType: Class<IMovieService>
         get() = IMovieService::class.java
+
+    fun getMovieDetail(movieId: Int): Observable<MovieDetailResponseModel> {
+        return observeOnMainThread(mApiInstance.getMovieDetail(movieId))
+    }
 }

@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true">
 
     <android.support.design.widget.AppBarLayout
-        android:id="@+id/app_bar_layout"
+        android:id="@+id/appBarLayoutMovieDetail"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:fitsSystemWindows="true"
@@ -28,81 +29,6 @@
                 layout="@layout/movie_header_detail"
                 android:fitsSystemWindows="true"
                 app:layout_collapseMode="parallax" />
-            <!-- <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                 xmlns:app="http://schemas.android.com/apk/res-auto"
-                 xmlns:fresco="http://schemas.android.com/tools"
-                 android:layout_width="match_parent"
-                 android:layout_height="match_parent"
-                 android:fitsSystemWindows="true"
-                 app:layout_collapseMode="parallax">
-
-                 <com.facebook.drawee.view.SimpleDraweeView
-                     android:id="@+id/sdvMovieHeaderBackdrop"
-                     android:layout_width="0dp"
-                     android:layout_height="@dimen/in_theaters_backdrop_height"
-                     android:contentDescription="@string/movie_detail_backdrop_content_description"
-                     app:layout_constraintEnd_toEndOf="parent"
-                     app:layout_constraintStart_toStartOf="parent"
-                     app:layout_constraintTop_toTopOf="parent"
-                     fresco:actualImageScaleType="focusCrop"
-                     fresco:placeholderImage="@android:color/darker_gray"
-                     fresco:src="@drawable/backdrop_default" />
-
-                 <View
-                     android:layout_width="0dp"
-                     android:layout_height="0dp"
-                     android:background="@drawable/movie_image_view_menu_background"
-                     app:layout_constraintBottom_toBottomOf="@id/sdvMovieHeaderBackdrop"
-                     app:layout_constraintEnd_toEndOf="@id/sdvMovieHeaderBackdrop"
-                     app:layout_constraintStart_toStartOf="@id/sdvMovieHeaderBackdrop"
-                     app:layout_constraintTop_toTopOf="@id/sdvMovieHeaderBackdrop" />
-
-                 <TextView
-                     android:id="@+id/sdvMovieHeaderReleaseDate"
-                     style="@style/LightMediumText"
-                     android:layout_width="wrap_content"
-                     android:layout_height="wrap_content"
-                     android:layout_marginBottom="16dp"
-                     android:layout_marginStart="16dp"
-                     android:layout_marginTop="16dp"
-                     android:textColor="@android:color/white"
-                     app:layout_constraintBottom_toBottomOf="@+id/sdvMovieHeaderBackdrop"
-                     app:layout_constraintStart_toStartOf="@+id/sdvMovieHeaderBackdrop"
-                     fresco:text="1h 20m" />
-
-                 <TextView
-                     android:id="@+id/separator"
-                     style="@style/Base.TextAppearance.AppCompat.Medium"
-                     android:layout_width="wrap_content"
-                     android:layout_height="wrap_content"
-                     android:layout_marginStart="8dp"
-                     android:text="@string/dont_know_the_name_separator"
-                     android:textColor="@android:color/white"
-                     app:layout_constraintBottom_toBottomOf="@id/sdvMovieHeaderReleaseDate"
-                     app:layout_constraintStart_toEndOf="@id/sdvMovieHeaderReleaseDate" />
-
-                 <TextView
-                     android:id="@+id/tvMovieHeaderMovieGenres"
-                     style="@style/LightMediumText"
-                     android:layout_width="wrap_content"
-                     android:layout_height="wrap_content"
-                     android:layout_marginStart="8dp"
-                     android:textColor="@android:color/white"
-                     app:layout_constraintBottom_toBottomOf="@id/separator"
-                     app:layout_constraintStart_toEndOf="@id/separator"
-                     fresco:text="Action, Sci-Fi" />
-
-                 <TextView
-                     android:id="@+id/tvMovieHeaderMovieName"
-                     style="@style/BlackLargeText"
-                     android:layout_width="wrap_content"
-                     android:layout_height="wrap_content"
-                     android:layout_marginBottom="8dp"
-                     android:textColor="@android:color/white"
-                     app:layout_constraintBottom_toTopOf="@+id/sdvMovieHeaderReleaseDate"
-                     app:layout_constraintStart_toStartOf="@+id/sdvMovieHeaderReleaseDate"
-                     fresco:text="Dunkirk" />
-             </android.support.constraint.ConstraintLayout>-->
 
             <android.support.v7.widget.Toolbar
                 android:id="@+id/toolbarMovieDetail"
@@ -120,11 +46,188 @@
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-        <android.support.constraint.ConstraintLayout
+        <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-        </android.support.constraint.ConstraintLayout>
+            <com.themovielist.ui.RequestStatusView
+                android:id="@+id/rsvMovieDetailRequestStatus"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+            <android.support.constraint.ConstraintLayout
+                android:id="@+id/movieDetailContainer"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="gone">
+
+                <android.support.constraint.Guideline
+                    android:id="@+id/guideline_start"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    app:layout_constraintGuide_begin="16dp" />
+
+                <android.support.constraint.Guideline
+                    android:id="@+id/guideline_end"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    app:layout_constraintGuide_end="16dp" />
+
+                <TextView
+                    android:id="@+id/tvMovieDetailSynopseLabel"
+                    style="@style/LightMediumTextBold"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:text="@string/overview"
+                    app:layout_constraintEnd_toEndOf="@id/guideline_end"
+                    app:layout_constraintStart_toStartOf="@id/guideline_start"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/tvMovieDetailSynopsys"
+                    style="@style/LightMediumText"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    app:layout_constraintEnd_toEndOf="@id/guideline_end"
+                    app:layout_constraintStart_toStartOf="@id/guideline_start"
+                    app:layout_constraintTop_toBottomOf="@id/tvMovieDetailSynopseLabel"
+                    tools:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam eget ligula eu lectus lobortis condimentum. Aliquam nonummy auctor massa. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Nulla at risus. Quisque purus magna, auctor et, sagittis ac, posuere eu, lectus. Nam mattis, felis ut adipiscing." />
+
+                <View
+                    android:id="@+id/divider"
+                    style="@style/ContentDivider"
+                    app:layout_constraintEnd_toEndOf="@id/guideline_end"
+                    app:layout_constraintStart_toStartOf="@id/guideline_start"
+                    app:layout_constraintTop_toBottomOf="@+id/tvMovieDetailSynopsys" />
+
+                <ImageView
+                    android:id="@+id/ivMovieDetailRatingIcon"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="16dp"
+                    app:layout_constraintEnd_toStartOf="@+id/ivMovieDetailTimeIcon"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/divider"
+                    app:srcCompat="@drawable/star" />
+
+                <ImageView
+                    android:id="@+id/ivMovieDetailTimeIcon"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_marginStart="8dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/ivMovieDetailRatingIcon"
+                    app:layout_constraintTop_toTopOf="@+id/ivMovieDetailRatingIcon"
+                    app:srcCompat="@drawable/av_timer" />
+
+                <TextView
+                    android:id="@+id/tvMovieDetailRating"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:fontFamily="sans-serif-light"
+                    app:layout_constraintEnd_toEndOf="@+id/ivMovieDetailRatingIcon"
+                    app:layout_constraintStart_toStartOf="@+id/ivMovieDetailRatingIcon"
+                    app:layout_constraintTop_toBottomOf="@+id/ivMovieDetailRatingIcon"
+                    tools:text="7.6" />
+
+                <TextView
+                    android:id="@+id/tvMovieDetailRuntime"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:fontFamily="sans-serif-light"
+                    app:layout_constraintEnd_toEndOf="@+id/ivMovieDetailTimeIcon"
+                    app:layout_constraintStart_toStartOf="@+id/ivMovieDetailTimeIcon"
+                    app:layout_constraintTop_toBottomOf="@+id/ivMovieDetailTimeIcon"
+                    tools:text="1h 30m" />
+
+                <View
+                    android:id="@+id/divider2"
+                    style="@style/ContentDivider"
+                    app:layout_constraintEnd_toEndOf="@id/guideline_end"
+                    app:layout_constraintStart_toStartOf="@id/guideline_start"
+                    app:layout_constraintTop_toBottomOf="@+id/tvMovieDetailRuntime" />
+
+                <TextView
+                    android:id="@+id/tvMovieDetailReviewsLabel"
+                    style="@style/LightMediumTextBold"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:text="@string/reviews"
+                    app:layout_constraintEnd_toEndOf="@id/guideline_end"
+                    app:layout_constraintStart_toStartOf="@id/guideline_start"
+                    app:layout_constraintTop_toBottomOf="@id/divider2" />
+
+                <include
+                    android:id="@+id/movieDetailReviewInclude"
+                    layout="@layout/movie_review_item"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    app:layout_constraintEnd_toEndOf="@id/guideline_end"
+                    app:layout_constraintStart_toStartOf="@id/guideline_start"
+                    app:layout_constraintTop_toBottomOf="@id/tvMovieDetailReviewsLabel" />
+
+                <TextView
+                    android:id="@+id/tvMovieDetailReadAllReviews"
+                    style="@style/Base.TextAppearance.AppCompat.Medium"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:text="@string/all_reviews"
+                    android:textColor="@color/colorPrimary"
+                    app:layout_constraintEnd_toEndOf="@id/guideline_end"
+                    app:layout_constraintStart_toStartOf="@id/guideline_start"
+                    app:layout_constraintTop_toBottomOf="@id/movieDetailReviewInclude" />
+
+                <View
+                    android:id="@+id/divider3"
+                    style="@style/ContentDivider"
+                    app:layout_constraintEnd_toEndOf="@id/guideline_end"
+                    app:layout_constraintStart_toStartOf="@id/guideline_start"
+                    app:layout_constraintTop_toBottomOf="@+id/tvMovieDetailReadAllReviews" />
+
+                <TextView
+                    android:id="@+id/tvMovieDetailTrailersLabel"
+                    style="@style/LightMediumTextBold"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:text="@string/trailers"
+                    app:layout_constraintEnd_toEndOf="@id/guideline_end"
+                    app:layout_constraintStart_toStartOf="@id/guideline_start"
+                    app:layout_constraintTop_toBottomOf="@id/divider3" />
+
+                <include
+                    android:id="@+id/tvMovieDetailTrailerInclude"
+                    layout="@layout/movie_trailer_item"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    app:layout_constraintEnd_toEndOf="@id/guideline_end"
+                    app:layout_constraintStart_toStartOf="@id/guideline_start"
+                    app:layout_constraintTop_toBottomOf="@id/tvMovieDetailTrailersLabel" />
+
+                <TextView
+                    android:id="@+id/tvMovieDetailSeeAllTrailers"
+                    style="@style/Base.TextAppearance.AppCompat.Medium"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:text="@string/all_trailers"
+                    android:textColor="@color/colorPrimary"
+                    app:layout_constraintEnd_toEndOf="@id/guideline_end"
+                    app:layout_constraintStart_toStartOf="@id/guideline_start"
+                    app:layout_constraintTop_toBottomOf="@id/tvMovieDetailTrailerInclude" />
+            </android.support.constraint.ConstraintLayout>
+        </FrameLayout>
 
     </android.support.v4.widget.NestedScrollView>
 

@@ -31,6 +31,7 @@ public abstract class MovieContract {
         public static final String COLUMN_BACKDROP_PATH = "backdropPath";
 
         public static final String COLUMN_VOTE_COUNT = "voteCount";
+
         public static final String COLUMN_GENRE_ID_LIST = "genreIds";
 
         public static Uri buildMovieWithId(int id) {

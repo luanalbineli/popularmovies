@@ -4,20 +4,19 @@ import android.app.DialogFragment
 import android.os.Bundle
 import android.os.Parcelable
 import android.support.annotation.StringRes
-import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.themovielist.PopularMovieApplication
 import com.albineli.udacity.popularmovies.R
+import com.themovielist.PopularMovieApplication
 import com.themovielist.injector.components.ApplicationComponent
-import com.themovielist.util.UIUtil
 import kotlinx.android.synthetic.main.fullscreen_fragment_dialog_with_list.*
+import kotlinx.android.synthetic.main.fullscreen_fragment_dialog_with_list.view.*
 import java.security.InvalidParameterException
 import java.util.*
 
 
-abstract class BaseFullscreenDialogWithList<TModel : Parcelable, TView> : DialogFragment() {
+abstract class BaseFullscreenDialogWithList<TModel : Parcelable, TView> : DialogFragment(), CommonMethods {
 
     protected lateinit var mList: ArrayList<TModel>
 
@@ -46,11 +45,9 @@ abstract class BaseFullscreenDialogWithList<TModel : Parcelable, TView> : Dialog
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val rootView = inflater.inflate(R.layout.fullscreen_fragment_dialog_with_list, container)
-
-        val drawable = resources.getDrawable(R.drawable.arrow_left)
-        UIUtil.paintDrawable(drawable, resources.getColor(android.R.color.white))
-        toolbarMovieReviewDialog.navigationIcon = drawable
-        toolbarMovieReviewDialog.setNavigationOnClickListener { v -> dismiss() }
+        configureToolbarBackButton(activity, rootView.toolbarMovieReviewDialog) {
+            dismiss()
+        }
 
         return rootView
     }

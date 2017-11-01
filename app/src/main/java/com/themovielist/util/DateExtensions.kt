@@ -1,12 +1,8 @@
 package com.themovielist.util
 
-import android.content.Context
-import android.text.format.DateFormat
-import com.albineli.udacity.popularmovies.R
-import java.text.SimpleDateFormat
 import java.util.*
 
-var DEFAULT_DATE_FORMAT: SimpleDateFormat? = null
+/*var DEFAULT_DATE_FORMAT: SimpleDateFormat? = null
 
 
 fun Date?.toDefaultDateFormat(context: Context): String? {
@@ -18,4 +14,16 @@ fun Date?.toDefaultDateFormat(context: Context): String? {
         DEFAULT_DATE_FORMAT = SimpleDateFormat(context.getString(R.string.default_date_format), Locale.getDefault())
         DEFAULT_DATE_FORMAT!!.format(this)
     }()
+}*/
+
+val Date?.yearFromCalendar
+    get() = getCalendarField(this, Calendar.YEAR)
+
+fun getCalendarField(date: Date?, field: Int): Int? {
+    if (date == null) {
+        return null
+    }
+    val calendar = Calendar.getInstance()
+    calendar.time = date
+    return calendar.get(field)
 }

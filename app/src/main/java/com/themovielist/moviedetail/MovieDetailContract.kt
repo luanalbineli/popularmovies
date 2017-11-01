@@ -12,11 +12,7 @@ import com.themovielist.model.MovieWithGenreModel
 
 abstract class MovieDetailContract {
     interface View {
-        fun showMovieReview(movieReviewModelList: List<MovieReviewModel>)
-
-        fun showMovieDetail(movieWithGenreModel: MovieWithGenreModel)
-
-        fun showMovieTrailer(movieTrailerList: List<MovieTrailerModel>)
+        fun showMovieInfo(movieWithGenreModel: MovieWithGenreModel)
 
         fun setFavoriteButtonState(favorite: Boolean)
 
@@ -24,31 +20,24 @@ abstract class MovieDetailContract {
 
         fun showSuccessMessageRemoveFavoriteMovie()
 
-
         fun showErrorMessageAddFavoriteMovie()
 
         fun showErrorMessageRemoveFavoriteMovie()
-
-        fun showErrorMessageLoadReviews()
-
-        fun showErrorMessageLoadTrailers()
-
-        fun setShowAllReviewsButtonVisibility(visible: Boolean)
-
-        fun setShowAllTrailersButtonVisibility(visible: Boolean)
-
-        fun showLoadingReviewsIndicator()
-
-        fun showLoadingTrailersIndicator()
 
         fun showAllReviews(movieReviewList: List<MovieReviewModel>, hasMore: Boolean)
 
         fun showAllTrailers(movieTrailerList: List<MovieTrailerModel>)
 
-        fun showEmptyReviewListMessage()
-
-        fun showEmptyTrailerListMessage()
         fun setFavoriteButtonEnabled(enabled: Boolean)
+        fun showLoadingMovieDetailIndicator()
+        fun hideLoadingMovieDetailIndicator()
+        fun showErrorLoadingMovieDetail(error: Throwable)
+        fun showMovieDetailInfo()
+        fun showMovieRuntime(hourMinute: Pair<Int, Int>)
+        fun showMessageEmptyReview()
+        fun hideSeeAllReviewsButton()
+        fun showReadAllReviewsButton(numberOfReviews: Int)
+        fun showFirstReviewInfo(movieReviewModel: MovieReviewModel)
     }
 
     interface Presenter : BasePresenter<View> {
@@ -57,9 +46,5 @@ abstract class MovieDetailContract {
         fun showAllReviews()
 
         fun showAllTrailers()
-
-        fun tryToLoadTrailersAgain()
-
-        fun tryToLoadReviewAgain()
     }
 }
