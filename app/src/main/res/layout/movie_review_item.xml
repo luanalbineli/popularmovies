@@ -15,6 +15,7 @@
         android:layout_marginTop="8dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
+        android:tint="@color/black_alpha_40"
         app:srcCompat="@drawable/account_circle" />
 
     <TextView
@@ -24,11 +25,12 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/imageButton"
+        app:layout_constraintBottom_toBottomOf="@+id/imageButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/imageButton"
-        app:layout_constraintTop_toBottomOf="@+id/imageButton"
-        tools:text="Name of the guy that wrote the stuff" />
+        app:layout_constraintTop_toTopOf="@+id/imageButton"
+        app:layout_constraintVertical_bias="0.24000001"
+        tools:text="Name" />
 
     <com.borjabravo.readmoretextview.ReadMoreTextView
         android:id="@+id/tvMovieReviewContent"
@@ -39,7 +41,7 @@
         app:colorClickableText="@color/colorAccent"
         app:layout_constraintEnd_toEndOf="@+id/tvMovieReviewAuthor"
         app:layout_constraintStart_toStartOf="@+id/imageButton"
-        app:layout_constraintTop_toBottomOf="@+id/tvMovieReviewAuthor"
+        app:layout_constraintTop_toBottomOf="@+id/imageButton"
         app:trimCollapsedText="@string/read_more"
         app:trimExpandedText="@string/read_less"
         app:trimLength="2"

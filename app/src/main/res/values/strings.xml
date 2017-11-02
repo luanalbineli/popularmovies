@@ -30,4 +30,5 @@
     <string name="overview">Overview</string>
     <string name="movie_runtime_format">%1$sh %2$sm</string>
     <string name="read_all_reviews_format">Read all reviews (%1$s)</string>
+    <string name="see_all_trailers_format">See all trailers (%1$s)</string>
 </resources>

@@ -24,6 +24,7 @@
     <TextView
         android:id="@+id/tvMovieTrailerName"
         android:layout_width="0dp"
+        style="@style/LightMediumText"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         fresco:layout_constraintEnd_toEndOf="parent"
@@ -39,20 +40,9 @@
         android:background="@drawable/shape_chip"
         android:textColor="@android:color/white"
         android:textSize="12sp"
+        android:fontFamily="sans-serif-light"
         fresco:layout_constraintStart_toStartOf="@+id/tvMovieTrailerName"
         fresco:layout_constraintTop_toBottomOf="@+id/tvMovieTrailerName"
         tools:text="720p" />
-
-    <TextView
-        android:id="@+id/tvMovieTrailerSource"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:background="@drawable/shape_chip"
-        android:textColor="@android:color/white"
-        android:textSize="12sp"
-        fresco:layout_constraintStart_toEndOf="@+id/tvMovieTrailerSize"
-        fresco:layout_constraintTop_toTopOf="@+id/tvMovieTrailerSize"
-        tools:text="YouTube" />
 
 </android.support.constraint.ConstraintLayout>

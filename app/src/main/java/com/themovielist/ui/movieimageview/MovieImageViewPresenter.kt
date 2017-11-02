@@ -44,7 +44,7 @@ class MovieImageViewPresenter @Inject constructor(private val mMovieRepository: 
     override fun onFavoriteMovieEvent(movie: MovieModel, favourite: Boolean) {
         if (mMovieImageViewModel.movieModel == movie && mMovieImageViewModel.isFavourite != favourite) {
             mMovieImageViewModel.isFavourite = favourite
-            mView.toggleMovieFavouriteEnabled(favourite)
+            mView.toggleMovieFavorite(favourite)
         }
     }
 }

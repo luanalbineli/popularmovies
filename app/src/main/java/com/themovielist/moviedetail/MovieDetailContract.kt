@@ -34,10 +34,9 @@ abstract class MovieDetailContract {
         fun showErrorLoadingMovieDetail(error: Throwable)
         fun showMovieDetailInfo()
         fun showMovieRuntime(hourMinute: Pair<Int, Int>)
-        fun showMessageEmptyReview()
-        fun hideSeeAllReviewsButton()
-        fun showReadAllReviewsButton(numberOfReviews: Int)
-        fun showFirstReviewInfo(movieReviewModel: MovieReviewModel)
+        fun bindMovieReviewInfo(movieReviewList: List<MovieReviewModel>)
+        fun dispatchFavoriteMovieEvent(movieModel: MovieModel, isFavorite: Boolean)
+        fun bindMovieTrailerInfo(movieTrailerList: List<MovieTrailerModel>)
     }
 
     interface Presenter : BasePresenter<View> {
@@ -46,5 +45,6 @@ abstract class MovieDetailContract {
         fun showAllReviews()
 
         fun showAllTrailers()
+        fun tryFecthMovieDetailAgain()
     }
 }

@@ -5,39 +5,30 @@ import android.os.Parcelable
 
 import com.google.gson.annotations.SerializedName
 
-class MovieTrailerModel constructor(@SerializedName("site") val site: String,
-                                    @SerializedName("size") val size: Int,
-                                    @SerializedName("key") val key: String,
-                                    @SerializedName("name") val name: String) : Parcelable {
+data class MovieTrailerModel constructor(@SerializedName("size") val size: String,
+                                         @SerializedName("source") val source: String,
+                                         @SerializedName("name") val name: String) : Parcelable {
 
-    private constructor(parcel: Parcel) : this(parcel.readString(), parcel.readInt(), parcel.readString(), parcel.readString())
-
-    private constructor() : this("", 0, "", "")
+    private constructor(parcel: Parcel) : this(parcel.readString(), parcel.readString(), parcel.readString())
 
     override fun describeContents(): Int {
         return 0
     }
 
     override fun writeToParcel(dest: Parcel, flags: Int) {
-        dest.writeString(site)
-        dest.writeInt(size)
-        dest.writeString(key)
+        dest.writeString(size)
+        dest.writeString(source)
         dest.writeString(name)
     }
 
-    override fun toString(): String {
-        return "(site = $site, size = $size, key = $key, name = $name)"
-    }
-
     companion object {
-
         val CREATOR: Parcelable.Creator<MovieTrailerModel> = object : Parcelable.Creator<MovieTrailerModel> {
             override fun createFromParcel(parcel: Parcel): MovieTrailerModel {
                 return MovieTrailerModel(parcel)
             }
 
-            override fun newArray(size: Int): Array<MovieTrailerModel> {
-                return Array(size) { MovieTrailerModel() }
+            override fun newArray(size: Int): Array<MovieTrailerModel?> {
+                return kotlin.arrayOfNulls(size)
             }
         }
     }

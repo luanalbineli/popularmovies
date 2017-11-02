@@ -6,4 +6,10 @@
         <attr name="drawableTopCompat" format="reference"/>
         <attr name="drawableBottomCompat" format="reference"/>
     </declare-styleable>
+    <declare-styleable name="MovieDetailSectionView">
+        <attr name="content" format="reference" />
+        <attr name="title" format="string" />
+        <attr name="emptyMessage" format="string" />
+        <attr name="buttonTitle" format="string" />
+    </declare-styleable>
 </resources>

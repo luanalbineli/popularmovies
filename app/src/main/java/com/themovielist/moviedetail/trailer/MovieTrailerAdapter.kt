@@ -6,12 +6,7 @@ import com.albineli.udacity.popularmovies.R
 import com.themovielist.model.MovieTrailerModel
 import com.themovielist.ui.recyclerview.CustomRecyclerViewAdapter
 
-class MovieTrailerAdapter : CustomRecyclerViewAdapter<MovieTrailerModel, MovieTrailerViewHolder> {
-
-    constructor(emptyMessageResId: Int, tryAgainClickListener: (() -> Unit)?) : super(emptyMessageResId, tryAgainClickListener) {}
-
-    internal constructor() {}
-
+class MovieTrailerAdapter internal constructor() : CustomRecyclerViewAdapter<MovieTrailerModel, MovieTrailerViewHolder>() {
     override fun onCreateItemViewHolder(parent: ViewGroup): MovieTrailerViewHolder {
         val itemView = LayoutInflater.from(parent.context).inflate(R.layout.movie_trailer_item, parent, false)
         return MovieTrailerViewHolder(itemView)

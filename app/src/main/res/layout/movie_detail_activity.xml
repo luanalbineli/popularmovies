@@ -147,85 +147,29 @@
                     app:layout_constraintTop_toBottomOf="@+id/ivMovieDetailTimeIcon"
                     tools:text="1h 30m" />
 
-                <View
-                    android:id="@+id/divider2"
-                    style="@style/ContentDivider"
-                    app:layout_constraintEnd_toEndOf="@id/guideline_end"
-                    app:layout_constraintStart_toStartOf="@id/guideline_start"
-                    app:layout_constraintTop_toBottomOf="@+id/tvMovieDetailRuntime" />
-
-                <TextView
-                    android:id="@+id/tvMovieDetailReviewsLabel"
-                    style="@style/LightMediumTextBold"
+                <com.themovielist.ui.MovieDetailSectionView
+                    android:id="@+id/mdsMovieDetailReviewSection"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    android:text="@string/reviews"
-                    app:layout_constraintEnd_toEndOf="@id/guideline_end"
-                    app:layout_constraintStart_toStartOf="@id/guideline_start"
-                    app:layout_constraintTop_toBottomOf="@id/divider2" />
+                    app:buttonTitle="@string/read_all_reviews_format"
+                    app:content="@layout/movie_review_item"
+                    app:emptyMessage="@string/the_list_is_empty"
+                    app:layout_constraintEnd_toEndOf="@+id/guideline_end"
+                    app:layout_constraintStart_toStartOf="@+id/guideline_start"
+                    app:layout_constraintTop_toBottomOf="@+id/tvMovieDetailRuntime"
+                    app:title="@string/reviews" />
 
-                <include
-                    android:id="@+id/movieDetailReviewInclude"
-                    layout="@layout/movie_review_item"
+                <com.themovielist.ui.MovieDetailSectionView
+                    android:id="@+id/mdsMovieDetailTrailerSection"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    app:layout_constraintEnd_toEndOf="@id/guideline_end"
-                    app:layout_constraintStart_toStartOf="@id/guideline_start"
-                    app:layout_constraintTop_toBottomOf="@id/tvMovieDetailReviewsLabel" />
-
-                <TextView
-                    android:id="@+id/tvMovieDetailReadAllReviews"
-                    style="@style/Base.TextAppearance.AppCompat.Medium"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    android:text="@string/all_reviews"
-                    android:textColor="@color/colorPrimary"
-                    app:layout_constraintEnd_toEndOf="@id/guideline_end"
-                    app:layout_constraintStart_toStartOf="@id/guideline_start"
-                    app:layout_constraintTop_toBottomOf="@id/movieDetailReviewInclude" />
-
-                <View
-                    android:id="@+id/divider3"
-                    style="@style/ContentDivider"
-                    app:layout_constraintEnd_toEndOf="@id/guideline_end"
-                    app:layout_constraintStart_toStartOf="@id/guideline_start"
-                    app:layout_constraintTop_toBottomOf="@+id/tvMovieDetailReadAllReviews" />
-
-                <TextView
-                    android:id="@+id/tvMovieDetailTrailersLabel"
-                    style="@style/LightMediumTextBold"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    android:text="@string/trailers"
-                    app:layout_constraintEnd_toEndOf="@id/guideline_end"
-                    app:layout_constraintStart_toStartOf="@id/guideline_start"
-                    app:layout_constraintTop_toBottomOf="@id/divider3" />
-
-                <include
-                    android:id="@+id/tvMovieDetailTrailerInclude"
-                    layout="@layout/movie_trailer_item"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    app:layout_constraintEnd_toEndOf="@id/guideline_end"
-                    app:layout_constraintStart_toStartOf="@id/guideline_start"
-                    app:layout_constraintTop_toBottomOf="@id/tvMovieDetailTrailersLabel" />
-
-                <TextView
-                    android:id="@+id/tvMovieDetailSeeAllTrailers"
-                    style="@style/Base.TextAppearance.AppCompat.Medium"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    android:text="@string/all_trailers"
-                    android:textColor="@color/colorPrimary"
-                    app:layout_constraintEnd_toEndOf="@id/guideline_end"
-                    app:layout_constraintStart_toStartOf="@id/guideline_start"
-                    app:layout_constraintTop_toBottomOf="@id/tvMovieDetailTrailerInclude" />
+                    app:buttonTitle="@string/see_all_trailers_format"
+                    app:content="@layout/movie_trailer_item"
+                    app:emptyMessage="@string/the_list_is_empty"
+                    app:layout_constraintEnd_toEndOf="@+id/guideline_end"
+                    app:layout_constraintStart_toStartOf="@+id/guideline_start"
+                    app:layout_constraintTop_toBottomOf="@+id/mdsMovieDetailReviewSection"
+                    app:title="@string/trailers" />
             </android.support.constraint.ConstraintLayout>
         </FrameLayout>
 

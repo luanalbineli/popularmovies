@@ -11,26 +11,28 @@ import com.albineli.udacity.popularmovies.R
 import com.themovielist.base.BaseDaggerActivity
 import com.themovielist.base.BasePresenter
 import com.themovielist.enums.RequestStatusDescriptor
+import com.themovielist.event.FavoriteMovieEvent
 import com.themovielist.injector.components.ApplicationComponent
 import com.themovielist.injector.components.DaggerFragmentComponent
 import com.themovielist.model.MovieModel
 import com.themovielist.model.MovieReviewModel
 import com.themovielist.model.MovieTrailerModel
 import com.themovielist.model.MovieWithGenreModel
+import com.themovielist.moviedetail.review.MovieDetailReviewViewHolder
 import com.themovielist.moviedetail.review.MovieReviewListDialog
 import com.themovielist.moviedetail.trailer.MovieTrailerListDialog
+import com.themovielist.moviedetail.trailer.MovieTrailerViewHolder
+import com.themovielist.ui.MovieDetailSectionView
 import com.themovielist.util.*
 import kotlinx.android.synthetic.main.movie_detail_activity.*
 import kotlinx.android.synthetic.main.movie_header_detail.*
-import kotlinx.android.synthetic.main.movie_review_item.view.*
+import org.greenrobot.eventbus.EventBus
 import timber.log.Timber
 import java.security.InvalidParameterException
-import java.util.*
 import javax.inject.Inject
 
 
 class MovieDetailActivity : BaseDaggerActivity<MovieDetailContract.View>(), MovieDetailContract.View {
-
     override val presenterImplementation: BasePresenter<MovieDetailContract.View>
         get() = mPresenter
 
@@ -64,8 +66,7 @@ class MovieDetailActivity : BaseDaggerActivity<MovieDetailContract.View>(), Movi
 
         configureToolbar()
 
-        tvMovieDetailReadAllReviews.setOnClickListener { mPresenter.showAllReviews() }
-        tvMovieDetailSeeAllTrailers.setOnClickListener { mPresenter.showAllTrailers() }
+        rsvMovieDetailRequestStatus.setTryAgainClickListener { mPresenter.tryFecthMovieDetailAgain() }
 
         mPresenter.start(mMovieModel)
     }
@@ -83,6 +84,21 @@ class MovieDetailActivity : BaseDaggerActivity<MovieDetailContract.View>(), Movi
             mPresenter.toggleFavoriteMovie()
             true
         }
+
+        /*var isShow = false
+        var scrollRange = -1
+        appBarLayoutMovieDetail.addOnOffsetChangedListener({ appBarLayout, verticalOffset ->
+            if (scrollRange == -1) {
+                scrollRange = appBarLayout.totalScrollRange
+            }
+            if (scrollRange + verticalOffset == 0) {
+                collapse_toolbar.title = "It"
+                isShow = true
+            } else if(isShow) {
+                collapse_toolbar.title = " "
+                isShow = false
+            }
+        })*/
     }
 
     override fun showMovieInfo(movieWithGenreModel: MovieWithGenreModel) {
@@ -136,7 +152,7 @@ class MovieDetailActivity : BaseDaggerActivity<MovieDetailContract.View>(), Movi
     }
 
     private fun showToastMessage(@StringRes messageResId: Int) {
-         Snackbar.make(movieDetailContainer, messageResId, Snackbar.LENGTH_SHORT).show()
+        Snackbar.make(movieDetailContainer, messageResId, Snackbar.LENGTH_SHORT).show()
     }
 
     override fun setFavoriteButtonEnabled(enabled: Boolean) {
@@ -152,28 +168,41 @@ class MovieDetailActivity : BaseDaggerActivity<MovieDetailContract.View>(), Movi
     }
 
     override fun showErrorLoadingMovieDetail(error: Throwable) {
-        rsvMovieDetailRequestStatus.setRequestStatus(RequestStatusDescriptor.ERROR)
+        Timber.e(error, "An error occurred while tried to fetch the movie detail: ${error.message}")
+        rsvMovieDetailRequestStatus.setRequestStatus(RequestStatusDescriptor.ERROR, true)
     }
 
     override fun showMovieRuntime(hourMinute: Pair<Int, Int>) {
         tvMovieDetailRuntime.text = String.format(getString(R.string.movie_runtime_format), hourMinute.first, hourMinute.second)
     }
 
-    override fun showMessageEmptyReview() {
-        // TODO: IMPLEMENT
+    override fun bindMovieReviewInfo(movieReviewList: List<MovieReviewModel>) {
+        val reviewSection = findViewById<MovieDetailSectionView<MovieReviewModel>>(R.id.mdsMovieDetailReviewSection)
+        reviewSection.onBindSectionContent = { itemView, movieReviewModel ->
+            MovieDetailReviewViewHolder.bindLayout(itemView, movieReviewModel.author, movieReviewModel.content)
+        }
+        reviewSection.onClickSectionButton = {
+            mPresenter.showAllReviews()
+        }
+
+        reviewSection.bind(movieReviewList)
     }
 
-    override fun hideSeeAllReviewsButton() {
-        tvMovieDetailReadAllReviews.setDisplay(false)
+    override fun bindMovieTrailerInfo(movieTrailerList: List<MovieTrailerModel>) {
+        val trailerSection = findViewById<MovieDetailSectionView<MovieTrailerModel>>(R.id.mdsMovieDetailTrailerSection)
+        trailerSection.onBindSectionContent = { itemView, movieTrailerModel ->
+            MovieTrailerViewHolder.bindLayout(itemView, movieTrailerModel)
+            itemView.setOnClickListener { YouTubeUtil.openYouTubeVideo(this, movieTrailerModel.source) }
+        }
+        trailerSection.onClickSectionButton = {
+            mPresenter.showAllTrailers()
+        }
+
+        trailerSection.bind(movieTrailerList)
     }
 
-    override fun showReadAllReviewsButton(numberOfReviews: Int) {
-        tvMovieDetailReadAllReviews.text = String.format(getString(R.string.read_all_reviews_format), numberOfReviews)
-    }
-
-    override fun showFirstReviewInfo(movieReviewModel: MovieReviewModel) {
-        movieDetailReviewInclude.tvMovieReviewAuthor.text = movieReviewModel.author
-        movieDetailReviewInclude.tvMovieReviewContent.text = movieReviewModel.content
+    override fun dispatchFavoriteMovieEvent(movieModel: MovieModel, isFavorite: Boolean) {
+        EventBus.getDefault().post(FavoriteMovieEvent(movieModel, isFavorite))
     }
 
     companion object {

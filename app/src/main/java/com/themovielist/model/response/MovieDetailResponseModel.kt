@@ -3,7 +3,6 @@ package com.themovielist.model.response
 import com.google.gson.annotations.SerializedName
 import com.themovielist.model.MovieModel
 import com.themovielist.model.MovieReviewModel
-import com.themovielist.model.MovieTrailerModel
 import java.util.*
 
 class MovieDetailResponseModel(id: Int = 0, posterPath: String, overview: String,
@@ -15,7 +14,7 @@ class MovieDetailResponseModel(id: Int = 0, posterPath: String, overview: String
     lateinit var reviewsResponseModel: PaginatedArrayResponseModel<MovieReviewModel>
 
     @SerializedName("trailers")
-    lateinit var trailersResponseModel: PaginatedArrayResponseModel<MovieTrailerModel>
+    lateinit var trailerResponseModel: MovieDetailTrailerResponseModel
 
     @SerializedName("runtime")
     var runtime = 0

@@ -32,7 +32,7 @@ class MovieTrailerListDialog : BaseFullscreenDialogWithList<MovieTrailerModel, M
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        mMovieReviewAdapter.setOnItemClickListener { _, item -> YouTubeUtil.openYouTubeVideo(activity, item.key) }
+        mMovieReviewAdapter.setOnItemClickListener { _, item -> YouTubeUtil.openYouTubeVideo(activity, item.source) }
 
         val dividerItemDecoration = DividerItemDecoration(rvFullscreenFragmentDialog.context, mLinearLayoutManager.orientation)
 

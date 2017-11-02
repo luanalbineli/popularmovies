@@ -91,7 +91,6 @@ class MovieImageView constructor(context: Context, attributeSet: AttributeSet) :
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun onFavoriteMovieEvent(favoriteMovieEvent: FavoriteMovieEvent) {
-        Timber.d("Reached the favorite movie event: $favoriteMovieEvent")
         mPresenter.onFavoriteMovieEvent(favoriteMovieEvent.movie, favoriteMovieEvent.favorite)
     }
 
