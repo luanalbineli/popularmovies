@@ -1,15 +1,14 @@
-package com.themovielist.home.list
+package com.themovielist.moviecast
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import com.albineli.udacity.popularmovies.R
 import com.themovielist.model.MovieImageViewModel
-import com.themovielist.moviecast.MovieCastListVH
 import com.themovielist.ui.recyclerview.CustomRecyclerViewAdapter
 import com.themovielist.util.ApiUtil
 import com.themovielist.util.dpToPx
 
-internal class HomeMovieListAdapter(emptyMessageResId: Int, tryAgainClickListener: (() -> Unit)? = null) : CustomRecyclerViewAdapter<MovieImageViewModel, MovieCastListVH>(emptyMessageResId, tryAgainClickListener) {
+internal class MovieCastListAdapter(emptyMessageResId: Int, tryAgainClickListener: (() -> Unit)? = null) : CustomRecyclerViewAdapter<MovieImageViewModel, MovieCastListVH>(emptyMessageResId, tryAgainClickListener) {
     private var mPosterWidth: String? = null
 
     override fun onCreateItemViewHolder(parent: ViewGroup): MovieCastListVH {

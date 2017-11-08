@@ -4,7 +4,7 @@ package com.themovielist.repository.movie
 import com.themovielist.PopularMovieApplication
 import com.themovielist.model.MovieModel
 import com.themovielist.model.MovieReviewModel
-import com.themovielist.model.MovieTrailerModel
+import com.themovielist.model.response.MovieCreditsResponseModel
 import com.themovielist.model.response.MovieDetailResponseModel
 import com.themovielist.model.response.PaginatedArrayResponseModel
 import com.themovielist.repository.RepositoryBase
@@ -120,25 +120,18 @@ internal constructor(mRetrofit: Retrofit, private val mApplicationContext: Popul
         }.subscribeOn(Schedulers.io()))
     }
 
-    fun getMovieDetailById(id: Int): Observable<MovieModel> {
-        return observeOnMainThread(Observable.create(ObservableOnSubscribe<MovieModel> { emitter ->
-            mApplicationContext.tryQueryOnContentResolver(emitter, {
-                query(MovieContract.MovieEntry.buildMovieWithId(id), null, null, null, null)
-            }, {
-                val movieModel = if (moveToNext()) MovieModel.fromCursor(this) else MovieModel.EMPTY_MOVIE
-                emitter.onNext(movieModel)
-            })
-        }).subscribeOn(Schedulers.io()))
-    }
-
-    fun isMovieFavorite(id: Int): Observable<Boolean> {
+    fun isMovieFavorite(movieId: Int): Observable<Boolean> {
         return observeOnMainThread(Observable.create(ObservableOnSubscribe<Boolean> { emitter ->
             mApplicationContext.tryQueryOnContentResolver(emitter, {
-                query(MovieContract.MovieEntry.buildMovieWithId(id), null, null, null, null)
+                query(MovieContract.MovieEntry.buildMovieWithId(movieId), null, null, null, null)
             }, {
                 emitter.onNext(moveToNext())
             })
         }).subscribeOn(Schedulers.io()))
+    }
+
+    fun getMovieCreditsByMovieId(movieId: Int): Observable<MovieCreditsResponseModel> {
+        return observeOnMainThread(mApiInstance.getMovieCredits(movieId))
     }
 
     override val getApiInstanceType: Class<IMovieService>

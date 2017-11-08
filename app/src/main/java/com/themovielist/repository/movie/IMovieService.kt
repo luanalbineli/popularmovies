@@ -3,7 +3,7 @@ package com.themovielist.repository.movie
 
 import com.themovielist.model.MovieModel
 import com.themovielist.model.MovieReviewModel
-import com.themovielist.model.MovieTrailerModel
+import com.themovielist.model.response.MovieCreditsResponseModel
 import com.themovielist.model.response.MovieDetailResponseModel
 import com.themovielist.model.response.PaginatedArrayResponseModel
 
@@ -24,4 +24,7 @@ interface IMovieService {
 
     @GET("movie/{movieId}?append_to_response=reviews,trailers")
     fun getMovieDetail(@Path("movieId") movieId: Int): Observable<MovieDetailResponseModel>
+
+    @GET("movie/{movieId}/credits")
+    fun getMovieCredits(@Path("movieId") movieId: Int): Observable<MovieCreditsResponseModel>
 }

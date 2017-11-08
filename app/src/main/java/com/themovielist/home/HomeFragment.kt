@@ -59,7 +59,7 @@ class HomeFragment : BaseFragment<HomeContract.View>(), HomeContract.View {
 
         rsvHomeMovieRequestStatus.setTryAgainClickListener { mPresenter.tryToLoadMoviesAgain() }
 
-        tvHomeSeeMovieListByPopularity.setOnClickListener { mPresenter.seeAllPopularMovieList() }
+        tvHomeSeeMovieCast.setOnClickListener { mPresenter.seeAllPopularMovieList() }
         tvHomeSeeMovieListByRating.setOnClickListener { mPresenter.sellAllRatingMovieList() }
 
         mPresenter.start()

@@ -24,7 +24,7 @@ abstract class MovieDetailContract {
 
         fun showErrorMessageRemoveFavoriteMovie()
 
-        fun showAllReviews(movieReviewList: List<MovieReviewModel>, hasMore: Boolean)
+        fun showAllReviews(movieReviewList: List<MovieReviewModel>, hasMore: Boolean, movieId: Int)
 
         fun showAllTrailers(movieTrailerList: List<MovieTrailerModel>)
 

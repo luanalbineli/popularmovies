@@ -170,6 +170,34 @@
                     app:layout_constraintStart_toStartOf="@+id/guideline_start"
                     app:layout_constraintTop_toBottomOf="@+id/mdsMovieDetailReviewSection"
                     app:title="@string/trailers" />
+
+                <TextView
+                    android:id="@+id/textView2"
+                    style="@style/Base.TextAppearance.AppCompat.Medium"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/cast"
+                    android:textStyle="bold"
+                    app:layout_constraintTop_toBottomOf="@+id/mdsMovieDetailTrailerSection"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <com.themovielist.ui.DrawableCompatTextView
+                    android:id="@+id/tvHomeSeeMovieCast"
+                    style="@style/LightMediumText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/see_all"
+                    app:drawableRightCompat="@drawable/chevron_right"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+                <FrameLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tvHomeSeeMovieCast"
+                    android:id="@+id/flMovieDetailCastContainer" />
             </android.support.constraint.ConstraintLayout>
         </FrameLayout>
 

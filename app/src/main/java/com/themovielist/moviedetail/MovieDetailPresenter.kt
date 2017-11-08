@@ -68,7 +68,7 @@ internal constructor(movieRepository: MovieRepository, private val mCommonReposi
     }
 
     override fun showAllReviews() {
-        mView.showAllReviews(mMovieDetailResponseModel.reviewsResponseModel.results, mMovieDetailResponseModel.reviewsResponseModel.hasMorePages())
+        mView.showAllReviews(mMovieDetailResponseModel.reviewsResponseModel.results, mMovieDetailResponseModel.reviewsResponseModel.hasMorePages(), mMovieDetailResponseModel.id)
     }
 
     override fun showAllTrailers() {

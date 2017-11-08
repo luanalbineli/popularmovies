@@ -18,6 +18,7 @@ import com.themovielist.model.MovieModel
 import com.themovielist.model.MovieReviewModel
 import com.themovielist.model.MovieTrailerModel
 import com.themovielist.model.MovieWithGenreModel
+import com.themovielist.moviecast.MovieCastListFragment
 import com.themovielist.moviedetail.review.MovieDetailReviewViewHolder
 import com.themovielist.moviedetail.review.MovieReviewListDialog
 import com.themovielist.moviedetail.trailer.MovieTrailerListDialog
@@ -42,7 +43,7 @@ class MovieDetailActivity : BaseDaggerActivity<MovieDetailContract.View>(), Movi
     @Inject
     lateinit var mPresenter: MovieDetailPresenter
 
-    private lateinit var mMovieModel: MovieModel
+    private var mFavoriteMenuItem: MenuItem? = null
 
     override fun onInjectDependencies(applicationComponent: ApplicationComponent) {
         DaggerFragmentComponent.builder()
@@ -58,7 +59,7 @@ class MovieDetailActivity : BaseDaggerActivity<MovieDetailContract.View>(), Movi
             throw InvalidParameterException("movie")
         }
 
-        mMovieModel = intent.getParcelableExtra(MOVIE_KEY)
+        val movieModel = intent.getParcelableExtra<MovieModel>(MOVIE_KEY)
 
         setContentView(R.layout.movie_detail_activity)
 
@@ -68,10 +69,8 @@ class MovieDetailActivity : BaseDaggerActivity<MovieDetailContract.View>(), Movi
 
         rsvMovieDetailRequestStatus.setTryAgainClickListener { mPresenter.tryFecthMovieDetailAgain() }
 
-        mPresenter.start(mMovieModel)
+        mPresenter.start(movieModel)
     }
-
-    private var mFavoriteMenuItem: MenuItem? = null
 
     private fun configureToolbar() {
         configureToolbarBackButton(this, toolbarMovieDetail) {
@@ -141,8 +140,8 @@ class MovieDetailActivity : BaseDaggerActivity<MovieDetailContract.View>(), Movi
         showToastMessage(R.string.error_remove_favorite_movie)
     }
 
-    override fun showAllReviews(movieReviewList: List<MovieReviewModel>, hasMore: Boolean) {
-        val movieReviewListDialog = MovieReviewListDialog.getInstance(movieReviewList, mMovieModel.id, hasMore)
+    override fun showAllReviews(movieReviewList: List<MovieReviewModel>, hasMore: Boolean, movieId: Int) {
+        val movieReviewListDialog = MovieReviewListDialog.getInstance(movieReviewList, movieId, hasMore)
         movieReviewListDialog.show(fragmentManager, "movie_review_dialog")
     }
 
@@ -207,6 +206,7 @@ class MovieDetailActivity : BaseDaggerActivity<MovieDetailContract.View>(), Movi
 
     companion object {
         const val MOVIE_KEY = "movie_model"
+        const val MOVIE_CAST_FRAGMENT_TAG = "movie_cast_fragment_tag"
         fun getDefaultIntent(context: Context, movieModel: MovieModel): Intent {
             return Intent(context, MovieDetailActivity::class.java).also {
                 it.putExtra(MOVIE_KEY, movieModel)

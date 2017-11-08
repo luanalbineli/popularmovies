@@ -4,6 +4,7 @@ import com.themovielist.home.HomeFragment
 import com.themovielist.home.list.HomeMovieListFragment
 import com.themovielist.injector.PerFragment
 import com.themovielist.intheaters.InTheatersFragment
+import com.themovielist.moviecast.MovieCastListFragment
 import com.themovielist.moviedetail.MovieDetailActivity
 import com.themovielist.moviedetail.review.MovieReviewListDialog
 import com.themovielist.moviedetail.trailer.MovieTrailerListDialog
@@ -26,4 +27,6 @@ interface FragmentComponent {
     fun inject(dialogFragment: MovieReviewListDialog)
     fun inject(dialogFragment: MovieTrailerListDialog)
     fun inject(movieImageView: MovieImageView)
+
+    fun inject(castListFragment: MovieCastListFragment)
 }

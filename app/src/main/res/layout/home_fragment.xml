@@ -33,7 +33,7 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <com.themovielist.ui.DrawableCompatTextView
-                android:id="@+id/tvHomeSeeMovieListByPopularity"
+                android:id="@+id/tvHomeSeeMovieCast"
                 style="@style/LightMediumText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
