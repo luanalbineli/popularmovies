@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.facebook.drawee.view.SimpleDraweeView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:fresco="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/sdvMovieCastImage"
+    android:layout_width="@dimen/cast_movie_list_image_width"
+    android:layout_height="@dimen/cast_movie_list_image_height"
+    fresco:actualImageScaleType="centerCrop"
+    fresco:placeholderImage="@android:color/darker_gray"
+    fresco:roundedCornerRadius="2dp" />

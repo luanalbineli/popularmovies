@@ -45,6 +45,8 @@ class MovieDetailActivity : BaseDaggerActivity<MovieDetailContract.View>(), Movi
 
     private var mFavoriteMenuItem: MenuItem? = null
 
+    private val mMovieCastFragment by lazy { fragmentManager.findFragmentById(R.id.fragmentMovieDetailCast) as MovieCastListFragment }
+
     override fun onInjectDependencies(applicationComponent: ApplicationComponent) {
         DaggerFragmentComponent.builder()
                 .applicationComponent(applicationComponent)
@@ -68,6 +70,8 @@ class MovieDetailActivity : BaseDaggerActivity<MovieDetailContract.View>(), Movi
         configureToolbar()
 
         rsvMovieDetailRequestStatus.setTryAgainClickListener { mPresenter.tryFecthMovieDetailAgain() }
+
+        mMovieCastFragment.movieId = movieModel.id
 
         mPresenter.start(movieModel)
     }
@@ -206,7 +210,6 @@ class MovieDetailActivity : BaseDaggerActivity<MovieDetailContract.View>(), Movi
 
     companion object {
         const val MOVIE_KEY = "movie_model"
-        const val MOVIE_CAST_FRAGMENT_TAG = "movie_cast_fragment_tag"
         fun getDefaultIntent(context: Context, movieModel: MovieModel): Intent {
             return Intent(context, MovieDetailActivity::class.java).also {
                 it.putExtra(MOVIE_KEY, movieModel)

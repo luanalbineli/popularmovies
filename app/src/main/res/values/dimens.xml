@@ -12,6 +12,10 @@
     <dimen name="movie_image_view_favorite_button">34dp</dimen>
     <dimen name="movie_image_view_detail_button">34sp</dimen>
 
+    <!-- Cast -->
+    <dimen name="cast_movie_list_image_width">135dp</dimen>
+    <dimen name="cast_movie_list_image_height">200dp</dimen>
+
 
     <!-- Generic -->
     <dimen name="smallest_text_size">12sp</dimen>

@@ -32,7 +32,6 @@ internal constructor(movieRepository: MovieRepository, private val mCommonReposi
         mMovieRepository.isMovieFavorite(movieModel.id).subscribe({
             mView.setFavoriteButtonState(it)
             isFavorite = it
-            Timber.i("IS MOVIE FAVORITE: $it")
         })
     }
 

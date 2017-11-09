@@ -9,7 +9,6 @@ import com.themovielist.injector.components.ApplicationComponent
 import com.themovielist.injector.components.DaggerFragmentComponent
 import com.themovielist.model.MovieImageViewModel
 import com.themovielist.model.MovieModel
-import com.themovielist.moviecast.MovieCastListAdapter
 import kotlinx.android.synthetic.main.recycler_view.*
 import timber.log.Timber
 import javax.inject.Inject
@@ -25,7 +24,7 @@ class HomeMovieListFragment : BaseRecyclerViewFragment<HomeMovieListContract.Vie
     @Inject
     lateinit var mPresenter: HomeMovieListPresenter
 
-    private val mMovieListAdapter by lazy { MovieCastListAdapter(R.string.the_list_is_empty) }
+    private val mMovieListAdapter by lazy { HomeMovieListAdapter(R.string.the_list_is_empty) }
 
     override fun onInjectDependencies(applicationComponent: ApplicationComponent) {
         DaggerFragmentComponent.builder()

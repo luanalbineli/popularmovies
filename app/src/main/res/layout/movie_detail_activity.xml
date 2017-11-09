@@ -171,6 +171,13 @@
                     app:layout_constraintTop_toBottomOf="@+id/mdsMovieDetailReviewSection"
                     app:title="@string/trailers" />
 
+                <View
+                    android:id="@+id/divider1"
+                    style="@style/ContentDivider"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/mdsMovieDetailTrailerSection" />
+
                 <TextView
                     android:id="@+id/textView2"
                     style="@style/Base.TextAppearance.AppCompat.Medium"
@@ -178,9 +185,8 @@
                     android:layout_height="wrap_content"
                     android:text="@string/cast"
                     android:textStyle="bold"
-                    app:layout_constraintTop_toBottomOf="@+id/mdsMovieDetailTrailerSection"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintStart_toStartOf="@+id/guideline_start"
+                    app:layout_constraintTop_toBottomOf="@+id/divider1" />
 
                 <com.themovielist.ui.DrawableCompatTextView
                     android:id="@+id/tvHomeSeeMovieCast"
@@ -189,15 +195,18 @@
                     android:layout_height="wrap_content"
                     android:text="@string/see_all"
                     app:drawableRightCompat="@drawable/chevron_right"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-                <FrameLayout
+                    app:layout_constraintEnd_toEndOf="@+id/guideline_end"
+                    app:layout_constraintTop_toTopOf="@+id/textView2" />
+
+                <fragment
+                    android:id="@+id/fragmentMovieDetailCast"
+                    android:name="com.themovielist.moviecast.MovieCastListFragment"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/tvHomeSeeMovieCast"
-                    android:id="@+id/flMovieDetailCastContainer" />
+                    app:layout_constraintBottom_toBottomOf="parent"/>
             </android.support.constraint.ConstraintLayout>
         </FrameLayout>
 
