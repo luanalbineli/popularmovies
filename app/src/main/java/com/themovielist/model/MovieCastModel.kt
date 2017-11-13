@@ -6,7 +6,7 @@ import com.google.gson.annotations.SerializedName
 
 data class MovieCastModel constructor(@SerializedName("character") val character: String,
                                       @SerializedName("name") val name: String,
-                                      @SerializedName("profile_path") val profilePath: String) : Parcelable {
+                                      @SerializedName("profile_path") val profilePath: String?) : Parcelable {
     constructor(parcel: Parcel) : this(
             parcel.readString(),
             parcel.readString(),

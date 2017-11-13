@@ -1,6 +1,8 @@
 package com.themovielist.util
 
 object ApiUtil {
+    const val ORIGINAL_IMAGE_SIZE_NAME = "original"
+
     private val BASE_URL_POSTER = "http://image.tmdb.org/t/p/"
     private val POSTER_SIZE = intArrayOf(92, 154, 185, 342, 500, 780) // TODO: Hardcoded, we should call /configuration.
 

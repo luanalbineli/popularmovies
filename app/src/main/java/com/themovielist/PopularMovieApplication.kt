@@ -14,6 +14,12 @@ import com.themovielist.util.tryExecute
 import io.reactivex.ObservableEmitter
 import timber.log.Timber
 import java.sql.SQLDataException
+import com.facebook.common.logging.FLog
+import com.facebook.imagepipeline.core.ImagePipelineConfig
+import com.facebook.imagepipeline.listener.RequestLoggingListener
+import com.facebook.imagepipeline.listener.RequestListener
+
+
 
 class PopularMovieApplication : Application() {
     lateinit var applicationComponent: ApplicationComponent
@@ -25,10 +31,18 @@ class PopularMovieApplication : Application() {
             // You should not init your app in this process.
             return
         }
+
+        // Fresco.
+        val requestListeners = HashSet<RequestListener>()
+        requestListeners.add(RequestLoggingListener())
+        val config = ImagePipelineConfig.newBuilder(this)
+                .setRequestListeners(requestListeners)
+                .build()
+        Fresco.initialize(this, config)
+        FLog.setMinimumLoggingLevel(FLog.VERBOSE)
+
         // Timber
         Timber.plant(Timber.DebugTree())
-        // Fresco
-        Fresco.initialize(this)
         // LeakCanary
         LeakCanary.install(this)
         // Dagger2

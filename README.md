@@ -44,8 +44,8 @@ The application was divided into four tabs:
    * :white_check_mark: Show all reviews;
    * :white_check_mark: Show the first two trailers;
    * :white_check_mark: Show all trailers;
-   * :x: Option to favorite the movie;
-   * :x: Show the cast;
+   * :white_check_mark: Option to favorite the movie;
+   * :white_check_mark: Show the cast;
    * :x: Show recommendations (of movies, based on the movie you are seeing);
    
 ### Building yourself

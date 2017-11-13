@@ -1,9 +1,57 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.facebook.drawee.view.SimpleDraweeView xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:fresco="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/sdvMovieCastImage"
-    android:layout_width="@dimen/cast_movie_list_image_width"
-    android:layout_height="@dimen/cast_movie_list_image_height"
-    fresco:actualImageScaleType="centerCrop"
-    fresco:placeholderImage="@android:color/darker_gray"
-    fresco:roundedCornerRadius="2dp" />
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
+    <com.facebook.drawee.view.SimpleDraweeView xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:fresco="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/sdvMovieCastImage"
+        android:layout_width="@dimen/cast_movie_list_image_width"
+        android:layout_height="@dimen/cast_movie_list_image_height"
+        fresco:actualImageScaleType="centerCrop"
+        fresco:layout_constraintEnd_toEndOf="parent"
+        fresco:layout_constraintStart_toStartOf="parent"
+        fresco:layout_constraintTop_toTopOf="parent"
+        fresco:placeholderImage="@android:color/darker_gray"
+        fresco:roundedCornerRadius="2dp" />
+
+    <ImageView
+        android:id="@+id/ivMovieCastEmptyImage"
+        android:layout_width="48dp"
+
+        android:layout_height="48dp"
+        fresco:layout_constraintBottom_toBottomOf="@+id/sdvMovieCastImage"
+        fresco:layout_constraintEnd_toEndOf="@+id/sdvMovieCastImage"
+        fresco:layout_constraintStart_toStartOf="@+id/sdvMovieCastImage"
+        fresco:layout_constraintTop_toTopOf="@+id/sdvMovieCastImage"
+        fresco:srcCompat="@drawable/camera_off" />
+
+    <TextView
+        android:id="@+id/tvMovieCastName"
+        style="@style/LightMediumText"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:ellipsize="end"
+        android:lines="2"
+        android:maxLines="2"
+        fresco:layout_constraintEnd_toEndOf="parent"
+        fresco:layout_constraintStart_toStartOf="parent"
+        fresco:layout_constraintTop_toBottomOf="@+id/sdvMovieCastImage"
+        tools:text="Mamamata ta ta asd as d" />
+
+    <TextView
+        android:id="@+id/tvMovieCastCharacter"
+        style="@style/ThinSmallText"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:ellipsize="end"
+        android:maxLines="1"
+        fresco:layout_constraintEnd_toEndOf="parent"
+        fresco:layout_constraintStart_toStartOf="parent"
+        fresco:layout_constraintTop_toBottomOf="@+id/tvMovieCastName"
+        tools:text="Loki" />
+</android.support.constraint.ConstraintLayout>

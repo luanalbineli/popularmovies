@@ -51,9 +51,9 @@ class MovieCastPresenter @Inject constructor(private val movieRepository: MovieR
                 })
                 .doOnTerminate { mView.hideLoadingIndicator() }
                 .subscribe({ response ->
-                    this.movieCastViewModel.profileSizeList = response.first.imageResponseModel.profileSizeList
+                    this.movieCastViewModel.profileSizeList = response.first.imageResponseModel.getProfileSizeList()
                     this.movieCastViewModel.movieCastList = response.second
-                    mView.showMovieCastList(response.second, response.first.imageResponseModel.profileSizeList)
+                    mView.showMovieCastList(response.second, response.first.imageResponseModel.getProfileSizeList())
                 }, { error -> mView.showErrorLoadingMovieCast(error) })
     }
 

@@ -185,10 +185,12 @@
                     android:layout_height="wrap_content"
                     android:text="@string/cast"
                     android:textStyle="bold"
+                    android:layout_marginTop="16dp"
                     app:layout_constraintStart_toStartOf="@+id/guideline_start"
                     app:layout_constraintTop_toBottomOf="@+id/divider1" />
 
-                <com.themovielist.ui.DrawableCompatTextView
+                <!-- TODO: COMING SOON -->
+               <!-- <com.themovielist.ui.DrawableCompatTextView
                     android:id="@+id/tvHomeSeeMovieCast"
                     style="@style/LightMediumText"
                     android:layout_width="wrap_content"
@@ -196,17 +198,19 @@
                     android:text="@string/see_all"
                     app:drawableRightCompat="@drawable/chevron_right"
                     app:layout_constraintEnd_toEndOf="@+id/guideline_end"
-                    app:layout_constraintTop_toTopOf="@+id/textView2" />
+                    app:layout_constraintTop_toTopOf="@+id/textView2" />-->
 
                 <fragment
+                    android:layout_marginTop="16dp"
                     android:id="@+id/fragmentMovieDetailCast"
                     android:name="com.themovielist.moviecast.MovieCastListFragment"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="@+id/guideline_end"
+                    app:layout_constraintStart_toStartOf="@+id/guideline_start"
                     app:layout_constraintTop_toBottomOf="@id/tvHomeSeeMovieCast"
-                    app:layout_constraintBottom_toBottomOf="parent"/>
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    android:layout_marginBottom="16dp"/>
             </android.support.constraint.ConstraintLayout>
         </FrameLayout>
 
