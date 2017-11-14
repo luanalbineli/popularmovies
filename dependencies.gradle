@@ -26,7 +26,8 @@ ext {
             bottomBar               : '2.0.2',
             readMoreTextView        : '2.0.1',
             leakCanary              : '1.5.4',
-            favoriteButton          : '0.1.4'
+            favoriteButton          : '0.1.4',
+            floatingSearchView      : '2.1.1'
     ]
 
     supportV13 = "com.android.support:support-v13:$versions.support"
@@ -88,6 +89,8 @@ ext {
     favoriteButton = "com.github.ivbaranov:materialfavoritebutton:$versions.favoriteButton"
 
     bottomBar = "com.ashokvarma.android:bottom-navigation-bar:$versions.bottomBar"
+
+    floatingSearchView = "com.github.arimorty:floatingsearchview:$versions.floatingSearchView"
 
     // Room
     /*compile "android.arch.persistence.room:runtime:$rootProject.room_version"

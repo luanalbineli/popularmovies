@@ -1,5 +1,6 @@
 package com.themovielist.injector.components
 
+import com.themovielist.browse.MovieBrowseFragment
 import com.themovielist.home.HomeFragment
 import com.themovielist.home.list.HomeMovieListFragment
 import com.themovielist.injector.PerFragment
@@ -29,4 +30,6 @@ interface FragmentComponent {
     fun inject(movieImageView: MovieImageView)
 
     fun inject(castListFragment: MovieCastListFragment)
+
+    fun inject(movieBrowseFragment: MovieBrowseFragment)
 }

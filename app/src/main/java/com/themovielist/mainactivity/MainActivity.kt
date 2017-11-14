@@ -11,8 +11,13 @@ import com.themovielist.base.BaseActivity
 import com.themovielist.enums.TabTypeEnum
 import com.themovielist.home.HomeFragment
 import com.themovielist.intheaters.InTheatersFragment
+import com.themovielist.util.setDisplay
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.content_main.*
+import android.support.design.widget.AppBarLayout
+import android.support.design.widget.CoordinatorLayout
+import com.themovielist.browse.MovieBrowseFragment
+
 
 class MainActivity : BaseActivity(), FragmentManager.OnBackStackChangedListener {
     @TabTypeEnum.TabType
@@ -39,6 +44,10 @@ class MainActivity : BaseActivity(), FragmentManager.OnBackStackChangedListener 
             override fun onTabSelected(index: Int) {
                 mSelectedTabIndex = index
                 setUpMainContentFragment()
+                appBarLayout.setDisplay(index != 1)
+                val params = llContentContainer.layoutParams as CoordinatorLayout.LayoutParams
+                params.behavior = if (index == 1) null else AppBarLayout.ScrollingViewBehavior()
+                llContentContainer.requestLayout()
             }
 
             override fun onTabUnselected(i: Int) {
@@ -64,6 +73,9 @@ class MainActivity : BaseActivity(), FragmentManager.OnBackStackChangedListener 
             }
             TabTypeEnum.IN_THEATERS -> checkChangeMainContent(IN_THEATERS_FRAGMENT_TAG) {
                 InTheatersFragment.getInstance()
+            }
+            TabTypeEnum.BROWSE -> checkChangeMainContent(BROWSE_FRAGMENT_TAG) {
+                MovieBrowseFragment.getInstance()
             }
         }
     }
