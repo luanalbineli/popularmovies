@@ -1,7 +1,7 @@
 package com.themovielist.ui.movieimageview
 
 import com.themovielist.base.BasePresenter
-import com.themovielist.model.MovieImageViewModel
+import com.themovielist.model.view.MovieImageViewModel
 import com.themovielist.model.MovieModel
 
 

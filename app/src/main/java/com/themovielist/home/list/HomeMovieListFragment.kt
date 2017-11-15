@@ -7,7 +7,7 @@ import com.themovielist.base.BasePresenter
 import com.themovielist.base.BaseRecyclerViewFragment
 import com.themovielist.injector.components.ApplicationComponent
 import com.themovielist.injector.components.DaggerFragmentComponent
-import com.themovielist.model.MovieImageViewModel
+import com.themovielist.model.view.MovieImageViewModel
 import com.themovielist.model.MovieModel
 import kotlinx.android.synthetic.main.recycler_view.*
 import timber.log.Timber

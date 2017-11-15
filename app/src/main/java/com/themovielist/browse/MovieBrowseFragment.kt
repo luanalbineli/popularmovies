@@ -6,14 +6,15 @@ import android.view.View
 import android.view.ViewGroup
 import com.albineli.udacity.popularmovies.R
 import com.arlib.floatingsearchview.FloatingSearchView
-import com.arlib.floatingsearchview.suggestions.model.SearchSuggestion
 import com.themovielist.base.BasePresenter
 import com.themovielist.base.BaseRecyclerViewFragment
 import com.themovielist.injector.components.ApplicationComponent
 import com.themovielist.injector.components.DaggerFragmentComponent
 import com.themovielist.model.MovieCastModel
+import com.themovielist.model.MovieModel
 import com.themovielist.model.MovieSizeModel
 import com.themovielist.model.view.MovieCastViewModel
+import com.themovielist.model.view.MovieSuggestionModel
 import kotlinx.android.synthetic.main.movie_browse_fragment.*
 import timber.log.Timber
 import javax.inject.Inject
@@ -48,23 +49,40 @@ class MovieBrowseFragment : BaseRecyclerViewFragment<MovieBrowseContract.View>()
         useLinearLayoutManager()
 
         fsvMovieBrowseSearch.setOnQueryChangeListener { _, newQuery ->
-            Timber.i("setOnQueryChangeListener - newQuery: $newQuery")
             mPresenter.onQueryChanged(newQuery)
-            //fsvMovieBrowseSearch.swapSuggestions(mutableListOf(SearchSuggestion()))
         }
 
-        fsvMovieBrowseSearch.setOnFocusChangeListener(object: FloatingSearchView.OnFocusChangeListener {
+        fsvMovieBrowseSearch.setOnBindSuggestionCallback { suggestionView, _, _, searchSuggestion, _ ->
+            suggestionView.setOnClickListener {
+                val movieSuggestionModel = searchSuggestion as MovieSuggestionModel
+                mPresenter.onSelectSuggestion(movieSuggestionModel)
+            }
+        }
+
+        fsvMovieBrowseSearch.setOnFocusChangeListener(object : FloatingSearchView.OnFocusChangeListener {
             override fun onFocusCleared() {
-                Timber.i("onFocusCleared")
+                fsvMovieBrowseSearch.setSearchHint(getString(R.string.search))
             }
 
             override fun onFocus() {
-                Timber.i("OnFocus")
+                fsvMovieBrowseSearch.setSearchHint(getString(R.string.type_at_least_three_characters))
             }
         })
 
         val movieCastViewModel = buildMovieCastViewModel(savedInstanceState)
         mPresenter.start(movieCastViewModel)
+    }
+
+    override fun showLoadingQueryResultIndicator() {
+        fsvMovieBrowseSearch.showProgress()
+    }
+
+    override fun showSuggestion(suggestionList: List<MovieModel>) {
+        fsvMovieBrowseSearch.swapSuggestions(suggestionList.map { MovieSuggestionModel(it) })
+    }
+
+    override fun hideLoadingQueryResultIndicator() {
+        fsvMovieBrowseSearch.hideProgress()
     }
 
     private fun buildMovieCastViewModel(savedInstanceState: Bundle?): MovieCastViewModel {
@@ -76,7 +94,7 @@ class MovieBrowseFragment : BaseRecyclerViewFragment<MovieBrowseContract.View>()
     }
 
     override fun showErrorLoadingMovieCast(error: Throwable) {
-        Timber.e(error,"An error occurred while tried to fetch the movie cast: ${error.message}")
+        Timber.e(error, "An error occurred while tried to fetch the movie cast: ${error.message}")
         mAdapter.showErrorMessage()
     }
 

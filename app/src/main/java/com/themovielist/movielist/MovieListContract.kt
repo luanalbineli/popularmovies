@@ -2,7 +2,7 @@ package com.themovielist.movielist
 
 import com.themovielist.base.BasePresenter
 import com.themovielist.enums.MovieSortEnum
-import com.themovielist.model.MovieListStateModel
+import com.themovielist.model.view.MovieListStateModel
 import com.themovielist.model.MovieModel
 
 interface MovieListContract {

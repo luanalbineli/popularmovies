@@ -14,7 +14,7 @@ import com.themovielist.event.FavoriteMovieEvent
 import com.themovielist.event.TabChangeFilterEvent
 import com.themovielist.injector.components.ApplicationComponent
 import com.themovielist.injector.components.DaggerFragmentComponent
-import com.themovielist.model.MovieListStateModel
+import com.themovielist.model.view.MovieListStateModel
 import com.themovielist.model.MovieModel
 import com.themovielist.moviedetail.MovieDetailActivity
 import com.themovielist.ui.recyclerview.CustomRecyclerViewAdapter
@@ -37,7 +37,7 @@ class MovieListActivity : BaseDaggerActivity<MovieListContract.View>(), MovieLis
     @Inject
     lateinit var mPresenter: MovieListPresenter
 
-    private val mMovieListAdapter by lazy {MovieListAdapter(R.string.the_list_is_empty, { mPresenter.tryAgain() })}
+    private val mMovieListAdapter by lazy {MovieListAdapter(rvMovieList, R.string.the_list_is_empty, { mPresenter.tryAgain() })}
 
     private val mGridLayoutManager by lazy { GridLayoutManager(this, 2) }
 

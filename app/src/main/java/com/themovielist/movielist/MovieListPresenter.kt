@@ -2,7 +2,7 @@ package com.themovielist.movielist
 
 import com.themovielist.base.BasePresenterImpl
 import com.themovielist.enums.MovieSortEnum
-import com.themovielist.model.MovieListStateModel
+import com.themovielist.model.view.MovieListStateModel
 import com.themovielist.model.MovieModel
 import com.themovielist.model.response.PaginatedArrayResponseModel
 import com.themovielist.repository.movie.MovieRepository

@@ -15,6 +15,8 @@ import com.themovielist.util.tryExecute
 import io.reactivex.Completable
 import io.reactivex.Observable
 import io.reactivex.ObservableOnSubscribe
+import io.reactivex.Single
+import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import retrofit2.Retrofit
 import timber.log.Timber
@@ -139,5 +141,9 @@ internal constructor(mRetrofit: Retrofit, private val mApplicationContext: Popul
 
     fun getMovieDetail(movieId: Int): Observable<MovieDetailResponseModel> {
         return observeOnMainThread(mApiInstance.getMovieDetail(movieId))
+    }
+
+    fun queryMovies(newQuery: String): Single<PaginatedArrayResponseModel<MovieModel>> {
+        return observeOnMainThread(mApiInstance.queryMovies(newQuery))
     }
 }

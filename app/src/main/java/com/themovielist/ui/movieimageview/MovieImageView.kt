@@ -13,7 +13,7 @@ import com.facebook.imagepipeline.request.ImageRequestBuilder
 import com.themovielist.PopularMovieApplication
 import com.themovielist.event.FavoriteMovieEvent
 import com.themovielist.injector.components.DaggerFragmentComponent
-import com.themovielist.model.MovieImageViewModel
+import com.themovielist.model.view.MovieImageViewModel
 import com.themovielist.model.MovieModel
 import com.themovielist.moviedetail.MovieDetailActivity
 import kotlinx.android.synthetic.main.movie_image_view.view.*

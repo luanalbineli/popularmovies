@@ -1,6 +1,6 @@
 package com.themovielist.ui.movieimageview
 
-import com.themovielist.model.MovieImageViewModel
+import com.themovielist.model.view.MovieImageViewModel
 import com.themovielist.model.MovieModel
 import com.themovielist.repository.movie.MovieRepository
 import timber.log.Timber

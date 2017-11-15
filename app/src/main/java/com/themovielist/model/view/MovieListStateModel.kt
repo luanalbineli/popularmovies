@@ -1,9 +1,9 @@
-package com.themovielist.model
+package com.themovielist.model.view
 
 import android.content.Intent
 import android.os.Bundle
 import com.themovielist.enums.MovieSortEnum
-import com.themovielist.movielist.MovieListActivity
+import com.themovielist.model.MovieModel
 import com.themovielist.movielist.MovieListActivity.Companion.FILTER_BUNDLE_KEY
 import timber.log.Timber
 import java.util.*

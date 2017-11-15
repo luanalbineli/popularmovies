@@ -8,6 +8,7 @@ import com.themovielist.model.response.MovieDetailResponseModel
 import com.themovielist.model.response.PaginatedArrayResponseModel
 
 import io.reactivex.Observable
+import io.reactivex.Single
 import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query
@@ -27,4 +28,7 @@ interface IMovieService {
 
     @GET("movie/{movieId}/credits")
     fun getMovieCredits(@Path("movieId") movieId: Int): Observable<MovieCreditsResponseModel>
+
+    @GET("search/movie")
+    fun queryMovies(@Query("query") query: String): Single<PaginatedArrayResponseModel<MovieModel>>
 }

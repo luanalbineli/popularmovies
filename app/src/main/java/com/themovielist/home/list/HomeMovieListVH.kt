@@ -1,7 +1,7 @@
 package com.themovielist.home.list
 
 import android.view.View
-import com.themovielist.model.MovieImageViewModel
+import com.themovielist.model.view.MovieImageViewModel
 import com.themovielist.ui.recyclerview.CustomRecyclerViewHolder
 import com.themovielist.util.ApiUtil
 import kotlinx.android.synthetic.main.home_movie_list_item.view.*

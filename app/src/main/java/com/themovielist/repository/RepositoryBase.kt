@@ -1,10 +1,9 @@
 package com.themovielist.repository
 
 
-import android.util.SparseArray
-import com.themovielist.model.MovieWithGenreModel
 import io.reactivex.Completable
 import io.reactivex.Observable
+import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import retrofit2.Retrofit
 
@@ -15,6 +14,10 @@ abstract class RepositoryBase<T> constructor(private val retrofit: Retrofit) {
 
     protected fun <T> observeOnMainThread(observable: Observable<T>): Observable<T> {
         return observable.observeOn(AndroidSchedulers.mainThread())
+    }
+
+    protected fun <T> observeOnMainThread(single: Single<T>): Single<T> {
+        return single.observeOn(AndroidSchedulers.mainThread())
     }
 
     protected fun observeOnMainThread(completable: Completable): Completable {

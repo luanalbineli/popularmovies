@@ -32,4 +32,6 @@
     <string name="read_all_reviews_format">Read all reviews (%1$s)</string>
     <string name="see_all_trailers_format">See all trailers (%1$s)</string>
     <string name="cast">Cast</string>
+    <string name="search">Search…</string>
+    <string name="type_at_least_three_characters">Type at least 3 characters</string>
 </resources>

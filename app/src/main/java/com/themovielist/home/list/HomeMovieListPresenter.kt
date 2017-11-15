@@ -1,7 +1,7 @@
 package com.themovielist.home.list
 
 import com.themovielist.base.BasePresenterImpl
-import com.themovielist.model.MovieImageViewModel
+import com.themovielist.model.view.MovieImageViewModel
 import com.themovielist.model.MovieModel
 import com.themovielist.repository.movie.MovieRepository
 import javax.inject.Inject
