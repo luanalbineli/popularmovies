@@ -6,8 +6,8 @@ import android.view.View
 import android.view.ViewGroup
 import com.albineli.udacity.popularmovies.R
 import com.arlib.floatingsearchview.FloatingSearchView
+import com.themovielist.base.BaseFragment
 import com.themovielist.base.BasePresenter
-import com.themovielist.base.BaseRecyclerViewFragment
 import com.themovielist.injector.components.ApplicationComponent
 import com.themovielist.injector.components.DaggerFragmentComponent
 import com.themovielist.model.MovieCastModel
@@ -16,16 +16,13 @@ import com.themovielist.model.MovieSizeModel
 import com.themovielist.model.view.MovieCastViewModel
 import com.themovielist.model.view.MovieSuggestionModel
 import kotlinx.android.synthetic.main.movie_browse_fragment.*
-import timber.log.Timber
 import javax.inject.Inject
 
-class MovieBrowseFragment : BaseRecyclerViewFragment<MovieBrowseContract.View>(), MovieBrowseContract.View {
+class MovieBrowseFragment : BaseFragment<MovieBrowseContract.View>(), MovieBrowseContract.View {
     override val presenterImplementation: BasePresenter<MovieBrowseContract.View>
         get() = mPresenter
     override val viewImplementation: MovieBrowseContract.View
         get() = this
-
-    private val mAdapter by lazy { MovieBrowseAdapter(R.string.the_list_is_empty, { mPresenter.tryAgain() }) }
 
     @Inject
     lateinit var mPresenter: MovieBrowsePresenter
@@ -43,10 +40,6 @@ class MovieBrowseFragment : BaseRecyclerViewFragment<MovieBrowseContract.View>()
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        rvRecyclerView.adapter = mAdapter
-
-        useLinearLayoutManager()
 
         fsvMovieBrowseSearch.setOnQueryChangeListener { _, newQuery ->
             mPresenter.onQueryChanged(newQuery)
@@ -94,20 +87,16 @@ class MovieBrowseFragment : BaseRecyclerViewFragment<MovieBrowseContract.View>()
     }
 
     override fun showErrorLoadingMovieCast(error: Throwable) {
-        Timber.e(error, "An error occurred while tried to fetch the movie cast: ${error.message}")
-        mAdapter.showErrorMessage()
     }
 
     override fun showMovieCastList(movieCastList: List<MovieCastModel>, profileSizeList: List<MovieSizeModel>) {
-        mAdapter.addItems(movieCastList)
     }
 
     override fun hideLoadingIndicator() {
-        mAdapter.hideRequestStatus()
     }
 
     override fun showLoadingIndicator() {
-        mAdapter.showLoading()
+        //fragmentBrowseMovieList()
     }
 
     override fun onStop() {

@@ -10,6 +10,7 @@ import com.themovielist.moviedetail.MovieDetailActivity
 import com.themovielist.moviedetail.review.MovieReviewListDialog
 import com.themovielist.moviedetail.trailer.MovieTrailerListDialog
 import com.themovielist.movielist.MovieListActivity
+import com.themovielist.movielistinator.MovieListinatorFragment
 import com.themovielist.ui.movieimageview.MovieImageView
 
 import dagger.Component
@@ -32,4 +33,6 @@ interface FragmentComponent {
     fun inject(castListFragment: MovieCastListFragment)
 
     fun inject(movieBrowseFragment: MovieBrowseFragment)
+
+    fun inject(movieListinatorFragment: MovieListinatorFragment)
 }
