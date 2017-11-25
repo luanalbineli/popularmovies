@@ -62,7 +62,6 @@ class MovieWithGenreModel(id: Int = 0, posterPath: String, overview: String,
         }
     }
 
-    fun concattedGenres(): CharSequence? {
-        return genreList?.map { it.name }?.reduce { a, b -> "$a, $b"} ?: ""
-    }
+    fun concattedGenres(): CharSequence? =
+            genreList?.map { it.name }?.reduce { a, b -> "$a, $b"} ?: ""
 }

@@ -59,8 +59,6 @@ class HomeMovieListFragment : BaseRecyclerViewFragment<HomeMovieListContract.Vie
     }
 
     companion object {
-        fun getInstance(): HomeMovieListFragment {
-            return HomeMovieListFragment()
-        }
+        fun getInstance(): HomeMovieListFragment = HomeMovieListFragment()
     }
 }

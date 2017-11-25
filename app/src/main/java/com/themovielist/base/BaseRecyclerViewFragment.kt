@@ -10,9 +10,8 @@ import com.themovielist.ui.recyclerview.HorizonalSpaceItemDecoration
 import kotlinx.android.synthetic.main.recycler_view.*
 
 abstract class BaseRecyclerViewFragment<TView>: BaseFragment<TView>() {
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.recycler_view, container, false)
-    }
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? =
+            inflater.inflate(R.layout.recycler_view, container, false)
 
     protected fun useLinearLayoutManager(): LinearLayoutManager {
         val linearLayoutManager = LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false)
