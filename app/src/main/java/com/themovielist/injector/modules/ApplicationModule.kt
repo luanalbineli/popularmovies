@@ -10,6 +10,7 @@ import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
+import java.util.*
 import javax.inject.Singleton
 
 @Module
@@ -36,6 +37,7 @@ class ApplicationModule(private val mPopularMovieApplication: PopularMovieApplic
             val requestBuilder = chain.request().newBuilder()
             val urlBuilder = chain.request().url().newBuilder()
             urlBuilder.addQueryParameter("api_key", BuildConfig.API_KEY)
+            urlBuilder.addQueryParameter("region", Locale.getDefault().country)
             requestBuilder.url(urlBuilder.build())
             chain.proceed(requestBuilder.build())
         }

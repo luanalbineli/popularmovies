@@ -19,4 +19,7 @@ object ApiUtil {
                 ?.let { "w" + it }
                 ?: "original"
     }
+
+    const val INITIAL_PAGE_SIZE = 1
+
 }

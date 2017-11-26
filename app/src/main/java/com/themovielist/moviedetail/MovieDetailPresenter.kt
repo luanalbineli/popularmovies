@@ -29,9 +29,9 @@ internal constructor(movieRepository: MovieRepository, private val mCommonReposi
             mView.showErrorLoadingMovieDetail(error)
         })
 
-        mMovieRepository.isMovieFavorite(movieModel.id).subscribe({
-            mView.setFavoriteButtonState(it)
-            isFavorite = it
+        mMovieRepository.isMovieFavorite(movieModel.id).subscribe({ isFavorite, _ ->
+            mView.setFavoriteButtonState(isFavorite)
+            this.isFavorite = isFavorite
         })
     }
 

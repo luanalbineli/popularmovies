@@ -1,16 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:fresco="http://schemas.android.com/apk/res-auto"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="4dp"
-    android:orientation="vertical">
-
-    <com.facebook.drawee.view.SimpleDraweeView
+    xmlns:fresco="http://schemas.android.com/apk/res-auto">
+    <com.themovielist.ui.movieimageview.MovieImageView
+        android:id="@+id/mivMovieItem"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+    <!--<com.facebook.drawee.view.SimpleDraweeView
         android:id="@+id/sdvMovieItemPoster"
+        fresco:layout_constraintStart_toStartOf="parent"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         fresco:actualImageScaleType="centerCrop"
         fresco:placeholderImage="@android:color/darker_gray"
-        fresco:viewAspectRatio="0.666666666666666666667" />
-</RelativeLayout>
+        fresco:viewAspectRatio="0.666666666666666666667" />-->
+</FrameLayout>

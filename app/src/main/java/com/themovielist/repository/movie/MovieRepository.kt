@@ -14,9 +14,8 @@ import com.themovielist.util.toList
 import com.themovielist.util.tryExecute
 import io.reactivex.Completable
 import io.reactivex.Observable
-import io.reactivex.ObservableOnSubscribe
 import io.reactivex.Single
-import io.reactivex.disposables.Disposable
+import io.reactivex.SingleOnSubscribe
 import io.reactivex.schedulers.Schedulers
 import retrofit2.Retrofit
 import timber.log.Timber
@@ -26,8 +25,8 @@ import javax.inject.Inject
 class MovieRepository @Inject
 internal constructor(mRetrofit: Retrofit, private val mApplicationContext: PopularMovieApplication) : RepositoryBase<IMovieService>(mRetrofit) {
 
-    fun getFavoriteList(): Observable<PaginatedArrayResponseModel<MovieModel>> {
-        return observeOnMainThread(Observable.create(ObservableOnSubscribe<PaginatedArrayResponseModel<MovieModel>> { emitter ->
+    fun getFavoriteList(): Single<PaginatedArrayResponseModel<MovieModel>> {
+        return observeOnMainThread(Single.create(SingleOnSubscribe<PaginatedArrayResponseModel<MovieModel>> { emitter ->
             mApplicationContext.safeContentResolver(emitter) {
                 val cursor = query(MovieContract.MovieEntry.CONTENT_URI, null, null, null, null)
                 if (cursor == null) {
@@ -45,14 +44,14 @@ internal constructor(mRetrofit: Retrofit, private val mApplicationContext: Popul
                     arrayRequestAPI.totalPages = 1
                     arrayRequestAPI.page = 1
 
-                    emitter.onNext(arrayRequestAPI)
+                    emitter.onSuccess(arrayRequestAPI)
                 }
             }
         }).subscribeOn(Schedulers.io()))
     }
 
-    fun getFavoriteMovieIds(): Observable<Array<Int>> {
-        return observeOnMainThread(Observable.create(ObservableOnSubscribe<Array<Int>> { emitter ->
+    fun getFavoriteMovieIds(): Single<Array<Int>> {
+        return observeOnMainThread(Single.create(SingleOnSubscribe<Array<Int>> { emitter ->
             mApplicationContext.safeContentResolver(emitter) {
                 val cursor = query(MovieContract.MovieEntry.CONTENT_URI, arrayOf(MovieContract.MovieEntry._ID), null, null, null)
                 if (cursor == null) {
@@ -64,17 +63,17 @@ internal constructor(mRetrofit: Retrofit, private val mApplicationContext: Popul
                     val favoriteMovieModelList = cursor.toArray {
                         getInt(getColumnIndex(MovieContract.MovieEntry._ID))
                     }
-                    emitter.onNext(favoriteMovieModelList)
+                    emitter.onSuccess(favoriteMovieModelList)
                 }
             }
         }).subscribeOn(Schedulers.io()))
     }
 
-    fun getTopRatedList(pageIndex: Int): Observable<PaginatedArrayResponseModel<MovieModel>> {
+    fun getTopRatedList(pageIndex: Int): Single<PaginatedArrayResponseModel<MovieModel>> {
         return observeOnMainThread(mApiInstance.getTopRatedList(pageIndex))
     }
 
-    fun getPopularList(pageIndex: Int): Observable<PaginatedArrayResponseModel<MovieModel>> {
+    fun getPopularList(pageIndex: Int): Single<PaginatedArrayResponseModel<MovieModel>> {
         return observeOnMainThread(mApiInstance.getPopularList(pageIndex))
     }
 
@@ -122,17 +121,17 @@ internal constructor(mRetrofit: Retrofit, private val mApplicationContext: Popul
         }.subscribeOn(Schedulers.io()))
     }
 
-    fun isMovieFavorite(movieId: Int): Observable<Boolean> {
-        return observeOnMainThread(Observable.create(ObservableOnSubscribe<Boolean> { emitter ->
+    fun isMovieFavorite(movieId: Int): Single<Boolean> {
+        return observeOnMainThread(Single.create(SingleOnSubscribe<Boolean> { emitter ->
             mApplicationContext.tryQueryOnContentResolver(emitter, {
                 query(MovieContract.MovieEntry.buildMovieWithId(movieId), null, null, null, null)
             }, {
-                emitter.onNext(moveToNext())
+                emitter.onSuccess(moveToNext())
             })
         }).subscribeOn(Schedulers.io()))
     }
 
-    fun getMovieCreditsByMovieId(movieId: Int): Observable<MovieCreditsResponseModel> {
+    fun getMovieCreditsByMovieId(movieId: Int): Single<MovieCreditsResponseModel> {
         return observeOnMainThread(mApiInstance.getMovieCredits(movieId))
     }
 

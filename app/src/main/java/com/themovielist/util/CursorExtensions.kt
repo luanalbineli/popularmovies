@@ -1,9 +1,9 @@
 package com.themovielist.util
 
 import android.database.Cursor
-import io.reactivex.ObservableEmitter
+import io.reactivex.SingleEmitter
 
-inline fun <T> Cursor.tryExecute(emitter: ObservableEmitter<T>, invoker: Cursor.() -> Unit) {
+inline fun <T> Cursor.tryExecute(emitter: SingleEmitter<T>, invoker: Cursor.() -> Unit) {
     try {
         invoker.invoke(this)
     } catch (ex: Exception) {

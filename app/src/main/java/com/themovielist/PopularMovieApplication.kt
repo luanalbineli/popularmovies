@@ -5,20 +5,19 @@ import android.app.Application
 import android.content.ContentResolver
 import android.content.Context
 import android.database.Cursor
+import com.facebook.common.logging.FLog
 import com.facebook.drawee.backends.pipeline.Fresco
+import com.facebook.imagepipeline.core.ImagePipelineConfig
+import com.facebook.imagepipeline.listener.RequestListener
+import com.facebook.imagepipeline.listener.RequestLoggingListener
 import com.squareup.leakcanary.LeakCanary
 import com.themovielist.injector.components.ApplicationComponent
 import com.themovielist.injector.components.DaggerApplicationComponent
 import com.themovielist.injector.modules.ApplicationModule
 import com.themovielist.util.tryExecute
-import io.reactivex.ObservableEmitter
+import io.reactivex.SingleEmitter
 import timber.log.Timber
 import java.sql.SQLDataException
-import com.facebook.common.logging.FLog
-import com.facebook.imagepipeline.core.ImagePipelineConfig
-import com.facebook.imagepipeline.listener.RequestLoggingListener
-import com.facebook.imagepipeline.listener.RequestListener
-
 
 
 class PopularMovieApplication : Application() {
@@ -51,7 +50,7 @@ class PopularMovieApplication : Application() {
                 .build()
     }
 
-    inline fun <T> safeContentResolver(emitter: ObservableEmitter<T>, safeFunction: ContentResolver.() -> Unit) {
+    inline fun <T> safeContentResolver(emitter: SingleEmitter<T>, safeFunction: ContentResolver.() -> Unit) {
         val contentResolver = contentResolver
         if (contentResolver == null) {
             emitter.onError(RuntimeException("Cannot get the ContentResolver"))
@@ -61,7 +60,7 @@ class PopularMovieApplication : Application() {
         safeFunction.invoke(contentResolver)
     }
 
-    inline fun <T> tryQueryOnContentResolver(emitter: ObservableEmitter<T>, cursorInvoker: ContentResolver.() -> Cursor?, safeFunction: Cursor.() -> Unit) {
+    inline fun <T> tryQueryOnContentResolver(emitter: SingleEmitter<T>, cursorInvoker: ContentResolver.() -> Cursor?, safeFunction: Cursor.() -> Unit) {
         val contentResolver = contentResolver
         if (contentResolver == null) {
             emitter.onError(RuntimeException("Cannot get the ContentResolver"))

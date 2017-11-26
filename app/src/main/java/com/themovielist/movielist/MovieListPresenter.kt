@@ -2,11 +2,11 @@ package com.themovielist.movielist
 
 import com.themovielist.base.BasePresenterImpl
 import com.themovielist.enums.MovieSortEnum
-import com.themovielist.model.view.MovieListStateModel
 import com.themovielist.model.MovieModel
 import com.themovielist.model.response.PaginatedArrayResponseModel
+import com.themovielist.model.view.MovieListStateModel
 import com.themovielist.repository.movie.MovieRepository
-import io.reactivex.Observable
+import io.reactivex.Single
 import io.reactivex.disposables.Disposable
 import timber.log.Timber
 import javax.inject.Inject
@@ -79,7 +79,7 @@ internal constructor(movieRepository: MovieRepository) : BasePresenterImpl(movie
             pageIndex++
         }
 
-        val observable: Observable<PaginatedArrayResponseModel<MovieModel>> =
+        val observable: Single<PaginatedArrayResponseModel<MovieModel>> =
                 when (filter) {
                     MovieSortEnum.POPULAR -> mMovieRepository.getPopularList(pageIndex)
                     MovieSortEnum.RATING -> mMovieRepository.getTopRatedList(pageIndex)
@@ -87,7 +87,7 @@ internal constructor(movieRepository: MovieRepository) : BasePresenterImpl(movie
                 }
 
         mSubscription = observable
-                .doOnTerminate { mSubscription = null }
+                .doAfterTerminate { mSubscription = null }
                 .subscribe(
                         { response -> handleSuccessLoadMovieList(response.results, response.hasMorePages(), startOver) },
                         { throwable -> this.handleErrorLoadMovieList(throwable) })

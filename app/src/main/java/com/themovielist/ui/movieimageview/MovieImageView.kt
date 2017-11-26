@@ -5,16 +5,16 @@ import android.net.Uri
 import android.support.design.widget.Snackbar
 import android.util.AttributeSet
 import android.view.LayoutInflater
+import android.view.ViewGroup
 import android.widget.FrameLayout
 import com.albineli.udacity.popularmovies.R
 import com.facebook.drawee.backends.pipeline.Fresco
-import com.facebook.imagepipeline.common.ResizeOptions
 import com.facebook.imagepipeline.request.ImageRequestBuilder
 import com.themovielist.PopularMovieApplication
 import com.themovielist.event.FavoriteMovieEvent
 import com.themovielist.injector.components.DaggerFragmentComponent
-import com.themovielist.model.view.MovieImageViewModel
 import com.themovielist.model.MovieModel
+import com.themovielist.model.view.MovieImageViewModel
 import com.themovielist.moviedetail.MovieDetailActivity
 import kotlinx.android.synthetic.main.movie_image_view.view.*
 import org.greenrobot.eventbus.EventBus
@@ -56,18 +56,19 @@ class MovieImageView constructor(context: Context, attributeSet: AttributeSet) :
         mPresenter.setView(this)
     }
 
-    fun setImageURI(posterUrl: String) {
-        val posterWidth = context.resources.getDimensionPixelSize(R.dimen.home_movie_list_image_width)
-        val posterHeight = context.resources.getDimensionPixelSize(R.dimen.home_movie_list_image_height)
-
+    fun setImageURI(posterUrl: String, posterWidth: Int = ViewGroup.LayoutParams.MATCH_PARENT, posterHeight: Int = ViewGroup.LayoutParams.WRAP_CONTENT, aspectRatio: Float = 0f) {
         val request = ImageRequestBuilder.newBuilderWithSource(Uri.parse(posterUrl))
-                .setResizeOptions(ResizeOptions(posterWidth, posterHeight))
+                //.setResizeOptions(ResizeOptions(posterWidth, posterHeight))
                 .build()
 
-        sdvMovieImageView.controller = Fresco.newDraweeControllerBuilder()
+        sdvMovieImageView.layoutParams.width = posterWidth
+        sdvMovieImageView.layoutParams.height = posterHeight
+        sdvMovieImageView.aspectRatio = aspectRatio
+        sdvMovieImageView.setImageURI(posterUrl)
+        /*sdvMovieImageView.controller = Fresco.newDraweeControllerBuilder()
                 .setOldController(sdvMovieImageView.controller)
                 .setImageRequest(request)
-                .build()
+                .build()*/
     }
 
     fun setMovieImageViewModel(movieImageViewModel: MovieImageViewModel) {

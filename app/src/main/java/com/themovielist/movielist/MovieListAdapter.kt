@@ -1,6 +1,5 @@
 package com.themovielist.movielist
 
-import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import com.albineli.udacity.popularmovies.R
@@ -9,12 +8,12 @@ import com.themovielist.ui.recyclerview.CustomRecyclerViewAdapter
 import com.themovielist.util.ApiUtil
 import com.themovielist.util.UIUtil
 
-internal class MovieListAdapter (val recyclerView: RecyclerView, emptyMessageResId: Int, tryAgainClickListener: (() -> Unit)?) : CustomRecyclerViewAdapter<MovieModel, MovieListViewHolder>(emptyMessageResId, tryAgainClickListener) {
+internal class MovieListAdapter (emptyMessageResId: Int, tryAgainClickListener: (() -> Unit)?) : CustomRecyclerViewAdapter<MovieModel, MovieListViewHolder>(emptyMessageResId, tryAgainClickListener) {
     private var mPosterWidth: String? = null
 
     override fun onCreateItemViewHolder(parent: ViewGroup): MovieListViewHolder {
         val itemView = LayoutInflater.from(parent.context).inflate(R.layout.movie_item, parent, false)
-        return MovieListViewHolder(itemView, recyclerView)
+        return MovieListViewHolder(itemView)
     }
 
     override fun onBindItemViewHolder(holder: MovieListViewHolder, position: Int) {

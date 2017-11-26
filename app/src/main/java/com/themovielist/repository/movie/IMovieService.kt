@@ -15,10 +15,10 @@ import retrofit2.http.Query
 
 interface IMovieService {
     @GET("movie/top_rated")
-    fun getTopRatedList(@Query("page") pageNumber: Int?): Observable<PaginatedArrayResponseModel<MovieModel>>
+    fun getTopRatedList(@Query("page") pageNumber: Int?): Single<PaginatedArrayResponseModel<MovieModel>>
 
     @GET("movie/popular")
-    fun getPopularList(@Query("page") pageNumber: Int?): Observable<PaginatedArrayResponseModel<MovieModel>>
+    fun getPopularList(@Query("page") pageNumber: Int?): Single<PaginatedArrayResponseModel<MovieModel>>
 
     @GET("movie/{movieId}/reviews")
     fun getReviewsByMovieId(@Path("movieId") movieId: Int, @Query("page") pageNumber: Int?): Observable<PaginatedArrayResponseModel<MovieReviewModel>>
@@ -27,7 +27,7 @@ interface IMovieService {
     fun getMovieDetail(@Path("movieId") movieId: Int): Observable<MovieDetailResponseModel>
 
     @GET("movie/{movieId}/credits")
-    fun getMovieCredits(@Path("movieId") movieId: Int): Observable<MovieCreditsResponseModel>
+    fun getMovieCredits(@Path("movieId") movieId: Int): Single<MovieCreditsResponseModel>
 
     @GET("search/movie")
     fun queryMovies(@Query("query") query: String): Single<PaginatedArrayResponseModel<MovieModel>>

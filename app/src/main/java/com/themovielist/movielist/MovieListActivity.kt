@@ -37,7 +37,7 @@ class MovieListActivity : BaseDaggerActivity<MovieListContract.View>(), MovieLis
     @Inject
     lateinit var mPresenter: MovieListPresenter
 
-    private val mMovieListAdapter by lazy {MovieListAdapter(rvMovieList, R.string.the_list_is_empty, { mPresenter.tryAgain() })}
+    private val mMovieListAdapter by lazy {MovieListAdapter(R.string.the_list_is_empty, { mPresenter.tryAgain() })}
 
     private val mGridLayoutManager by lazy { GridLayoutManager(this, 2) }
 
