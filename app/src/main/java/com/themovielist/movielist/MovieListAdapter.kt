@@ -1,31 +1,23 @@
 package com.themovielist.movielist
 
-import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import com.albineli.udacity.popularmovies.R
-import com.themovielist.model.MovieModel
+import com.themovielist.model.MovieWithGenreModel
+import com.themovielist.model.response.ConfigurationImageResponseModel
 import com.themovielist.ui.recyclerview.CustomRecyclerViewAdapter
-import com.themovielist.util.ApiUtil
-import com.themovielist.util.UIUtil
 
-internal class MovieListAdapter (val recyclerView: RecyclerView, emptyMessageResId: Int, tryAgainClickListener: (() -> Unit)?) : CustomRecyclerViewAdapter<MovieModel, MovieListViewHolder>(emptyMessageResId, tryAgainClickListener) {
-    private var mPosterWidth: String? = null
 
-    override fun onCreateItemViewHolder(parent: ViewGroup): MovieListViewHolder {
+internal class MovieListAdapter(emptyMessageResId: Int, tryAgainClickListener: (() -> Unit)?) : CustomRecyclerViewAdapter<MovieWithGenreModel, MovieListVH>(emptyMessageResId, tryAgainClickListener) {
+    lateinit var configurationImageModel: ConfigurationImageResponseModel
+
+    override fun onCreateItemViewHolder(parent: ViewGroup): MovieListVH {
         val itemView = LayoutInflater.from(parent.context).inflate(R.layout.movie_item, parent, false)
-        return MovieListViewHolder(itemView, recyclerView)
+        return MovieListVH(itemView)
     }
 
-    override fun onBindItemViewHolder(holder: MovieListViewHolder, position: Int) {
-        if (mPosterWidth == null) {
-            val metrics = UIUtil.getDisplayMetrics(holder.context)
-            val posterWidthPx = metrics.widthPixels / 2
-
-            mPosterWidth = ApiUtil.getDefaultPosterSize(posterWidthPx)
-        }
-
-        val movieModel = getItemByPosition(position)
-        holder.bind(movieModel, mPosterWidth!!)
+    override fun onBindItemViewHolder(holder: MovieListVH, position: Int) {
+        val movieWithGenreModel = getItemByPosition(position)
+        holder.bind(movieWithGenreModel, configurationImageModel)
     }
 }

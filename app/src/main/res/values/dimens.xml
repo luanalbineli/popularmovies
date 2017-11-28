@@ -22,4 +22,7 @@
 
     <!-- In Theaters -->
     <dimen name="in_theaters_backdrop_height">240dp</dimen>
+
+    <!-- Genre list -->
+    <dimen name="genre_horizontal_space">8dp</dimen>
 </resources>

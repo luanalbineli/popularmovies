@@ -26,7 +26,8 @@
         <activity
             android:name="com.themovielist.moviedetail.MovieDetailActivity"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name="com.themovielist.movielist.MovieListActivity" />
+
+        <activity android:name="com.themovielist.home.fulllist.HomeFullMovieListActivity" />
 
         <provider
             android:name="com.themovielist.repository.data.MovieProvider"

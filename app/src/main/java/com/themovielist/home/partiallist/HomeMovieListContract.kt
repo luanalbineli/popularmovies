@@ -1,4 +1,4 @@
-package com.themovielist.home.list
+package com.themovielist.home.partiallist
 
 import com.themovielist.base.BasePresenter
 import com.themovielist.model.view.MovieImageViewModel

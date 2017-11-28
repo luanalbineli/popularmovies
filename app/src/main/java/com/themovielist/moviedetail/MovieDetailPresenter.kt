@@ -29,15 +29,15 @@ internal constructor(movieRepository: MovieRepository, private val mCommonReposi
             mView.showErrorLoadingMovieDetail(error)
         })
 
-        mMovieRepository.isMovieFavorite(movieModel.id).subscribe({
-            mView.setFavoriteButtonState(it)
-            isFavorite = it
+        mMovieRepository.isMovieFavorite(movieModel.id).subscribe({ isFavorite, _ ->
+            mView.setFavoriteButtonState(isFavorite)
+            this.isFavorite = isFavorite
         })
     }
 
     private fun fetchMovieDetailInfo() {
         mView.showLoadingMovieDetailIndicator()
-        mMovieRepository.getMovieDetail(mMovieWithGenreModel.id)
+        mMovieRepository.getMovieDetail(mMovieWithGenreModel.movieModel.id)
                 .subscribe(this::handleGetMovieDetailResponseSuccess, { error ->
                     mView.showErrorLoadingMovieDetail(error)
                 })
@@ -76,9 +76,9 @@ internal constructor(movieRepository: MovieRepository, private val mCommonReposi
 
     fun toggleFavoriteMovie() {
         val request = if (isFavorite) {
-            mMovieRepository.removeFavoriteMovie(mMovieWithGenreModel)
+            mMovieRepository.removeFavoriteMovie(mMovieWithGenreModel.movieModel)
         } else {
-            mMovieRepository.saveFavoriteMovie(mMovieWithGenreModel)
+            mMovieRepository.saveFavoriteMovie(mMovieWithGenreModel.movieModel)
         }
 
         mView.setFavoriteButtonEnabled(false)
@@ -96,7 +96,7 @@ internal constructor(movieRepository: MovieRepository, private val mCommonReposi
                             }
                             isFavorite = !isFavorite
                             mView.setFavoriteButtonState(isFavorite)
-                            mView.dispatchFavoriteMovieEvent(mMovieWithGenreModel, isFavorite)
+                            mView.dispatchFavoriteMovieEvent(mMovieWithGenreModel.movieModel, isFavorite)
                         }
                 ) { throwable ->
                     Timber.e(throwable, "An error occurred while tried to remove the favorite movie")

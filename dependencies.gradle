@@ -20,7 +20,7 @@ ext {
             kotlin                  : '1.1.51',
             hamcrest                : '1.3',
             daggerMock              : '0.8.1',
-            fresco                  : '1.4.0',
+            fresco                  : '1.5.0',
             materialRatingBar       : '1.1.1',
             likeButton              : '0.2.3',
             bottomBar               : '2.0.2',

@@ -1,10 +1,14 @@
 package com.themovielist.repository.intheaters
 
+import android.util.SparseArray
+import com.themovielist.model.GenreModel
+import com.themovielist.model.MovieModel
 import com.themovielist.model.MovieWithGenreModel
 import com.themovielist.model.response.PaginatedArrayResponseModel
 import com.themovielist.repository.RepositoryBase
 import com.themovielist.repository.movie.CommonRepository
-import io.reactivex.Observable
+import io.reactivex.Single
+import io.reactivex.functions.BiFunction
 import retrofit2.Retrofit
 import javax.inject.Inject
 
@@ -12,12 +16,15 @@ class InTheatersRepository
 @Inject
 constructor(mRetrofit: Retrofit, private val mCommonRepository: CommonRepository) : RepositoryBase<IInTheatersMovieService>(mRetrofit) {
 
-    fun getInTheatersMovieList(pageIndex: Int): Observable<PaginatedArrayResponseModel<MovieWithGenreModel>> {
+    fun getInTheatersMovieList(pageIndex: Int): Single<PaginatedArrayResponseModel<MovieWithGenreModel>> {
 
-        return mCommonRepository.getUserRegion()
-                .flatMap { userRegion -> mApiInstance.getInTheatersMovieList(userRegion, pageIndex) }
-                .flatMap({ mCommonRepository.getAllGenres() }, { inTheatersMovieList, genreMap ->
-                    mCommonRepository.fillMovieGenresList(inTheatersMovieList, genreMap)
+        val inTheatersMovieListRequest = mApiInstance.getInTheatersMovieList(pageIndex)
+        val genreMapRequest = mCommonRepository.getAllGenres()
+        return Single.zip(
+                inTheatersMovieListRequest,
+                genreMapRequest,
+                BiFunction<PaginatedArrayResponseModel<MovieModel>, SparseArray<GenreModel>, PaginatedArrayResponseModel<MovieWithGenreModel>> { t1, t2 ->
+                    mCommonRepository.fillMovieGenresList(t1, t2)
                 })
     }
 

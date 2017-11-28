@@ -1,20 +1,16 @@
 package com.themovielist.ui.movieimageview
 
 import android.content.Context
-import android.net.Uri
 import android.support.design.widget.Snackbar
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.widget.FrameLayout
 import com.albineli.udacity.popularmovies.R
-import com.facebook.drawee.backends.pipeline.Fresco
-import com.facebook.imagepipeline.common.ResizeOptions
-import com.facebook.imagepipeline.request.ImageRequestBuilder
 import com.themovielist.PopularMovieApplication
 import com.themovielist.event.FavoriteMovieEvent
 import com.themovielist.injector.components.DaggerFragmentComponent
-import com.themovielist.model.view.MovieImageViewModel
 import com.themovielist.model.MovieModel
+import com.themovielist.model.view.MovieImageViewModel
 import com.themovielist.moviedetail.MovieDetailActivity
 import kotlinx.android.synthetic.main.movie_image_view.view.*
 import org.greenrobot.eventbus.EventBus
@@ -33,7 +29,14 @@ class MovieImageView constructor(context: Context, attributeSet: AttributeSet) :
 
     init {
         injectDependencies()
-        LayoutInflater.from(context).inflate(R.layout.movie_image_view, this)
+
+        /*
+        * For some F3cking unknown reason, I was unable to change the SimpleDraweeView width/height/aspectRatio on runtime, turning this component useless.
+        * I had to pass the layout by parameter (changing the width/height/aspectRatio of the SimpleDraweeView on the XML. Sad :/
+        * */
+        val simpleDraweeViewLayout = getSimpleDraweeView(attributeSet)
+
+        LayoutInflater.from(context).inflate(simpleDraweeViewLayout, this)
 
         mfbMovieImageViewFavorite.setOnFavoriteChangeListener { _, _ ->
             if (mIsFavoritingManually) {
@@ -43,6 +46,14 @@ class MovieImageView constructor(context: Context, attributeSet: AttributeSet) :
         }
 
         sdvMovieImageView.setOnClickListener { mPresenter.showMovieDetail() }
+    }
+
+    private fun getSimpleDraweeView(attributeSet: AttributeSet): Int {
+        val typedArray = context.obtainStyledAttributes(attributeSet, R.styleable.MovieImageView)
+        val layoutResId = typedArray.getResourceId(R.styleable.MovieImageView_simpleDraweeView, R.layout.movie_image_view)
+        typedArray.recycle()
+
+        return layoutResId
     }
 
     private fun injectDependencies() {
@@ -56,18 +67,12 @@ class MovieImageView constructor(context: Context, attributeSet: AttributeSet) :
         mPresenter.setView(this)
     }
 
-    fun setImageURI(posterUrl: String) {
-        val posterWidth = context.resources.getDimensionPixelSize(R.dimen.home_movie_list_image_width)
-        val posterHeight = context.resources.getDimensionPixelSize(R.dimen.home_movie_list_image_height)
-
-        val request = ImageRequestBuilder.newBuilderWithSource(Uri.parse(posterUrl))
-                .setResizeOptions(ResizeOptions(posterWidth, posterHeight))
-                .build()
-
-        sdvMovieImageView.controller = Fresco.newDraweeControllerBuilder()
+    fun setImageURI(posterUrl: String?) {
+        sdvMovieImageView.setImageURI(posterUrl)
+        /*sdvMovieImageView.controller = Fresco.newDraweeControllerBuilder()
                 .setOldController(sdvMovieImageView.controller)
                 .setImageRequest(request)
-                .build()
+                .build()*/
     }
 
     fun setMovieImageViewModel(movieImageViewModel: MovieImageViewModel) {

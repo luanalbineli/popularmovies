@@ -1,4 +1,4 @@
-package com.themovielist.home.list
+package com.themovielist.home.partiallist
 
 import android.os.Bundle
 import android.view.View

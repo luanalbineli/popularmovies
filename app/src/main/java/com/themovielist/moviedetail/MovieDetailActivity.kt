@@ -106,17 +106,17 @@ class MovieDetailActivity : BaseDaggerActivity<MovieDetailContract.View>(), Movi
 
     override fun showMovieInfo(movieWithGenreModel: MovieWithGenreModel) {
         val backdropWidth = ApiUtil.getDefaultPosterSize(UIUtil.getDisplayMetrics(sdvMovieHeaderBackdrop.context).widthPixels)
-        val backdropUrl = ApiUtil.buildPosterImageUrl(movieWithGenreModel.backdropPath, backdropWidth)
+        val backdropUrl = ApiUtil.buildPosterImageUrl(movieWithGenreModel.movieModel.backdropPath, backdropWidth)
         sdvMovieHeaderBackdrop.setImageURI(backdropUrl)
 
-        tvMovieHeaderMovieName.text = movieWithGenreModel.title
-        tvMovieHeaderMovieGenres.text = movieWithGenreModel.concattedGenres()
-        Timber.i("RELEASE DATE: ${movieWithGenreModel.releaseDate} | YEAR: ${movieWithGenreModel.releaseDate?.yearFromCalendar}")
-        tvMovieHeaderReleaseDate.text = movieWithGenreModel.releaseDate?.yearFromCalendar.toString()
+        tvMovieHeaderMovieName.text = movieWithGenreModel.movieModel.title
+        tvMovieHeaderMovieGenres.text = movieWithGenreModel.concatenatedGenres()
+        Timber.i("RELEASE DATE: ${movieWithGenreModel.movieModel.releaseDate} | YEAR: ${movieWithGenreModel.movieModel.releaseDate?.yearFromCalendar}")
+        tvMovieHeaderReleaseDate.text = movieWithGenreModel.movieModel.releaseDate?.yearFromCalendar.toString()
 
-        tvMovieDetailSynopsys.text = movieWithGenreModel.overview
+        tvMovieDetailSynopsys.text = movieWithGenreModel.movieModel.overview
 
-        tvMovieDetailRating.text = movieWithGenreModel.voteAverage.toString()
+        tvMovieDetailRating.text = movieWithGenreModel.movieModel.voteAverage.toString()
     }
 
     override fun showMovieDetailInfo() {

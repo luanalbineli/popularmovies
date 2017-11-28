@@ -117,6 +117,12 @@ abstract class CustomRecyclerViewAdapter<TItem, THolder : CustomRecyclerViewHold
         redrawGridStatus(RequestStatusDescriptor.HIDDEN)
     }
 
+    fun hideLoadingIndicator() {
+        if (mRequestStatus == RequestStatusDescriptor.LOADING) { // Hide only if is loading
+            hideRequestStatus()
+        }
+    }
+
     fun showEmptyMessage() {
         redrawGridStatus(RequestStatusDescriptor.EMPTY)
     }

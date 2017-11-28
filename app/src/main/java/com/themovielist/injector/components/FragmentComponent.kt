@@ -2,24 +2,23 @@ package com.themovielist.injector.components
 
 import com.themovielist.browse.MovieBrowseFragment
 import com.themovielist.home.HomeFragment
-import com.themovielist.home.list.HomeMovieListFragment
+import com.themovielist.home.fulllist.HomeFullMovieListActivity
+import com.themovielist.home.partiallist.HomeMovieListFragment
 import com.themovielist.injector.PerFragment
 import com.themovielist.intheaters.InTheatersFragment
 import com.themovielist.moviecast.MovieCastListFragment
 import com.themovielist.moviedetail.MovieDetailActivity
 import com.themovielist.moviedetail.review.MovieReviewListDialog
 import com.themovielist.moviedetail.trailer.MovieTrailerListDialog
-import com.themovielist.movielist.MovieListActivity
-import com.themovielist.movielistinator.MovieListinatorFragment
+import com.themovielist.movielist.MovieListFragment
 import com.themovielist.ui.movieimageview.MovieImageView
-
 import dagger.Component
 
 @PerFragment
 @Component(dependencies = arrayOf(ApplicationComponent::class))
 interface FragmentComponent {
     fun inject(fragment: MovieDetailActivity)
-    fun inject(fragment: MovieListActivity)
+    fun inject(fragment: HomeFullMovieListActivity)
 
     fun inject(fragment: HomeFragment)
     fun inject(fragment: HomeMovieListFragment)
@@ -34,5 +33,5 @@ interface FragmentComponent {
 
     fun inject(movieBrowseFragment: MovieBrowseFragment)
 
-    fun inject(movieListinatorFragment: MovieListinatorFragment)
+    fun inject(movieListFragment: MovieListFragment)
 }

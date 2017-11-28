@@ -1,5 +1,9 @@
 package com.themovielist.util
 
+import com.themovielist.enums.ImageSizeEnum
+import com.themovielist.model.MovieSizeModel
+import com.themovielist.model.response.ConfigurationImageResponseModel
+
 object ApiUtil {
     const val ORIGINAL_IMAGE_SIZE_NAME = "original"
 
@@ -19,4 +23,27 @@ object ApiUtil {
                 ?.let { "w" + it }
                 ?: "original"
     }
+
+    fun buildPosterImageUrl(posterKey: String, configurationImageResponseModel: ConfigurationImageResponseModel, posterWidth: Int, posterHeight: Int): String {
+        val posterSize = getPosterSize(configurationImageResponseModel.getPosterSizeList(), posterWidth, posterHeight)
+        return "${configurationImageResponseModel.secureBaseUrl}$posterSize/$posterKey"
+    }
+
+    private fun getPosterSize(posterSizeList: List<MovieSizeModel>, posterWidth: Int, posterHeight: Int): String {
+        val posterSize = posterSizeList.firstOrNull {
+            if (it.sizeType == ImageSizeEnum.WIDTH) {
+                it.size > posterWidth
+            }
+
+            it.size > posterHeight
+        } ?: return ORIGINAL_IMAGE_SIZE_NAME
+
+        if (posterSize.sizeType == ImageSizeEnum.WIDTH) {
+            return "w${posterSize.size}"
+        }
+        return "h${posterSize.size}"
+    }
+
+    const val INITIAL_PAGE_INDEX = 1
+
 }

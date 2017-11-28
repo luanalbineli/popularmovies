@@ -1,11 +1,9 @@
 package com.themovielist.intheaters
 
-import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import com.albineli.udacity.popularmovies.R
 import com.themovielist.model.MovieModel
-import com.themovielist.movielist.MovieListViewHolder
 import com.themovielist.ui.recyclerview.CustomRecyclerViewAdapter
 import com.themovielist.util.ApiUtil
 import com.themovielist.util.UIUtil

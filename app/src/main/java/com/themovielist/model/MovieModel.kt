@@ -13,7 +13,7 @@ open class MovieModel constructor(@SerializedName("id")
                                   var id: Int = 0,
 
                                   @SerializedName("poster_path")
-                                  var posterPath: String = "",
+                                  var posterPath: String? = "",
 
                                   @SerializedName("overview")
                                   var overview: String = "",
@@ -124,19 +124,10 @@ open class MovieModel constructor(@SerializedName("id")
     }
 
     companion object CREATOR : Parcelable.Creator<MovieModel> {
-        @JvmField
-        val EMPTY_MOVIE = MovieModel(Int.MIN_VALUE, genreIdList = IntArray(0))
+        override fun createFromParcel(parcel: Parcel): MovieModel = MovieModel(parcel)
 
-        override fun createFromParcel(parcel: Parcel): MovieModel {
-            return MovieModel(parcel)
-        }
+        override fun newArray(size: Int): Array<MovieModel?> = arrayOfNulls(size)
 
-        override fun newArray(size: Int): Array<MovieModel?> {
-            return arrayOfNulls(size)
-        }
-
-        fun fromCursor(cursor: Cursor): MovieModel {
-            return MovieModel(cursor)
-        }
+        fun fromCursor(cursor: Cursor): MovieModel = MovieModel(cursor)
     }
 }

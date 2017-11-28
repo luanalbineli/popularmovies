@@ -51,12 +51,15 @@ class InTheatersFragment : BaseFragment<InTheatersContract.View>(), InTheatersCo
 
     override fun showMainMovieDetail(movieWithGenreModel: MovieWithGenreModel) {
         val posterWidth = ApiUtil.getDefaultPosterSize(sdvMovieHeaderBackdrop.width)
-        val posterUrl = ApiUtil.buildPosterImageUrl(movieWithGenreModel.posterPath, posterWidth)
+        if (movieWithGenreModel.movieModel.posterPath != null) {
+            val posterUrl = ApiUtil.buildPosterImageUrl(movieWithGenreModel.movieModel.posterPath!!, posterWidth)
 
-        sdvMovieHeaderBackdrop.setImageURI(posterUrl)
+            sdvMovieHeaderBackdrop.setImageURI(posterUrl)
+        }
+
 
         tvMovieHeaderReleaseDate.text = "1h 20m" // TODO: TEST
-        tvMovieHeaderMovieName.text = movieWithGenreModel.title
+        tvMovieHeaderMovieName.text = movieWithGenreModel.movieModel.title
         tvMovieHeaderMovieGenres.text = movieWithGenreModel.genreList?.map { it.name }?.reduce { a, b -> "$a, $b"} ?: ""
     }
 
@@ -70,8 +73,6 @@ class InTheatersFragment : BaseFragment<InTheatersContract.View>(), InTheatersCo
     }
 
     companion object {
-        fun getInstance(): InTheatersFragment {
-            return InTheatersFragment()
-        }
+        fun getInstance(): InTheatersFragment = InTheatersFragment()
     }
 }

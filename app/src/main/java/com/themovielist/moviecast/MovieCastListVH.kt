@@ -11,18 +11,23 @@ import kotlinx.android.synthetic.main.movie_cast_item.view.*
 class MovieCastListVH(itemView: View)
     : CustomRecyclerViewHolder(itemView) {
 
+    private val ivMovieCastEmptyImage = itemView.ivMovieCastEmptyImage
+    private val sdvMovieCastImage = itemView.sdvMovieCastImage
+    private val tvMovieCastCharacter = itemView.tvMovieCastCharacter
+    private val tvMovieCastName = itemView.tvMovieCastName
+
     fun bind(movieCastModel: MovieCastModel, posterWidth: String) {
         if (movieCastModel.profilePath == null) {
-            itemView.ivMovieCastEmptyImage.setDisplay(true)
-            itemView.sdvMovieCastImage.setImageURI(null as String?)
+            ivMovieCastEmptyImage.setDisplay(true)
+            sdvMovieCastImage.setImageURI(null as String?)
         } else {
             val posterUrl = ApiUtil.buildPosterImageUrl(movieCastModel.profilePath, posterWidth)
-            itemView.sdvMovieCastImage.setImageURI(posterUrl)
-            itemView.ivMovieCastEmptyImage.setDisplay(false)
+            ivMovieCastEmptyImage.setDisplay(false)
+            sdvMovieCastImage.setImageURI(posterUrl)
 
         }
 
-        itemView.tvMovieCastCharacter.text = movieCastModel.character
-        itemView.tvMovieCastName.text = movieCastModel.name
+        tvMovieCastCharacter.text = movieCastModel.character
+        tvMovieCastName.text = movieCastModel.name
     }
 }

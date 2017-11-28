@@ -7,13 +7,12 @@ import android.view.ViewGroup
 import com.albineli.udacity.popularmovies.R
 import com.themovielist.base.BaseFragment
 import com.themovielist.base.BasePresenter
-import com.themovielist.enums.MovieSortEnum
 import com.themovielist.enums.RequestStatusDescriptor
-import com.themovielist.home.list.HomeMovieListFragment
+import com.themovielist.home.fulllist.HomeFullMovieListActivity
+import com.themovielist.home.partiallist.HomeMovieListFragment
 import com.themovielist.injector.components.ApplicationComponent
 import com.themovielist.injector.components.DaggerFragmentComponent
 import com.themovielist.model.MovieModel
-import com.themovielist.movielist.MovieListActivity
 import com.themovielist.util.setDisplay
 import kotlinx.android.synthetic.main.home_fragment.*
 import timber.log.Timber
@@ -87,9 +86,8 @@ class HomeFragment : BaseFragment<HomeContract.View>(), HomeContract.View {
         mPopularMovieListFragment.addMovies(popularList)
     }
 
-    override fun seeAllMoviesSortedBy(@MovieSortEnum.MovieSort sort: Int) {
-        Timber.d("Opening the movie list sorted by: $sort")
-        val intent = MovieListActivity.getIntent(activity, sort)
+    override fun seeAllMoviesSortedBy(homeMovieSort: Int) {
+        val intent = HomeFullMovieListActivity.getIntent(activity, homeMovieSort)
         startActivity(intent)
     }
 

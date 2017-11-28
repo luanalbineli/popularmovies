@@ -9,7 +9,10 @@
     <declare-styleable name="MovieDetailSectionView">
         <attr name="content" format="reference" />
         <attr name="title" format="string" />
-        <attr name="emptyMessage" format="string" />
+        <attr name="emptyMessage" format="string" />s
         <attr name="buttonTitle" format="string" />
+    </declare-styleable>
+    <declare-styleable name="MovieImageView">
+        <attr name="simpleDraweeView" format="reference" />
     </declare-styleable>
 </resources>

@@ -5,17 +5,27 @@
     android:layout_height="wrap_content"
     android:animateLayoutChanges="true">
 
-     <com.facebook.drawee.view.SimpleDraweeView xmlns:android="http://schemas.android.com/apk/res/android"
-         android:id="@+id/sdvMovieImageView"
-         android:layout_width="@dimen/home_movie_list_image_width"
-         android:layout_height="@dimen/home_movie_list_image_height"
-         app:actualImageScaleType="centerCrop"
-         app:layout_constraintBottom_toTopOf="@+id/tvMovieImageViewName"
-         app:layout_constraintEnd_toEndOf="parent"
-         app:layout_constraintStart_toStartOf="parent"
-         app:layout_constraintTop_toTopOf="parent"
-         app:placeholderImage="@android:color/darker_gray"
-         app:roundedCornerRadius="2dp" />
+    <com.facebook.drawee.view.SimpleDraweeView xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/sdvMovieImageView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:actualImageScaleType="centerCrop"
+        app:layout_constraintBottom_toTopOf="@+id/tvMovieImageViewName"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:placeholderImage="@android:color/darker_gray"
+        app:viewAspectRatio="0.67" />
+
+    <ImageView
+        android:id="@+id/ivMovieItemEmptyImage"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        app:srcCompat="@drawable/camera_off"
+        app:layout_constraintBottom_toBottomOf="@+id/sdvMovieImageView"
+        app:layout_constraintEnd_toEndOf="@+id/sdvMovieImageView"
+        app:layout_constraintStart_toStartOf="@+id/sdvMovieImageView"
+        app:layout_constraintTop_toTopOf="@+id/sdvMovieImageView" />
 
     <com.github.ivbaranov.mfb.MaterialFavoriteButton
         android:id="@+id/mfbMovieImageViewFavorite"

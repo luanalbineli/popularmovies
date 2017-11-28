@@ -22,6 +22,12 @@ fun Parcel.writeNullableInt(value: Int?) {
     }
 }
 
+fun Parcel.readBoolean(): Boolean = this.readInt() == 1
+
+fun Parcel.writeBoolean(boolean: Boolean) {
+    this.writeInt(if (boolean) 1 else 0)
+}
+
 fun Parcel.readNullableInt(): Int? {
     if (this.readByte() == NULL_VALUE) {
         return null
