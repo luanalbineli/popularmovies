@@ -35,4 +35,6 @@
     <string name="search">Search…</string>
     <string name="type_at_least_three_characters">Type at least 3 characters</string>
     <string name="search_for_movies_here">Search for movies here</string>
+    <string name="oops">Oops</string>
+    <string name="error_something_went_wrong">Uhh… Unfortunately something went wrong. Please, try again</string>
 </resources>

@@ -17,6 +17,16 @@
          app:placeholderImage="@android:color/darker_gray"
          app:roundedCornerRadius="2dp" />
 
+    <ImageView
+        android:id="@+id/ivMovieItemEmptyImage"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        app:srcCompat="@drawable/camera_off"
+        app:layout_constraintBottom_toBottomOf="@+id/sdvMovieImageView"
+        app:layout_constraintEnd_toEndOf="@+id/sdvMovieImageView"
+        app:layout_constraintStart_toStartOf="@+id/sdvMovieImageView"
+        app:layout_constraintTop_toTopOf="@+id/sdvMovieImageView" />
+
     <com.github.ivbaranov.mfb.MaterialFavoriteButton
         android:id="@+id/mfbMovieImageViewFavorite"
         android:layout_width="wrap_content"

@@ -12,6 +12,7 @@ import com.themovielist.injector.components.DaggerFragmentComponent
 import com.themovielist.model.MovieModel
 import com.themovielist.model.view.MovieImageViewModel
 import com.themovielist.moviedetail.MovieDetailActivity
+import com.themovielist.util.setDisplay
 import kotlinx.android.synthetic.main.movie_image_view.view.*
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
@@ -69,10 +70,7 @@ class MovieImageView constructor(context: Context, attributeSet: AttributeSet) :
 
     fun setImageURI(posterUrl: String?) {
         sdvMovieImageView.setImageURI(posterUrl)
-        /*sdvMovieImageView.controller = Fresco.newDraweeControllerBuilder()
-                .setOldController(sdvMovieImageView.controller)
-                .setImageRequest(request)
-                .build()*/
+        ivMovieItemEmptyImage.setDisplay(posterUrl == null)
     }
 
     fun setMovieImageViewModel(movieImageViewModel: MovieImageViewModel) {

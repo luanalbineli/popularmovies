@@ -23,16 +23,14 @@ class MovieListVH(itemView: View)
 
     private val mPosterHeight by lazy { mPosterWidth * 1.33 }
 
-    fun bind(movieWithGenreModel: MovieWithGenreModel, configurationImageResponseModel: ConfigurationImageResponseModel) =
-            if (movieWithGenreModel.movieModel.posterPath == null) {
-                mivMovieItem.setImageURI(null as String?)
-                itemView.ivMovieItemEmptyImage.setDisplay(true)
-            } else {
-                val posterUrl = ApiUtil.buildPosterImageUrl(movieWithGenreModel.movieModel.posterPath!!, configurationImageResponseModel, mPosterWidth, mPosterHeight.toInt())
-                Timber.d("Poster url: $posterUrl")
-                mivMovieItem.setImageURI(posterUrl)
-                itemView.ivMovieItemEmptyImage.setDisplay(false)
-            }
+    fun bind(movieWithGenreModel: MovieWithGenreModel, configurationImageResponseModel: ConfigurationImageResponseModel) {
+        val imageUrl = movieWithGenreModel.movieModel.posterPath?.let {
+            ApiUtil.buildPosterImageUrl(movieWithGenreModel.movieModel.posterPath!!, configurationImageResponseModel, mPosterWidth, mPosterHeight.toInt())
+        }
+
+        mivMovieItem.setImageURI(imageUrl)
+    }
+
     /*itemView.tvMovieItemTitle.text = movieWithGenreModel.movieModel.title
     itemView.tvMovieItemGenre.text = movieWithGenreModel.concatenatedGenres()
     itemView.tvMovieItemReleaseDate.text = movieWithGenreModel.movieModel.releaseDate.toDefaultFormat()*/

@@ -70,6 +70,7 @@ class HomeFragment : BaseFragment<HomeContract.View>(), HomeContract.View {
 
     override fun showErrorLoadingMovies(error: Throwable) {
         Timber.i(error, "An error occurred while tried to fecth the movies from HOME")
+        rsvHomeMovieRequestStatus.setRequestStatus(RequestStatusDescriptor.ERROR, true)
     }
 
     override fun showLoadingIndicator() {
