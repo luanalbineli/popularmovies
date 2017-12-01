@@ -8,14 +8,15 @@ import com.themovielist.base.BaseDaggerActivity
 import com.themovielist.base.BasePresenter
 import com.themovielist.injector.components.ApplicationComponent
 import com.themovielist.injector.components.DaggerFragmentComponent
-import com.themovielist.model.MovieWithGenreModel
 import com.themovielist.model.response.ConfigurationImageResponseModel
 import com.themovielist.model.view.GenreListItemModel
 import com.themovielist.model.view.HomeFullMovieListViewModel
+import com.themovielist.model.view.MovieImageGenreViewModel
 import com.themovielist.moviedetail.MovieDetailActivity
 import com.themovielist.movielist.MovieListFragment
 import kotlinx.android.synthetic.main.upcoming_movies_fragment.*
 import timber.log.Timber
+import java.security.InvalidParameterException
 import javax.inject.Inject
 
 
@@ -28,7 +29,7 @@ class HomeFullMovieListActivity : BaseDaggerActivity<HomeFullMovieListContract.V
     @Inject
     lateinit var mPresenter: HomeFullMovieListPresenter
 
-    private lateinit var mUpcomingMovieListFragment: MovieListFragment
+    private lateinit var mMovieListFragment: MovieListFragment
 
     override fun onInjectDependencies(applicationComponent: ApplicationComponent) {
         DaggerFragmentComponent.builder()
@@ -40,20 +41,33 @@ class HomeFullMovieListActivity : BaseDaggerActivity<HomeFullMovieListContract.V
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        val filter = intent.getIntExtra(HOME_MOVIE_SORT, Int.MIN_VALUE)
+        if (filter == Int.MIN_VALUE) {
+            throw InvalidParameterException(HOME_MOVIE_SORT)
+        }
+
         setContentView(R.layout.upcoming_movies_fragment)
 
+        configureComponents()
+
+        val upcomingMoviesViewModel = savedInstanceState?.getParcelable<HomeFullMovieListViewModel>(UPCOMING_MOVIES_VIEW_MODEL)
+
+        mPresenter.start(upcomingMoviesViewModel, filter)
+    }
+
+    private fun configureComponents() {
         val fragmentInstance = fragmentManager.findFragmentById(R.id.fragmentUpcomingMovieList)
 
-        mUpcomingMovieListFragment = fragmentInstance as MovieListFragment
-        mUpcomingMovieListFragment.onTryAgainListener = {
+        mMovieListFragment = fragmentInstance as MovieListFragment
+        mMovieListFragment.onTryAgainListener = {
             mPresenter.tryAgain()
         }
 
-        mUpcomingMovieListFragment.onClickMovieItem = { _, movieWithGenreModel ->
+        mMovieListFragment.onClickMovieItem = { _, movieWithGenreModel ->
             mPresenter.showMovieDetail(movieWithGenreModel)
         }
 
-        mUpcomingMovieListFragment.onLoadMoreMovies = {
+        mMovieListFragment.onLoadMoreMovies = {
             Timber.d("Trying to load more movies")
             mPresenter.loadMoreMovies()
         }
@@ -61,19 +75,15 @@ class HomeFullMovieListActivity : BaseDaggerActivity<HomeFullMovieListContract.V
         glvGenreList.onSelectGenreListener = { _, genreListItemModel ->
             mPresenter.onChangeSelectedGenre(genreListItemModel)
         }
-
-        val upcomingMoviesViewModel = savedInstanceState?.getParcelable<HomeFullMovieListViewModel>(UPCOMING_MOVIES_VIEW_MODEL)
-
-        mPresenter.start(upcomingMoviesViewModel)
     }
 
-    override fun showMovieDetail(movieWithGenreModel: MovieWithGenreModel) {
-        val movieDetailIntent = MovieDetailActivity.getDefaultIntent(this, movieWithGenreModel.movieModel)
+    override fun showMovieDetail(movieImageGenreViewModel: MovieImageGenreViewModel) {
+        val movieDetailIntent = MovieDetailActivity.getDefaultIntent(this, movieImageGenreViewModel.movieModel)
         startActivity(movieDetailIntent)
     }
 
-    override fun addUpcomingMovieList(upcomingMovieList: List<MovieWithGenreModel>, configurationResponseModel: ConfigurationImageResponseModel) {
-        mUpcomingMovieListFragment.addMoviesToList(upcomingMovieList, configurationResponseModel)
+    override fun addMoviesToList(movieList: List<MovieImageGenreViewModel>, configurationResponseModel: ConfigurationImageResponseModel) {
+        mMovieListFragment.addMoviesToList(movieList, configurationResponseModel)
     }
 
     override fun showGenreList(genreListItemList: List<GenreListItemModel>) {
@@ -81,38 +91,38 @@ class HomeFullMovieListActivity : BaseDaggerActivity<HomeFullMovieListContract.V
     }
 
     override fun hideLoadingIndicator() {
-        mUpcomingMovieListFragment.hideLoadingIndicator()
+        mMovieListFragment.hideLoadingIndicator()
     }
 
     override fun scrollToItemPosition(firstVisibleItemPosition: Int) {
-        mUpcomingMovieListFragment.scrollToItemPosition(firstVisibleItemPosition)
+        mMovieListFragment.scrollToItemPosition(firstVisibleItemPosition)
     }
 
     override fun onStop() {
         super.onStop()
-        val firstVisibleItemPosition = mUpcomingMovieListFragment.getFirstVisibleItemPosition()
+        val firstVisibleItemPosition = mMovieListFragment.getFirstVisibleItemPosition()
         mPresenter.onStop(firstVisibleItemPosition)
     }
 
     override fun showErrorLoadingUpcomingMovies(error: Throwable) {
         Timber.e(error, "An error occurred while tried to load the upcoming movies")
-        mUpcomingMovieListFragment.showErrorLoadingMovies()
+        mMovieListFragment.showErrorLoadingMovies()
     }
 
     override fun showLoadingUpcomingMoviesIndicator() {
-        mUpcomingMovieListFragment.showLoadingIndicator()
+        mMovieListFragment.showLoadingIndicator()
     }
 
     override fun enableLoadMoreListener() {
-        mUpcomingMovieListFragment.enableLoadMoreListener()
+        mMovieListFragment.enableLoadMoreListener()
     }
 
     override fun disableLoadMoreListener() {
-        mUpcomingMovieListFragment.disableLoadMoreListener()
+        mMovieListFragment.disableLoadMoreListener()
     }
 
     override fun showEmptyListMessage() {
-        mUpcomingMovieListFragment.showEmptyListMessage()
+        mMovieListFragment.showEmptyListMessage()
     }
 
     override fun onSaveInstanceState(outState: Bundle?) {
@@ -122,8 +132,8 @@ class HomeFullMovieListActivity : BaseDaggerActivity<HomeFullMovieListContract.V
         }
     }
 
-    override fun replaceUpcomingMovieList(finalUpcomingMovieList: List<MovieWithGenreModel>, imageResponseModel: ConfigurationImageResponseModel) {
-        mUpcomingMovieListFragment.replaceMoviesToList(finalUpcomingMovieList, imageResponseModel)
+    override fun replaceMovieList(movieList: List<MovieImageGenreViewModel>, imageResponseModel: ConfigurationImageResponseModel) {
+        mMovieListFragment.replaceMoviesToList(movieList, imageResponseModel)
     }
 
     companion object {

@@ -63,7 +63,7 @@ constructor(retrofit: Retrofit) : RepositoryBase<ICommonMovieService>(retrofit) 
         }
     }
 
-    fun fillMovieGenresList(movieModel: MovieModel, genreMap: SparseArray<GenreModel>): List<GenreModel> {
+    fun fillMovieGenresList(movieModel: MovieModel, genreMap: SparseArray<GenreModel>): List<GenreModel>? {
         return movieModel.genreIdList.mapToListNotNull { genreId ->
             if (genreMap.indexOfKey(genreId) > -1) genreMap.get(genreId) else null
         }

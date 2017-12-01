@@ -114,6 +114,6 @@ class MovieImageView constructor(context: Context, attributeSet: AttributeSet) :
 
     override fun showMovieInfo(movieImageViewModel: MovieImageViewModel) {
         tvMovieImageViewName.text = movieImageViewModel.movieModel.title
-        toggleMovieFavorite(movieImageViewModel.isFavourite)
+        toggleMovieFavorite(movieImageViewModel.isFavorite)
     }
 }

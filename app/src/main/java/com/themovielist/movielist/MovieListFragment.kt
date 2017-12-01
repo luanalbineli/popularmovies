@@ -9,8 +9,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.albineli.udacity.popularmovies.R
-import com.themovielist.model.MovieWithGenreModel
 import com.themovielist.model.response.ConfigurationImageResponseModel
+import com.themovielist.model.view.MovieImageGenreViewModel
 import com.themovielist.ui.recyclerview.CustomRecyclerViewAdapter
 import kotlinx.android.synthetic.main.movie_list_fragment.*
 
@@ -18,7 +18,7 @@ import kotlinx.android.synthetic.main.movie_list_fragment.*
 class MovieListFragment : Fragment() {
     var onTryAgainListener: (() -> Unit)? = null
 
-    var onClickMovieItem: ((position: Int, movieWithGenreModel: MovieWithGenreModel) -> Unit)? = null
+    var onClickMovieItem: ((position: Int, movieWithGenreModel: MovieImageGenreViewModel) -> Unit)? = null
 
     var onLoadMoreMovies: (() -> Unit)? = null
 
@@ -41,9 +41,6 @@ class MovieListFragment : Fragment() {
                         -> mGridLayoutManager.spanCount
                     }
         }
-
-        val dividerItemDecoration = DividerItemDecoration(rvMovieList.context, mGridLayoutManager.orientation)
-        rvMovieList.addItemDecoration(dividerItemDecoration)
 
         rvMovieList.layoutManager = mGridLayoutManager
         rvMovieList.adapter = mMovieListAdapter
@@ -87,7 +84,7 @@ class MovieListFragment : Fragment() {
         mMovieListAdapter.hideLoadingIndicator()
     }
 
-    fun addMoviesToList(movieWithGenreListModel: List<MovieWithGenreModel>, configurationResponseModel: ConfigurationImageResponseModel) {
+    fun addMoviesToList(movieWithGenreListModel: List<MovieImageGenreViewModel>, configurationResponseModel: ConfigurationImageResponseModel) {
         mMovieListAdapter.configurationImageModel = configurationResponseModel
         mMovieListAdapter.addItems(movieWithGenreListModel)
     }
@@ -97,7 +94,7 @@ class MovieListFragment : Fragment() {
     }
 
     fun getFirstVisibleItemPosition(): Int = mGridLayoutManager.findFirstVisibleItemPosition()
-    fun replaceMoviesToList(finalUpcomingMovieList: List<MovieWithGenreModel>, imageResponseModel: ConfigurationImageResponseModel) {
+    fun replaceMoviesToList(finalUpcomingMovieList: List<MovieImageGenreViewModel>, imageResponseModel: ConfigurationImageResponseModel) {
         mMovieListAdapter.configurationImageModel = imageResponseModel
         mMovieListAdapter.replaceItems(finalUpcomingMovieList)
     }

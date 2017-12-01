@@ -4,22 +4,25 @@ import android.os.Parcel
 import android.os.Parcelable
 import android.util.SparseArray
 import com.themovielist.model.GenreModel
-import com.themovielist.model.MovieWithGenreModel
 import com.themovielist.model.response.ConfigurationImageResponseModel
 import com.themovielist.util.readBoolean
 import com.themovielist.util.values
 import com.themovielist.util.writeBoolean
 
-data class HomeFullMovieListViewModel(var pageIndex: Int,
-                                      var upcomingMovieList: MutableList<MovieWithGenreModel> = mutableListOf(),
-                                      var firstVisibleItemPosition: Int = 0,
-                                      var imageResponseModel: ConfigurationImageResponseModel? = null,
-                                      var hasMorePages: Boolean = false,
-                                      var genreMap: SparseArray<GenreModel> = SparseArray(),
-                                      var selectedGenreMap: SparseArray<GenreModel> = SparseArray()) : Parcelable {
+data class HomeFullMovieListViewModel(
+        var filter: Int,
+        var pageIndex: Int,
+        var movieList: MutableList<MovieImageGenreViewModel> = mutableListOf(),
+        var firstVisibleItemPosition: Int = 0,
+        var imageResponseModel: ConfigurationImageResponseModel? = null,
+        var hasMorePages: Boolean = false,
+        var genreMap: SparseArray<GenreModel> = SparseArray(),
+        var selectedGenreMap: SparseArray<GenreModel> = SparseArray()) : Parcelable {
 
-    constructor(parcel: Parcel) : this(parcel.readInt(),
-            parcel.createTypedArrayList(MovieWithGenreModel),
+    constructor(parcel: Parcel) : this(
+            parcel.readInt(),
+            parcel.readInt(),
+            parcel.createTypedArrayList(MovieImageGenreViewModel).toMutableList(),
             parcel.readInt(),
             parcel.readParcelable(ConfigurationImageResponseModel::class.java.classLoader),
             parcel.readBoolean()) {
@@ -33,8 +36,9 @@ data class HomeFullMovieListViewModel(var pageIndex: Int,
     }
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
+        parcel.writeInt(filter)
         parcel.writeInt(pageIndex)
-        parcel.writeTypedList(upcomingMovieList)
+        parcel.writeTypedList(movieList)
         parcel.writeInt(firstVisibleItemPosition)
         parcel.writeParcelable(imageResponseModel, 0)
         parcel.writeBoolean(hasMorePages)

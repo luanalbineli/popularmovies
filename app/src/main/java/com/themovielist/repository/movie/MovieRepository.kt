@@ -7,7 +7,6 @@ import com.themovielist.model.GenreModel
 import com.themovielist.model.MovieModel
 import com.themovielist.model.MovieReviewModel
 import com.themovielist.model.response.*
-import com.themovielist.model.response.HomeFullMovieListResponseModel
 import com.themovielist.repository.RepositoryBase
 import com.themovielist.repository.data.MovieContract
 import com.themovielist.util.toArray
@@ -17,13 +16,12 @@ import io.reactivex.Completable
 import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.SingleOnSubscribe
+import io.reactivex.functions.Function4
 import io.reactivex.schedulers.Schedulers
 import retrofit2.Retrofit
 import timber.log.Timber
 import java.sql.SQLDataException
 import javax.inject.Inject
-
-import io.reactivex.functions.Function3
 
 class MovieRepository @Inject
 internal constructor(mRetrofit: Retrofit, private val mApplicationContext: PopularMovieApplication, private val commonRepository: CommonRepository) : RepositoryBase<IMovieService>(mRetrofit) {
@@ -53,21 +51,35 @@ internal constructor(mRetrofit: Retrofit, private val mApplicationContext: Popul
         }).subscribeOn(Schedulers.io()))
     }
 
-    fun getUpcomingMoviesWithGenreAndConfiguration(pageIndex: Int): Single<HomeFullMovieListResponseModel> {
+    fun getMoviesByPopularityWithGenreAndConfiguration(pageIndex: Int) =
+            getMoviesWithGenreAndConfiguration(mApiInstance.getPopularList(pageIndex))
+
+    fun getMoviesByRatingWithGenreAndConfiguration(pageIndex: Int) =
+            getMoviesWithGenreAndConfiguration(mApiInstance.getTopRatedList(pageIndex))
+
+    fun getTopRatedList(pageIndex: Int) =
+            observeOnMainThread(mApiInstance.getTopRatedList(pageIndex))
+
+    fun getPopularList(pageIndex: Int) =
+            observeOnMainThread(mApiInstance.getPopularList(pageIndex))
+
+    private fun getMoviesWithGenreAndConfiguration(movieRequest: Single<PaginatedArrayResponseModel<MovieModel>>): Single<HomeFullMovieListResponseModel> {
         val configurationRequest = commonRepository.getConfiguration()
         val genreListRequest = commonRepository.getAllGenres()
-        val upcomingMoviesRequest = getTopRatedList(pageIndex)
+        val favoriteMovies = getFavoriteMovieIds()
 
-        return Single.zip(
+        return observeOnMainThread(Single.zip(
                 configurationRequest,
-                upcomingMoviesRequest,
+                movieRequest,
                 genreListRequest,
-                Function3 { configurationResponseModel: ConfigurationResponseModel,
+                favoriteMovies,
+                Function4 { configurationResponseModel: ConfigurationResponseModel,
                             upcomingMovieList: PaginatedArrayResponseModel<MovieModel>,
-                            genreList: SparseArray<GenreModel> ->
+                            genreList: SparseArray<GenreModel>,
+                            favoriteMovieIds: Array<Int> ->
                     val movieWithGenreModel = commonRepository.fillMovieGenresList(upcomingMovieList, genreList)
-                    HomeFullMovieListResponseModel(configurationResponseModel, movieWithGenreModel, genreList)
-                })
+                    HomeFullMovieListResponseModel(configurationResponseModel, movieWithGenreModel, genreList, favoriteMovieIds)
+                }))
     }
 
     fun getFavoriteMovieIds(): Single<Array<Int>> {
@@ -87,14 +99,6 @@ internal constructor(mRetrofit: Retrofit, private val mApplicationContext: Popul
                 }
             }
         }).subscribeOn(Schedulers.io()))
-    }
-
-    fun getTopRatedList(pageIndex: Int): Single<PaginatedArrayResponseModel<MovieModel>> {
-        return observeOnMainThread(mApiInstance.getTopRatedList(pageIndex))
-    }
-
-    fun getPopularList(pageIndex: Int): Single<PaginatedArrayResponseModel<MovieModel>> {
-        return observeOnMainThread(mApiInstance.getPopularList(pageIndex))
     }
 
     fun getReviewsByMovieId(pageIndex: Int, movieId: Int): Observable<PaginatedArrayResponseModel<MovieReviewModel>> {
@@ -151,18 +155,15 @@ internal constructor(mRetrofit: Retrofit, private val mApplicationContext: Popul
         }).subscribeOn(Schedulers.io()))
     }
 
-    fun getMovieCreditsByMovieId(movieId: Int): Single<MovieCreditsResponseModel> {
-        return observeOnMainThread(mApiInstance.getMovieCredits(movieId))
-    }
+    fun getMovieCreditsByMovieId(movieId: Int): Single<MovieCreditsResponseModel> =
+            observeOnMainThread(mApiInstance.getMovieCredits(movieId))
 
     override val getApiInstanceType: Class<IMovieService>
         get() = IMovieService::class.java
 
-    fun getMovieDetail(movieId: Int): Observable<MovieDetailResponseModel> {
-        return observeOnMainThread(mApiInstance.getMovieDetail(movieId))
-    }
+    fun getMovieDetail(movieId: Int): Observable<MovieDetailResponseModel> =
+            observeOnMainThread(mApiInstance.getMovieDetail(movieId))
 
-    fun queryMovies(newQuery: String): Single<PaginatedArrayResponseModel<MovieModel>> {
-        return observeOnMainThread(mApiInstance.queryMovies(newQuery))
-    }
+    fun queryMovies(newQuery: String): Single<PaginatedArrayResponseModel<MovieModel>> =
+            observeOnMainThread(mApiInstance.queryMovies(newQuery))
 }

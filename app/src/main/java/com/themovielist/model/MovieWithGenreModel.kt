@@ -33,5 +33,4 @@ class MovieWithGenreModel constructor(var movieModel: MovieModel, @Transient var
             }
         } ?: ""
     }
-
 }

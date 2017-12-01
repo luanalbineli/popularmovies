@@ -24,14 +24,14 @@ class MovieImageViewPresenter @Inject constructor(private val mMovieRepository: 
     override fun toggleMovieFavorite() {
         Timber.d("Toggling the movie favorite state: ${mMovieImageViewModel.movieModel}")
         mView.toggleMovieFavouriteEnabled(false)
-        val request = if (mMovieImageViewModel.isFavourite) mMovieRepository.removeFavoriteMovie(mMovieImageViewModel.movieModel) else mMovieRepository.saveFavoriteMovie(mMovieImageViewModel.movieModel)
+        val request = if (mMovieImageViewModel.isFavorite) mMovieRepository.removeFavoriteMovie(mMovieImageViewModel.movieModel) else mMovieRepository.saveFavoriteMovie(mMovieImageViewModel.movieModel)
         request.doOnTerminate { mView.toggleMovieFavouriteEnabled(true) }
                 .subscribe({
                     // Update the model.
-                    mMovieImageViewModel.isFavourite = !mMovieImageViewModel.isFavourite
+                    mMovieImageViewModel.isFavorite = !mMovieImageViewModel.isFavorite
                 }, { error ->
                     // Return the like button to the old state.
-                    mView.toggleMovieFavorite(mMovieImageViewModel.isFavourite)
+                    mView.toggleMovieFavorite(mMovieImageViewModel.isFavorite)
                     mView.showErrorFavoriteMovie(error)
                 })
     }
@@ -42,8 +42,8 @@ class MovieImageViewPresenter @Inject constructor(private val mMovieRepository: 
     }
 
     override fun onFavoriteMovieEvent(movie: MovieModel, favourite: Boolean) {
-        if (mMovieImageViewModel.movieModel == movie && mMovieImageViewModel.isFavourite != favourite) {
-            mMovieImageViewModel.isFavourite = favourite
+        if (mMovieImageViewModel.movieModel == movie && mMovieImageViewModel.isFavorite != favourite) {
+            mMovieImageViewModel.isFavorite = favourite
             mView.toggleMovieFavorite(favourite)
         }
     }
