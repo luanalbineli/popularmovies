@@ -20,6 +20,8 @@ object HomeFullMovieListContract {
         fun scrollToItemPosition(firstVisibleItemPosition: Int)
         fun showGenreList(genreListItemList: List<GenreListItemModel>)
         fun replaceMovieList(movieList: List<MovieImageGenreViewModel>, imageResponseModel: ConfigurationImageResponseModel)
+        fun setTitleByFilter(filter: Int)
+        fun setListViewType(useListViewType: Boolean)
     }
 
     interface Presenter: BasePresenter<View> {
@@ -29,5 +31,6 @@ object HomeFullMovieListContract {
         fun onStop(firstVisibleItemPosition: Int)
         fun loadMoreMovies()
         fun onChangeSelectedGenre(genreListItemModel: GenreListItemModel)
+        fun onChangeListViewType(useListViewType: Boolean)
     }
 }

@@ -6,6 +6,7 @@ import android.os.Bundle
 import com.albineli.udacity.popularmovies.R
 import com.themovielist.base.BaseDaggerActivity
 import com.themovielist.base.BasePresenter
+import com.themovielist.enums.HomeMovieSortEnum
 import com.themovielist.injector.components.ApplicationComponent
 import com.themovielist.injector.components.DaggerFragmentComponent
 import com.themovielist.model.response.ConfigurationImageResponseModel
@@ -14,7 +15,8 @@ import com.themovielist.model.view.HomeFullMovieListViewModel
 import com.themovielist.model.view.MovieImageGenreViewModel
 import com.themovielist.moviedetail.MovieDetailActivity
 import com.themovielist.movielist.MovieListFragment
-import kotlinx.android.synthetic.main.upcoming_movies_fragment.*
+import kotlinx.android.synthetic.main.activity_home_full_movie_list.*
+import kotlinx.android.synthetic.main.activity_main.*
 import timber.log.Timber
 import java.security.InvalidParameterException
 import javax.inject.Inject
@@ -46,7 +48,10 @@ class HomeFullMovieListActivity : BaseDaggerActivity<HomeFullMovieListContract.V
             throw InvalidParameterException(HOME_MOVIE_SORT)
         }
 
-        setContentView(R.layout.upcoming_movies_fragment)
+        setContentView(R.layout.activity_main)
+
+        vsMainContent.layoutResource = R.layout.activity_home_full_movie_list
+        vsMainContent.inflate()
 
         configureComponents()
 
@@ -56,6 +61,8 @@ class HomeFullMovieListActivity : BaseDaggerActivity<HomeFullMovieListContract.V
     }
 
     private fun configureComponents() {
+        setSupportActionBar(toolbar)
+
         val fragmentInstance = fragmentManager.findFragmentById(R.id.fragmentUpcomingMovieList)
 
         mMovieListFragment = fragmentInstance as MovieListFragment
@@ -72,8 +79,28 @@ class HomeFullMovieListActivity : BaseDaggerActivity<HomeFullMovieListContract.V
             mPresenter.loadMoreMovies()
         }
 
+        mMovieListFragment.onChangeListViewType = { useListViewType ->
+            mPresenter.onChangeListViewType(useListViewType)
+        }
+
         glvGenreList.onSelectGenreListener = { _, genreListItemModel ->
             mPresenter.onChangeSelectedGenre(genreListItemModel)
+        }
+    }
+
+    override fun setTitleByFilter(filter: Int) {
+        toolbar.title = getString(if (filter == HomeMovieSortEnum.POPULAR) {
+            R.string.popular
+        } else {
+          R.string.rating
+        })
+    }
+
+    override fun setListViewType(useListViewType: Boolean) {
+        if (useListViewType) {
+            mMovieListFragment.useListLayout()
+        } else {
+            mMovieListFragment.useGridLayout()
         }
     }
 

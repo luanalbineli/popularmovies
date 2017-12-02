@@ -7,7 +7,7 @@ import com.themovielist.ui.recyclerview.CustomRecyclerViewHolder
 import com.themovielist.util.ApiUtil
 import com.themovielist.util.UIUtil
 import com.themovielist.util.yearFromCalendar
-import kotlinx.android.synthetic.main.movie_item.view.*
+import kotlinx.android.synthetic.main.movie_grid_item.view.*
 import kotlinx.android.synthetic.main.movie_item_movie_image_view.view.*
 
 class MovieListVH(itemView: View)

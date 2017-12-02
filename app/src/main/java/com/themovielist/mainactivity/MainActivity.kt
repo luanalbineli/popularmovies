@@ -3,20 +3,20 @@ package com.themovielist.mainactivity
 import android.app.Fragment
 import android.app.FragmentManager
 import android.os.Bundle
+import android.support.design.widget.AppBarLayout
+import android.support.design.widget.CoordinatorLayout
 import android.support.v7.content.res.AppCompatResources
 import com.albineli.udacity.popularmovies.R
 import com.ashokvarma.bottomnavigation.BottomNavigationBar
 import com.ashokvarma.bottomnavigation.BottomNavigationItem
 import com.themovielist.base.BaseActivity
+import com.themovielist.browse.MovieBrowseFragment
 import com.themovielist.enums.TabTypeEnum
 import com.themovielist.home.HomeFragment
 import com.themovielist.intheaters.InTheatersFragment
 import com.themovielist.util.setDisplay
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.content_main.*
-import android.support.design.widget.AppBarLayout
-import android.support.design.widget.CoordinatorLayout
-import com.themovielist.browse.MovieBrowseFragment
 
 
 class MainActivity : BaseActivity(), FragmentManager.OnBackStackChangedListener {
@@ -26,6 +26,10 @@ class MainActivity : BaseActivity(), FragmentManager.OnBackStackChangedListener 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        vsMainContent.layoutResource = R.layout.content_main
+        vsMainContent.inflate()
+
         setSupportActionBar(toolbar)
 
         if (savedInstanceState != null && savedInstanceState.containsKey(SELECTED_TAB_BUNDLE_KEY)) {

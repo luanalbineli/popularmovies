@@ -12,7 +12,7 @@ internal class InTheatersAdapter(emptyMessageResId: Int, tryAgainClickListener: 
     private var mPosterWidth: String? = null
 
     override fun onCreateItemViewHolder(parent: ViewGroup): InTheatersVH {
-        val itemView = LayoutInflater.from(parent.context).inflate(R.layout.movie_item, parent, false)
+        val itemView = LayoutInflater.from(parent.context).inflate(R.layout.movie_grid_item, parent, false)
         return InTheatersVH(itemView)
     }
 

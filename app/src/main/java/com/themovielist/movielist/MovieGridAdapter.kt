@@ -4,9 +4,10 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import com.albineli.udacity.popularmovies.R
 
-internal class MovieListAdapter(emptyMessageResId: Int, tryAgainClickListener: (() -> Unit)?) : BaseMovieListAdapter(emptyMessageResId, tryAgainClickListener) {
+
+internal class MovieGridAdapter(emptyMessageResId: Int, tryAgainClickListener: (() -> Unit)?) : BaseMovieListAdapter(emptyMessageResId, tryAgainClickListener) {
     override fun onCreateItemViewHolder(parent: ViewGroup): MovieListVH {
-        val itemView = LayoutInflater.from(parent.context).inflate(R.layout.movie_list_item, parent, false)
+        val itemView = LayoutInflater.from(parent.context).inflate(R.layout.movie_grid_item, parent, false)
         return MovieListVH(itemView)
     }
 

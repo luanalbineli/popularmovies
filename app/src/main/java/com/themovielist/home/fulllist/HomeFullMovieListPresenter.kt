@@ -11,6 +11,7 @@ import com.themovielist.model.view.MovieImageGenreViewModel
 import com.themovielist.repository.movie.CommonRepository
 import com.themovielist.repository.movie.MovieRepository
 import com.themovielist.util.ApiUtil
+import com.themovielist.util.Defaults
 import com.themovielist.util.containsKey
 import com.themovielist.util.values
 import io.reactivex.disposables.Disposable
@@ -37,6 +38,12 @@ constructor(private var movieRepository: MovieRepository, private var commonRepo
 
     override fun start(upcomingMoviesViewModel: HomeFullMovieListViewModel?, filter: Int) {
         this.upcomingMoviesViewModel = upcomingMoviesViewModel ?: HomeFullMovieListViewModel(filter, ApiUtil.INITIAL_PAGE_INDEX)
+
+        mView.setTitleByFilter(filter)
+
+        val useListViewType = commonRepository.getUseListViewType(Defaults.USE_LIST_VIEW_TYPE)
+        mView.setListViewType(useListViewType)
+
         upcomingMoviesViewModel?.let { viewModel ->
             filterUpcomingMovieList(viewModel.movieList, viewModel.imageResponseModel!!, viewModel.genreMap, viewModel.selectedGenreMap, true)
             mView.scrollToItemPosition(viewModel.firstVisibleItemPosition)
@@ -188,5 +195,9 @@ constructor(private var movieRepository: MovieRepository, private var commonRepo
 
     override fun showMovieDetail(movieImageGenreViewModel: MovieImageGenreViewModel) {
         mView.showMovieDetail(movieImageGenreViewModel)
+    }
+
+    override fun onChangeListViewType(useListViewType: Boolean) {
+        commonRepository.putUseListViewType(useListViewType)
     }
 }

@@ -1,6 +1,8 @@
 package com.themovielist.repository.movie
 
+import android.content.Context
 import android.util.SparseArray
+import com.themovielist.PopularMovieApplication
 import com.themovielist.model.GenreModel
 import com.themovielist.model.MovieModel
 import com.themovielist.model.MovieWithGenreModel
@@ -14,7 +16,7 @@ import javax.inject.Inject
 
 class CommonRepository
 @Inject
-constructor(retrofit: Retrofit) : RepositoryBase<ICommonMovieService>(retrofit) {
+constructor(retrofit: Retrofit, var applicationContext: PopularMovieApplication) : RepositoryBase<ICommonMovieService>(retrofit) {
     private var mGetAllGenresRequest: Single<SparseArray<GenreModel>>? = null
 
     private var mConfigurationRequest: Single<ConfigurationResponseModel>? = null
@@ -69,10 +71,28 @@ constructor(retrofit: Retrofit) : RepositoryBase<ICommonMovieService>(retrofit) 
         }
     }
 
+    fun getUseListViewType(defaultValue: Boolean) =
+        applicationContext
+                .getSharedPreferences(SP_COMMON_REPOSITORY, Context.MODE_PRIVATE)
+                .getBoolean(SP_USE_LIST_VIEW_TYPE_KEY, defaultValue)
+
+    fun putUseListViewType(useListViewType: Boolean) {
+        applicationContext
+                .getSharedPreferences(SP_COMMON_REPOSITORY, Context.MODE_PRIVATE)
+                .edit()
+                .putBoolean(SP_USE_LIST_VIEW_TYPE_KEY, useListViewType)
+                .apply()
+    }
+
     override val getApiInstanceType: Class<ICommonMovieService>
         get() = ICommonMovieService::class.java
 
     companion object {
+
+        const val SP_COMMON_REPOSITORY = "sp_common"
+
+        const val SP_USE_LIST_VIEW_TYPE_KEY = "sp_use_list_view_type"
+
         @JvmField
         var GENRE_MAP: SparseArray<GenreModel>? = null
 

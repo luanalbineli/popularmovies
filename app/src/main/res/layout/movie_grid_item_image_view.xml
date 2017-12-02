@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:animateLayoutChanges="true">
+
+    <com.facebook.drawee.view.SimpleDraweeView xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/sdvMovieImageView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:actualImageScaleType="centerCrop"
+        app:layout_constraintBottom_toTopOf="@+id/tvMovieImageViewName"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:placeholderImage="@android:color/darker_gray"
+        app:viewAspectRatio="0.67" />
+
+    <ImageView
+        android:id="@+id/ivMovieItemEmptyImage"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        app:layout_constraintBottom_toBottomOf="@+id/sdvMovieImageView"
+        app:layout_constraintEnd_toEndOf="@+id/sdvMovieImageView"
+        app:layout_constraintStart_toStartOf="@+id/sdvMovieImageView"
+        app:layout_constraintTop_toTopOf="@+id/sdvMovieImageView"
+        app:srcCompat="@drawable/camera_off" />
+
+    <com.github.ivbaranov.mfb.MaterialFavoriteButton
+        android:id="@+id/mfbMovieImageViewFavorite"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="@+id/sdvMovieImageView"
+        app:layout_constraintTop_toTopOf="@+id/sdvMovieImageView"
+        app:mfb_animate_favorite="false"
+        app:mfb_animate_unfavorite="false"
+        app:mfb_favorite_image="@drawable/heart"
+        app:mfb_not_favorite_image="@drawable/heart_outline"
+        app:mfb_padding="4"
+        app:mfb_size="36"
+        app:mfb_type="heart" />
+
+    <TextView
+        android:id="@+id/tvMovieImageViewName"
+        style="@style/LightMediumText"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="4dp"
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="4dp"
+        android:ellipsize="end"
+        android:gravity="center"
+        android:lines="1"
+        android:maxLines="1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/sdvMovieImageView" />
+
+    <TextView
+        android:id="@+id/tvMovieItemGenre"
+        style="@style/ThinSmallText"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:ellipsize="end"
+        android:gravity="center"
+        android:maxLines="1"
+        app:layout_constraintEnd_toEndOf="@+id/tvMovieImageViewName"
+        app:layout_constraintStart_toStartOf="@+id/tvMovieImageViewName"
+        app:layout_constraintTop_toBottomOf="@+id/tvMovieImageViewName"
+        tools:text="Drama, TV Show, Action das das da sda sd asd as das da sda sd " />
+
+
+    <ImageView
+        android:id="@+id/ivMovieDetailRatingIcon"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_marginBottom="16dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/tvMovieImageViewName"
+        app:layout_constraintTop_toBottomOf="@+id/tvMovieItemGenre"
+        app:srcCompat="@drawable/star" />
+
+    <TextView
+        android:id="@+id/tvMovieDetailRating"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        app:layout_constraintBottom_toBottomOf="@+id/ivMovieDetailRatingIcon"
+        app:layout_constraintEnd_toEndOf="@+id/guideline"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/ivMovieDetailRatingIcon"
+        app:layout_constraintTop_toTopOf="@+id/ivMovieDetailRatingIcon"
+        tools:text="7.6" />
+
+    <android.support.constraint.Guideline
+        android:id="@+id/guideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.5" />
+
+    <ImageView
+        android:id="@+id/ivMovieDetailCalendarIcon"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        app:layout_constraintBottom_toBottomOf="@+id/ivMovieDetailRatingIcon"
+        app:layout_constraintStart_toEndOf="@+id/guideline"
+        app:layout_constraintTop_toTopOf="@+id/ivMovieDetailRatingIcon"
+        app:srcCompat="@drawable/calendar" />
+
+    <TextView
+        android:id="@+id/tvMovieDetailYear"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        app:layout_constraintBottom_toBottomOf="@+id/ivMovieDetailCalendarIcon"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/ivMovieDetailCalendarIcon"
+        app:layout_constraintTop_toTopOf="@+id/ivMovieDetailCalendarIcon"
+        tools:text="2017" />
+</android.support.constraint.ConstraintLayout>
