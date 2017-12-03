@@ -4,8 +4,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.albineli.udacity.popularmovies.R
 import com.arlib.floatingsearchview.FloatingSearchView
+import com.themovielist.R
 import com.themovielist.base.BaseFragment
 import com.themovielist.base.BasePresenter
 import com.themovielist.injector.components.ApplicationComponent

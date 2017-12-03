@@ -8,7 +8,7 @@ import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.*
-import com.albineli.udacity.popularmovies.R
+import com.themovielist.R
 import com.themovielist.model.response.ConfigurationImageResponseModel
 import com.themovielist.model.view.MovieImageGenreViewModel
 import com.themovielist.ui.recyclerview.CustomRecyclerViewAdapter

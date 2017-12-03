@@ -5,7 +5,7 @@ import android.support.v7.widget.Toolbar
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.widget.TextView
-import com.albineli.udacity.popularmovies.R
+import com.themovielist.R
 
 class CenteredToolbarTitle constructor(context: Context, attributeSet: AttributeSet): Toolbar(context, attributeSet) {
     private val mCenteredTitleTextView by lazy {

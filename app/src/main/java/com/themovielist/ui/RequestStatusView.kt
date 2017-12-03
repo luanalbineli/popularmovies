@@ -8,7 +8,7 @@ import android.view.View
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
 import android.widget.FrameLayout
-import com.albineli.udacity.popularmovies.R
+import com.themovielist.R
 import com.themovielist.enums.RequestStatusDescriptor
 import kotlinx.android.synthetic.main.request_status.view.*
 

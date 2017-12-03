@@ -2,7 +2,7 @@ package com.themovielist.moviecast
 
 import android.os.Bundle
 import android.view.View
-import com.albineli.udacity.popularmovies.R
+import com.themovielist.R
 import com.themovielist.base.BasePresenter
 import com.themovielist.base.BaseRecyclerViewFragment
 import com.themovielist.injector.components.ApplicationComponent

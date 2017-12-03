@@ -1,6 +1,6 @@
 package com.themovielist.injector.modules
 
-import com.albineli.udacity.popularmovies.BuildConfig
+import com.themovielist.BuildConfig
 import com.themovielist.PopularMovieApplication
 import dagger.Module
 import dagger.Provides

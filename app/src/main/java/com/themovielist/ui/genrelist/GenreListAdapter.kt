@@ -2,7 +2,7 @@ package com.themovielist.ui.genrelist
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import com.albineli.udacity.popularmovies.R
+import com.themovielist.R
 import com.themovielist.model.view.GenreListItemModel
 import com.themovielist.ui.recyclerview.CustomRecyclerViewAdapter
 

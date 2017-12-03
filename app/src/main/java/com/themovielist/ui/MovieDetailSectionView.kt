@@ -5,7 +5,7 @@ import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.FrameLayout
-import com.albineli.udacity.popularmovies.R
+import com.themovielist.R
 import com.themovielist.util.setDisplay
 import kotlinx.android.synthetic.main.movie_detail_section.view.*
 import java.security.InvalidParameterException

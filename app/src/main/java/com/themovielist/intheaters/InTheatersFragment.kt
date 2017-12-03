@@ -5,7 +5,7 @@ import android.support.v7.widget.GridLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.albineli.udacity.popularmovies.R
+import com.themovielist.R
 import com.themovielist.base.BaseFragment
 import com.themovielist.base.BasePresenter
 import com.themovielist.injector.components.ApplicationComponent

@@ -2,7 +2,7 @@ package com.themovielist.home.partiallist
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import com.albineli.udacity.popularmovies.R
+import com.themovielist.R
 import com.themovielist.model.view.MovieImageViewModel
 import com.themovielist.ui.recyclerview.CustomRecyclerViewAdapter
 import com.themovielist.util.ApiUtil

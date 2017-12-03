@@ -6,12 +6,13 @@ import android.os.Bundle
 import android.support.design.widget.AppBarLayout
 import android.support.design.widget.CoordinatorLayout
 import android.support.v7.content.res.AppCompatResources
-import com.albineli.udacity.popularmovies.R
 import com.ashokvarma.bottomnavigation.BottomNavigationBar
 import com.ashokvarma.bottomnavigation.BottomNavigationItem
+import com.themovielist.R
 import com.themovielist.base.BaseActivity
 import com.themovielist.browse.MovieBrowseFragment
 import com.themovielist.enums.TabTypeEnum
+import com.themovielist.favorite.FavoriteFragment
 import com.themovielist.home.HomeFragment
 import com.themovielist.intheaters.InTheatersFragment
 import com.themovielist.util.setDisplay
@@ -81,6 +82,9 @@ class MainActivity : BaseActivity(), FragmentManager.OnBackStackChangedListener 
             TabTypeEnum.BROWSE -> checkChangeMainContent(BROWSE_FRAGMENT_TAG) {
                 MovieBrowseFragment.getInstance()
             }
+            TabTypeEnum.FAVORITE -> checkChangeMainContent(FAVORITE_FRAGMENT_TAG) {
+                FavoriteFragment.getInstance()
+            }
         }
     }
 
@@ -112,6 +116,6 @@ class MainActivity : BaseActivity(), FragmentManager.OnBackStackChangedListener 
         private val HOME_FRAGMENT_TAG = "home_fragment"
         private val BROWSE_FRAGMENT_TAG = "browse_fragment"
         private val IN_THEATERS_FRAGMENT_TAG = "in_theaters_fragment"
-        private val FRAVORITE_FRAGMENT_TAG = "favorite_fragment"
+        private val FAVORITE_FRAGMENT_TAG = "favorite_fragment"
     }
 }

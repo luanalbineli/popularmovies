@@ -1,6 +1,7 @@
 package com.themovielist.injector.components
 
 import com.themovielist.browse.MovieBrowseFragment
+import com.themovielist.favorite.FavoriteFragment
 import com.themovielist.home.HomeFragment
 import com.themovielist.home.fulllist.HomeFullMovieListActivity
 import com.themovielist.home.partiallist.HomeMovieListFragment
@@ -15,10 +16,10 @@ import com.themovielist.ui.movieimageview.MovieImageView
 import dagger.Component
 
 @PerFragment
-@Component(dependencies = arrayOf(ApplicationComponent::class))
+@Component(dependencies = [(ApplicationComponent::class)])
 interface FragmentComponent {
     fun inject(fragment: MovieDetailActivity)
-    fun inject(fragment: HomeFullMovieListActivity)
+    fun inject(fragment: FavoriteFragment)
 
     fun inject(fragment: HomeFragment)
     fun inject(fragment: HomeMovieListFragment)
@@ -34,4 +35,6 @@ interface FragmentComponent {
     fun inject(movieBrowseFragment: MovieBrowseFragment)
 
     fun inject(movieListFragment: MovieListFragment)
+
+    fun inject(fullMovieListActivity: HomeFullMovieListActivity)
 }

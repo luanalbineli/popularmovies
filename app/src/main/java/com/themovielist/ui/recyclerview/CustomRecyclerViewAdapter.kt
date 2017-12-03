@@ -4,7 +4,7 @@ import android.support.annotation.StringRes
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import com.albineli.udacity.popularmovies.R
+import com.themovielist.R
 import com.themovielist.enums.RequestStatusDescriptor
 import timber.log.Timber
 import java.util.*

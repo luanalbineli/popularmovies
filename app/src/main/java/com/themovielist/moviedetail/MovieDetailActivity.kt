@@ -7,7 +7,7 @@ import android.support.annotation.StringRes
 import android.support.design.widget.Snackbar
 import android.support.v7.content.res.AppCompatResources
 import android.view.MenuItem
-import com.albineli.udacity.popularmovies.R
+import com.themovielist.R
 import com.themovielist.base.BaseDaggerActivity
 import com.themovielist.base.BasePresenter
 import com.themovielist.enums.RequestStatusDescriptor

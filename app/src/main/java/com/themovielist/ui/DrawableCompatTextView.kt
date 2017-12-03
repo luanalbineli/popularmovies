@@ -8,7 +8,7 @@ import android.support.v4.content.ContextCompat
 import android.support.v7.content.res.AppCompatResources
 import android.support.v7.widget.AppCompatTextView
 import android.util.AttributeSet
-import com.albineli.udacity.popularmovies.R
+import com.themovielist.R
 
 class DrawableCompatTextView : AppCompatTextView {
     constructor(context: Context) : super(context)

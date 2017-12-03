@@ -5,8 +5,8 @@ import android.support.design.widget.Snackbar
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.widget.FrameLayout
-import com.albineli.udacity.popularmovies.R
 import com.themovielist.PopularMovieApplication
+import com.themovielist.R
 import com.themovielist.event.FavoriteMovieEvent
 import com.themovielist.injector.components.DaggerFragmentComponent
 import com.themovielist.model.MovieModel

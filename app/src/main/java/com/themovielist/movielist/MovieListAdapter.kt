@@ -2,7 +2,7 @@ package com.themovielist.movielist
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import com.albineli.udacity.popularmovies.R
+import com.themovielist.R
 
 internal class MovieListAdapter(emptyMessageResId: Int, tryAgainClickListener: (() -> Unit)?) : BaseMovieListAdapter(emptyMessageResId, tryAgainClickListener) {
     override fun onCreateItemViewHolder(parent: ViewGroup): MovieListVH {

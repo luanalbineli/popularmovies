@@ -7,8 +7,8 @@ import android.support.annotation.StringRes
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.albineli.udacity.popularmovies.R
 import com.themovielist.PopularMovieApplication
+import com.themovielist.R
 import com.themovielist.injector.components.ApplicationComponent
 import kotlinx.android.synthetic.main.fullscreen_fragment_dialog_with_list.*
 import kotlinx.android.synthetic.main.fullscreen_fragment_dialog_with_list.view.*

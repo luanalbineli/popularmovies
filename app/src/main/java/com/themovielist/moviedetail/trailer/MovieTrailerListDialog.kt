@@ -4,8 +4,8 @@ import android.os.Bundle
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
 import android.view.View
-import com.albineli.udacity.popularmovies.R
 import com.themovielist.PopularMovieApplication
+import com.themovielist.R
 import com.themovielist.base.BaseFullscreenDialogWithList
 import com.themovielist.base.BasePresenter
 import com.themovielist.injector.components.ApplicationComponent

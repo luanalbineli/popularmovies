@@ -5,7 +5,7 @@ import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.albineli.udacity.popularmovies.R
+import com.themovielist.R
 import com.themovielist.ui.recyclerview.HorizonalSpaceItemDecoration
 import kotlinx.android.synthetic.main.recycler_view.*
 
