@@ -19,7 +19,7 @@ I's easier to understand the flow of information, the responsabilities of each c
 
 The application was divided into four tabs:
 
-  * :heavy_minus_sign: Home - The default tab of the application
+  * :white_check_mark: Home - The default tab of the application
     * :white_check_mark: List of the first twenty movies ordered by popularity;
     * :white_check_mark: List of the first twenty movies ordered by rating;
     * :white_check_mark: Option to see all movies ordered by popularity (infinite scroll);
@@ -33,11 +33,11 @@ The application was divided into four tabs:
     * :x: List of the movies in theaters
     * :x: Show the upcoming movies
 
-  * :soon: Favorite
+  * :heavy_minus_sign: Favorite
     * :soon: List your favorite movies
     * :soon: Option to select the sorted by (added order, release date)
 
- * :heavy_minus_sign: Movie detail screen
+ * :white_check_mark: Movie detail screen
    * :white_check_mark: Show the backdrop and poster;
    * :white_check_mark: Show the user's average rating;
    * :white_check_mark: Show the first two reviews;

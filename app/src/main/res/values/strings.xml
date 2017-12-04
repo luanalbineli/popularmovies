@@ -4,9 +4,7 @@
     <string name="browse">Browse</string>
     <string name="cinema">Cinema</string>
     <string name="see_all">See all</string>
-    <string name="title_activity_main">Popular Movies</string>
     <string name="try_again">Try again</string>
-    <string name="error_get_movie_list">An error occurred while trying to get the movies. Please, try again.</string>
     <string name="popular">Popular</string>
     <string name="rating">Rating</string>
     <string name="favorite">Favorite</string>
@@ -21,7 +19,6 @@
     <string name="the_list_is_empty">The list is empty</string>
     <string name="trailers">Trailers</string>
     <string name="youtube">YouTube</string>
-    <string name="screen_size_trailer">%1$dp</string>
     <string name="all_reviews">All reviews</string>
     <string name="all_trailers">All trailers</string>
     <string name="pipe_separator">|</string>
@@ -38,4 +35,5 @@
     <string name="oops">Oops</string>
     <string name="error_something_went_wrong">Uhh… Unfortunately something went wrong. Please, try again</string>
     <string name="recommendations">Recommendations</string>
+    <string name="sort">Sort</string>
 </resources>

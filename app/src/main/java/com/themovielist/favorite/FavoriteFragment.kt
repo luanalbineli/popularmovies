@@ -1,36 +1,29 @@
 package com.themovielist.favorite
 
-import android.content.Context
-import android.content.Intent
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import com.themovielist.R
 import com.themovielist.base.BasePresenter
 import com.themovielist.base.BaseRecyclerViewFragment
-import com.themovielist.enums.HomeMovieSortEnum
 import com.themovielist.injector.components.ApplicationComponent
 import com.themovielist.injector.components.DaggerFragmentComponent
 import com.themovielist.model.response.ConfigurationImageResponseModel
-import com.themovielist.model.view.GenreListItemModel
+import com.themovielist.model.view.HomeFullMovieListViewModel
 import com.themovielist.model.view.MovieImageGenreViewModel
 import com.themovielist.moviedetail.MovieDetailActivity
 import com.themovielist.movielist.MovieListFragment
-import kotlinx.android.synthetic.main.activity_home_full_movie_list.*
-import kotlinx.android.synthetic.main.activity_main.*
 import timber.log.Timber
 import javax.inject.Inject
 
 
-class FavoriteFragment : BaseRecyclerViewFragment<HomeFullMovieListContract.View>(), HomeFullMovieListContract.View {
-    override val presenterImplementation: BasePresenter<HomeFullMovieListContract.View>
+class FavoriteFragment : BaseRecyclerViewFragment<FavoriteContract.View>(), FavoriteContract.View {
+    override val presenterImplementation: BasePresenter<FavoriteContract.View>
         get() = mPresenter
 
-    override val viewImplementation: HomeFullMovieListContract.View
+    override val viewImplementation: FavoriteContract.View
         get() = this
     @Inject
-    lateinit var mPresenter: HomeFullMovieListPresenter
+    lateinit var mPresenter: FavoritePresenter
 
     private lateinit var mMovieListFragment: MovieListFragment
 
@@ -41,35 +34,41 @@ class FavoriteFragment : BaseRecyclerViewFragment<HomeFullMovieListContract.View
                 .inject(this)
     }
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setHasOptionsMenu(true)
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
+        inflater?.inflate(R.menu.favorite_sort, menu)
+    }
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.favorite_fragment, container, false)
     }
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-      /*  val filter = intent.getIntExtra(HOME_MOVIE_SORT, Int.MIN_VALUE)
-        if (filter == Int.MIN_VALUE) {
-            throw InvalidParameterException(HOME_MOVIE_SORT)
-        }
-
-        setContentView(R.layout.activity_main)
-
-        vsMainContent.layoutResource = R.layout.activity_home_full_movie_list
-        vsMainContent.inflate()
+        activity.setTitle(R.string.favorite)
 
         configureComponents()
 
-        val upcomingMoviesViewModel = savedInstanceState?.getParcelable<HomeFullMovieListViewModel>(UPCOMING_MOVIES_VIEW_MODEL)
+        val viewModel = savedInstanceState?.getParcelable<HomeFullMovieListViewModel>(UPCOMING_MOVIES_VIEW_MODEL)
+        mPresenter.start(viewModel)
+    }
 
-        mPresenter.start(upcomingMoviesViewModel, filter)*/
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        if (item?.itemId == R.id.favorite_movie_sort) {
+            //mPresenter.handleSortButtonClick()
+            return true
+        }
+        return false
     }
 
     private fun configureComponents() {
+        mMovieListFragment = fragmentManager.findFragmentById(R.id.fragmentMovieList) as? MovieListFragment ?:
+                childFragmentManager.findFragmentById(R.id.fragmentMovieList) as MovieListFragment
 
-        val fragmentInstance = fragmentManager.findFragmentById(R.id.fragmentUpcomingMovieList)
-
-        mMovieListFragment = fragmentInstance as MovieListFragment
         mMovieListFragment.onTryAgainListener = {
             mPresenter.tryAgain()
         }
@@ -86,18 +85,6 @@ class FavoriteFragment : BaseRecyclerViewFragment<HomeFullMovieListContract.View
         mMovieListFragment.onChangeListViewType = { useListViewType ->
             mPresenter.onChangeListViewType(useListViewType)
         }
-
-        glvGenreList.onSelectGenreListener = { _, genreListItemModel ->
-            mPresenter.onChangeSelectedGenre(genreListItemModel)
-        }
-    }
-
-    override fun setTitleByFilter(filter: Int) {
-        toolbar.title = getString(if (filter == HomeMovieSortEnum.POPULAR) {
-            R.string.popular
-        } else {
-          R.string.rating
-        })
     }
 
     override fun setListViewType(useListViewType: Boolean) {
@@ -115,10 +102,6 @@ class FavoriteFragment : BaseRecyclerViewFragment<HomeFullMovieListContract.View
 
     override fun addMoviesToList(movieList: List<MovieImageGenreViewModel>, configurationResponseModel: ConfigurationImageResponseModel) {
         mMovieListFragment.addMoviesToList(movieList, configurationResponseModel)
-    }
-
-    override fun showGenreList(genreListItemList: List<GenreListItemModel>) {
-        glvGenreList.showGenreList(genreListItemList)
     }
 
     override fun hideLoadingIndicator() {
@@ -140,7 +123,7 @@ class FavoriteFragment : BaseRecyclerViewFragment<HomeFullMovieListContract.View
         mMovieListFragment.showErrorLoadingMovies()
     }
 
-    override fun showLoadingUpcomingMoviesIndicator() {
+    override fun showLoadingFavoriteMoviesIndicator() {
         mMovieListFragment.showLoadingIndicator()
     }
 
@@ -169,12 +152,7 @@ class FavoriteFragment : BaseRecyclerViewFragment<HomeFullMovieListContract.View
 
     companion object {
         private const val UPCOMING_MOVIES_VIEW_MODEL = "upcoming_movies_view_model"
-        private const val HOME_MOVIE_SORT = "home_movie_sort"
 
         fun getInstance(): FavoriteFragment = FavoriteFragment()
-        fun getIntent(context: Context, homeMovieSort: Int): Intent =
-                Intent(context, FavoriteFragment::class.java).also {
-                    it.putExtra(HOME_MOVIE_SORT, homeMovieSort)
-                }
     }
 }

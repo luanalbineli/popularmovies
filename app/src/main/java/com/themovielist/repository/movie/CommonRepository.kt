@@ -84,6 +84,19 @@ constructor(retrofit: Retrofit, var applicationContext: PopularMovieApplication)
                 .apply()
     }
 
+    fun getFavoriteMovieSort(defaultFavoriteMovieSort: Int) =
+            applicationContext
+                    .getSharedPreferences(SP_COMMON_REPOSITORY, Context.MODE_PRIVATE)
+                    .getInt(SP_FAVORITE_MOVIE_SORT_KEY, defaultFavoriteMovieSort)
+
+    fun putFavoriteMovieSort(favoriteMovieSort: Int) {
+        applicationContext
+                .getSharedPreferences(SP_COMMON_REPOSITORY, Context.MODE_PRIVATE)
+                .edit()
+                .putInt(SP_FAVORITE_MOVIE_SORT_KEY, favoriteMovieSort)
+                .apply()
+    }
+
     override val getApiInstanceType: Class<ICommonMovieService>
         get() = ICommonMovieService::class.java
 
@@ -92,6 +105,7 @@ constructor(retrofit: Retrofit, var applicationContext: PopularMovieApplication)
         const val SP_COMMON_REPOSITORY = "sp_common"
 
         const val SP_USE_LIST_VIEW_TYPE_KEY = "sp_use_list_view_type"
+        const val SP_FAVORITE_MOVIE_SORT_KEY = "sp_favorite_movie_sort"
 
         @JvmField
         var GENRE_MAP: SparseArray<GenreModel>? = null

@@ -26,29 +26,30 @@ import javax.inject.Inject
 class MovieRepository @Inject
 internal constructor(mRetrofit: Retrofit, private val mApplicationContext: PopularMovieApplication, private val commonRepository: CommonRepository) : RepositoryBase<IMovieService>(mRetrofit) {
 
-    fun getFavoriteList(): Single<PaginatedArrayResponseModel<MovieModel>> {
-        return observeOnMainThread(Single.create(SingleOnSubscribe<PaginatedArrayResponseModel<MovieModel>> { emitter ->
-            mApplicationContext.safeContentResolver(emitter) {
-                val cursor = query(MovieContract.MovieEntry.CONTENT_URI, null, null, null, null)
-                if (cursor == null) {
-                    emitter.onError(SQLDataException("An internal error occurred."))
-                    return@safeContentResolver
-                }
+    fun getFavoriteMovieListWithGenreAndConfiguration(): Single<HomeFullMovieListResponseModel> {
+        return getMoviesWithGenreAndConfiguration(
+                observeOnMainThread(Single.create({ emitter ->
+                    mApplicationContext.safeContentResolver(emitter) {
+                        val cursor = query(MovieContract.MovieEntry.CONTENT_URI, null, null, null, null)
+                        if (cursor == null) {
+                            emitter.onError(SQLDataException("An internal error occurred."))
+                            return@safeContentResolver
+                        }
 
-                cursor.tryExecute(emitter) {
-                    val favoriteMovieModelList = cursor.toList {
-                        MovieModel.fromCursor(cursor)
+                        cursor.tryExecute(emitter) {
+                            val favoriteMovieModelList = cursor.toList {
+                                MovieModel.fromCursor(cursor)
+                            }
+
+                            val arrayRequestAPI = PaginatedArrayResponseModel<MovieModel>()
+                            arrayRequestAPI.results = favoriteMovieModelList
+                            arrayRequestAPI.totalPages = 1
+                            arrayRequestAPI.page = 1
+
+                            emitter.onSuccess(arrayRequestAPI)
+                        }
                     }
-
-                    val arrayRequestAPI = PaginatedArrayResponseModel<MovieModel>()
-                    arrayRequestAPI.results = favoriteMovieModelList
-                    arrayRequestAPI.totalPages = 1
-                    arrayRequestAPI.page = 1
-
-                    emitter.onSuccess(arrayRequestAPI)
-                }
-            }
-        }).subscribeOn(Schedulers.io()))
+                })))
     }
 
     fun getMoviesByPopularityWithGenreAndConfiguration(pageIndex: Int) =

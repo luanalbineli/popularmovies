@@ -1,7 +1,6 @@
 package com.themovielist.favorite
 
 import android.util.SparseArray
-import com.themovielist.enums.HomeMovieSortEnum
 import com.themovielist.model.GenreModel
 import com.themovielist.model.response.ConfigurationImageResponseModel
 import com.themovielist.model.response.HomeFullMovieListResponseModel
@@ -13,20 +12,19 @@ import com.themovielist.repository.movie.MovieRepository
 import com.themovielist.util.ApiUtil
 import com.themovielist.util.Defaults
 import com.themovielist.util.containsKey
-import com.themovielist.util.values
 import io.reactivex.disposables.Disposable
 import timber.log.Timber
 import javax.inject.Inject
 
 
-class HomeFullMovieListPresenter
+class FavoritePresenter
 @Inject
 constructor(private var movieRepository: MovieRepository, private var commonRepository: CommonRepository)
-    : HomeFullMovieListContract.Presenter {
+    : FavoriteContract.Presenter {
 
-    private lateinit var mView: HomeFullMovieListContract.View
+    private lateinit var mView: FavoriteContract.View
 
-    override fun setView(view: HomeFullMovieListContract.View) {
+    override fun setView(view: FavoriteContract.View) {
         mView = view
     }
 
@@ -36,10 +34,8 @@ constructor(private var movieRepository: MovieRepository, private var commonRepo
 
     private var mHasError = false
 
-    override fun start(upcomingMoviesViewModel: HomeFullMovieListViewModel?, filter: Int) {
-        this.upcomingMoviesViewModel = upcomingMoviesViewModel ?: HomeFullMovieListViewModel(filter, ApiUtil.INITIAL_PAGE_INDEX)
-
-        mView.setTitleByFilter(filter)
+    override fun start(upcomingMoviesViewModel: HomeFullMovieListViewModel?) {
+        this.upcomingMoviesViewModel = upcomingMoviesViewModel ?: HomeFullMovieListViewModel(1, ApiUtil.INITIAL_PAGE_INDEX)
 
         val useListViewType = commonRepository.getUseListViewType(Defaults.USE_LIST_VIEW_TYPE)
         mView.setListViewType(useListViewType)
@@ -54,27 +50,20 @@ constructor(private var movieRepository: MovieRepository, private var commonRepo
                 mView.disableLoadMoreListener()
             }
 
-            mView.showGenreList(viewModel.genreMap.values()
-                    .sortedBy { it.name }
-                    .map {
-                        GenreListItemModel(it, viewModel.selectedGenreMap.containsKey(it.id))
-                    })
-
         } ?: fetchUpcomingMovieList()
     }
 
     private fun fetchUpcomingMovieList() {
-        mView.showLoadingUpcomingMoviesIndicator()
-        this.upcomingMoviesViewModel?.let {
-            val request = if (it.filter == HomeMovieSortEnum.POPULAR)
-                movieRepository.getMoviesByPopularityWithGenreAndConfiguration(it.pageIndex)
-            else
-                movieRepository.getMoviesByRatingWithGenreAndConfiguration(it.pageIndex)
+        mView.showLoadingFavoriteMoviesIndicator()
 
-            mRequest = request.doAfterTerminate {
-                mView.hideLoadingIndicator()
-                mRequest = null
-            }
+
+
+        this.upcomingMoviesViewModel?.let {
+            mRequest = movieRepository.getFavoriteMovieListWithGenreAndConfiguration()
+                    .doAfterTerminate {
+                        mView.hideLoadingIndicator()
+                        mRequest = null
+                    }
                     .subscribe({ response ->
                         handleSuccessfulUpcomingMoviesLoading(response)
                     }, { error ->
@@ -103,12 +92,6 @@ constructor(private var movieRepository: MovieRepository, private var commonRepo
             }
 
             if (it.pageIndex == ApiUtil.INITIAL_PAGE_INDEX) {
-                mView.showGenreList(response.genreListModel.values()
-                        .sortedBy { it.name }
-                        .map {
-                            GenreListItemModel(it, true)
-                        })
-
                 it.selectedGenreMap = response.genreListModel.clone()
                 it.genreMap = response.genreListModel
             }

@@ -7,9 +7,9 @@ import com.themovielist.model.view.HomeFullMovieListViewModel
 import com.themovielist.model.view.MovieImageGenreViewModel
 
 
-object HomeFullMovieListContract {
+object FavoriteContract {
     interface View {
-        fun showLoadingUpcomingMoviesIndicator()
+        fun showLoadingFavoriteMoviesIndicator()
         fun showErrorLoadingUpcomingMovies(error: Throwable)
         fun addMoviesToList(movieList: List<MovieImageGenreViewModel>, configurationResponseModel: ConfigurationImageResponseModel)
         fun hideLoadingIndicator()
@@ -18,14 +18,12 @@ object HomeFullMovieListContract {
         fun disableLoadMoreListener()
         fun showEmptyListMessage()
         fun scrollToItemPosition(firstVisibleItemPosition: Int)
-        fun showGenreList(genreListItemList: List<GenreListItemModel>)
         fun replaceMovieList(movieList: List<MovieImageGenreViewModel>, imageResponseModel: ConfigurationImageResponseModel)
-        fun setTitleByFilter(filter: Int)
         fun setListViewType(useListViewType: Boolean)
     }
 
     interface Presenter: BasePresenter<View> {
-        fun start(upcomingMoviesViewModel: HomeFullMovieListViewModel?, filter: Int)
+        fun start(upcomingMoviesViewModel: HomeFullMovieListViewModel?)
         fun tryAgain()
         fun showMovieDetail(movieImageGenreViewModel: MovieImageGenreViewModel)
         fun onStop(firstVisibleItemPosition: Int)
