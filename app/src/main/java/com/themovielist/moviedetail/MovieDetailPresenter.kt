@@ -105,4 +105,5 @@ internal constructor(movieRepository: MovieRepository, private val mCommonReposi
     }
 
     override fun tryFecthMovieDetailAgain() = fetchMovieDetailInfo()
+    override fun getMovieName() = mMovieWithGenreModel.movieModel.title
 }

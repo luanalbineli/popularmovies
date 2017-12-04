@@ -23,6 +23,7 @@ import com.themovielist.moviedetail.review.MovieDetailReviewViewHolder
 import com.themovielist.moviedetail.review.MovieReviewListDialog
 import com.themovielist.moviedetail.trailer.MovieTrailerListDialog
 import com.themovielist.moviedetail.trailer.MovieTrailerViewHolder
+import com.themovielist.recommendation.MovieRecommendationFragment
 import com.themovielist.ui.MovieDetailSectionView
 import com.themovielist.util.*
 import kotlinx.android.synthetic.main.movie_detail_activity.*
@@ -46,6 +47,8 @@ class MovieDetailActivity : BaseDaggerActivity<MovieDetailContract.View>(), Movi
     private var mFavoriteMenuItem: MenuItem? = null
 
     private val mMovieCastFragment by lazy { fragmentManager.findFragmentById(R.id.fragmentMovieDetailCast) as MovieCastListFragment }
+
+    private val mMovieRecommendationListFragment by lazy { fragmentManager.findFragmentById(R.id.fragmentMovieRecommendationList) as MovieRecommendationFragment }
 
     override fun onInjectDependencies(applicationComponent: ApplicationComponent) {
         DaggerFragmentComponent.builder()
@@ -73,6 +76,8 @@ class MovieDetailActivity : BaseDaggerActivity<MovieDetailContract.View>(), Movi
 
         mMovieCastFragment.movieId = movieModel.id
 
+        mMovieRecommendationListFragment.movieId = movieModel.id
+
         mPresenter.start(movieModel)
     }
 
@@ -88,20 +93,20 @@ class MovieDetailActivity : BaseDaggerActivity<MovieDetailContract.View>(), Movi
             true
         }
 
-        /*var isShow = false
+        var isShow = false
         var scrollRange = -1
         appBarLayoutMovieDetail.addOnOffsetChangedListener({ appBarLayout, verticalOffset ->
             if (scrollRange == -1) {
                 scrollRange = appBarLayout.totalScrollRange
             }
             if (scrollRange + verticalOffset == 0) {
-                collapse_toolbar.title = "It"
+                collapse_toolbar.title = mPresenter.getMovieName()
                 isShow = true
             } else if(isShow) {
                 collapse_toolbar.title = " "
                 isShow = false
             }
-        })*/
+        })
     }
 
     override fun showMovieInfo(movieWithGenreModel: MovieWithGenreModel) {

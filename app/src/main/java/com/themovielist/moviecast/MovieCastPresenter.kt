@@ -4,9 +4,9 @@ import com.themovielist.model.MovieCastModel
 import com.themovielist.model.response.ConfigurationResponseModel
 import com.themovielist.model.response.MovieCreditsResponseModel
 import com.themovielist.model.view.MovieCastViewModel
+import com.themovielist.recommendation.MovieRecommendationContract
 import com.themovielist.repository.movie.CommonRepository
 import com.themovielist.repository.movie.MovieRepository
-import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.disposables.Disposable
 import io.reactivex.functions.BiFunction

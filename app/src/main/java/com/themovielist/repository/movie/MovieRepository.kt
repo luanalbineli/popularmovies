@@ -158,6 +158,9 @@ internal constructor(mRetrofit: Retrofit, private val mApplicationContext: Popul
     fun getMovieCreditsByMovieId(movieId: Int): Single<MovieCreditsResponseModel> =
             observeOnMainThread(mApiInstance.getMovieCredits(movieId))
 
+    fun getMovieRecommendationsByMovieId(movieId: Int): Single<PaginatedArrayResponseModel<MovieModel>> =
+            observeOnMainThread(mApiInstance.getMovieRecommendationsByMovieId(movieId))
+
     override val getApiInstanceType: Class<IMovieService>
         get() = IMovieService::class.java
 

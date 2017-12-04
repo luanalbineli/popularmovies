@@ -10,6 +10,7 @@ import com.themovielist.base.BasePresenter
 import com.themovielist.enums.RequestStatusDescriptor
 import com.themovielist.event.FavoriteMovieEvent
 import com.themovielist.favorite.FavoriteFragment
+import com.themovielist.home.fulllist.HomeFullMovieListActivity
 import com.themovielist.home.partiallist.HomeMovieListFragment
 import com.themovielist.injector.components.ApplicationComponent
 import com.themovielist.injector.components.DaggerFragmentComponent
@@ -99,7 +100,7 @@ class HomeFragment : BaseFragment<HomeContract.View>(), HomeContract.View {
     }
 
     override fun seeAllMoviesSortedBy(homeMovieSort: Int) {
-        val intent = FavoriteFragment.getIntent(activity, homeMovieSort)
+        val intent = HomeFullMovieListActivity.getIntent(activity, homeMovieSort)
         startActivity(intent)
     }
 

@@ -22,8 +22,8 @@ The application was divided into four tabs:
   * :heavy_minus_sign: Home - The default tab of the application
     * :white_check_mark: List of the first twenty movies ordered by popularity;
     * :white_check_mark: List of the first twenty movies ordered by rating;
-    * :soon: Option to see all movies ordered by popularity (infinite scroll);
-    * :soon: Option to see all movies ordered by rating (infinite scroll);
+    * :white_check_mark: Option to see all movies ordered by popularity (infinite scroll);
+    * :white_check_mark: Option to see all movies ordered by rating (infinite scroll);
 
   * :x: Browse - Tab to the user search for new movies
     * :x: Filter by genre
@@ -33,9 +33,9 @@ The application was divided into four tabs:
     * :x: List of the movies in theaters
     * :x: Show the upcoming movies
 
-  * :x: Favorite
-    * :x: List your favorite movies
-    * :x: Option to select the order by (default, release date)
+  * :soon: Favorite
+    * :soon: List your favorite movies
+    * :soon: Option to select the sorted by (added order, release date)
 
  * :heavy_minus_sign: Movie detail screen
    * :white_check_mark: Show the backdrop and poster;
@@ -46,7 +46,7 @@ The application was divided into four tabs:
    * :white_check_mark: Show all trailers;
    * :white_check_mark: Option to favorite the movie;
    * :white_check_mark: Show the cast;
-   * :x: Show recommendations (of movies, based on the movie you are seeing);
+   * :white_check_mark: Show recommendations (of movies, based on the movie you are seeing);
    
 ### Building yourself
 

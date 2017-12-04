@@ -58,6 +58,10 @@ class HomeMovieListFragment : BaseRecyclerViewFragment<HomeMovieListContract.Vie
         mAdapter.showErrorMessage()
     }
 
+    fun hideLoadingIndicator() {
+        mAdapter.hideLoadingIndicator()
+    }
+
     companion object {
         fun getInstance(): HomeMovieListFragment = HomeMovieListFragment()
     }

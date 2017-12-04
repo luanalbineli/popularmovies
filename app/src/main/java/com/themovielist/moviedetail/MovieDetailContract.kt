@@ -46,5 +46,6 @@ abstract class MovieDetailContract {
 
         fun showAllTrailers()
         fun tryFecthMovieDetailAgain()
+        fun getMovieName(): String
     }
 }
