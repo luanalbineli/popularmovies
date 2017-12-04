@@ -35,10 +35,11 @@ interface CommonMethods {
     }
 
     fun configureToolbarBackButton(context: Context, toolbar: Toolbar, onBackPressed: () -> Unit) {
-        val drawable = ContextCompat.getDrawable(context, R.drawable.arrow_left)
-        UIUtil.paintDrawable(drawable, context.resources.getColor(android.R.color.white))
-        toolbar.navigationIcon = drawable
-        toolbar.setNavigationOnClickListener { _ -> onBackPressed() }
+        ContextCompat.getDrawable(context, R.drawable.arrow_left)?.let {
+            UIUtil.paintDrawable(it, context.resources.getColor(android.R.color.white))
+            toolbar.navigationIcon = it
+            toolbar.setNavigationOnClickListener { _ -> onBackPressed() }
+        }
     }
 
     private fun <T: Fragment> tryToRetrieveFragmentInstance(fragmentManager: FragmentManager, fragmentTag: String) : T? {

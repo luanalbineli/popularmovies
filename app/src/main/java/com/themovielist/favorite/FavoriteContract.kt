@@ -30,5 +30,6 @@ object FavoriteContract {
         fun loadMoreMovies()
         fun onChangeSelectedGenre(genreListItemModel: GenreListItemModel)
         fun onChangeListViewType(useListViewType: Boolean)
+        fun handleSortMenuClick()
     }
 }

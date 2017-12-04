@@ -1,7 +1,5 @@
 package com.themovielist.favorite
 
-import android.util.SparseArray
-import com.themovielist.model.GenreModel
 import com.themovielist.model.response.ConfigurationImageResponseModel
 import com.themovielist.model.response.HomeFullMovieListResponseModel
 import com.themovielist.model.view.GenreListItemModel
@@ -11,7 +9,6 @@ import com.themovielist.repository.movie.CommonRepository
 import com.themovielist.repository.movie.MovieRepository
 import com.themovielist.util.ApiUtil
 import com.themovielist.util.Defaults
-import com.themovielist.util.containsKey
 import io.reactivex.disposables.Disposable
 import timber.log.Timber
 import javax.inject.Inject
@@ -35,13 +32,13 @@ constructor(private var movieRepository: MovieRepository, private var commonRepo
     private var mHasError = false
 
     override fun start(upcomingMoviesViewModel: HomeFullMovieListViewModel?) {
-        this.upcomingMoviesViewModel = upcomingMoviesViewModel ?: HomeFullMovieListViewModel(1, ApiUtil.INITIAL_PAGE_INDEX)
+        this.upcomingMoviesViewModel = upcomingMoviesViewModel ?: HomeFullMovieListViewModel(Defaults.FAVORITE_LIST_SORT, ApiUtil.INITIAL_PAGE_INDEX)
 
         val useListViewType = commonRepository.getUseListViewType(Defaults.USE_LIST_VIEW_TYPE)
         mView.setListViewType(useListViewType)
 
         upcomingMoviesViewModel?.let { viewModel ->
-            filterUpcomingMovieList(viewModel.movieList, viewModel.imageResponseModel!!, viewModel.genreMap, viewModel.selectedGenreMap, true)
+            filterUpcomingMovieList(viewModel.movieList, viewModel.imageResponseModel!!, true)
             mView.scrollToItemPosition(viewModel.firstVisibleItemPosition)
 
             if (viewModel.hasMorePages) {
@@ -55,8 +52,6 @@ constructor(private var movieRepository: MovieRepository, private var commonRepo
 
     private fun fetchUpcomingMovieList() {
         mView.showLoadingFavoriteMoviesIndicator()
-
-
 
         this.upcomingMoviesViewModel?.let {
             mRequest = movieRepository.getFavoriteMovieListWithGenreAndConfiguration()
@@ -105,7 +100,7 @@ constructor(private var movieRepository: MovieRepository, private var commonRepo
         }
         viewModel.movieList.addAll(finalMovieList)
         viewModel.imageResponseModel = response.configurationResponseModel.imageResponseModel
-        filterUpcomingMovieList(finalMovieList, response.configurationResponseModel.imageResponseModel, viewModel.genreMap, viewModel.selectedGenreMap, false)
+        filterUpcomingMovieList(finalMovieList, response.configurationResponseModel.imageResponseModel, false)
     }
 
     private fun handleErrorLoadingUpcomingMovies(error: Throwable) {
@@ -153,26 +148,15 @@ constructor(private var movieRepository: MovieRepository, private var commonRepo
                 it.selectedGenreMap.delete(genreListItemModel.genreModel.id)
             }
 
-            filterUpcomingMovieList(it.movieList, it.imageResponseModel!!, it.genreMap, it.selectedGenreMap, true)
+            filterUpcomingMovieList(it.movieList, it.imageResponseModel!!, true)
         }
     }
 
-    private fun filterUpcomingMovieList(upcomingMovieList: List<MovieImageGenreViewModel>, imageResponseModel: ConfigurationImageResponseModel, genreMap: SparseArray<GenreModel>, selectedGenreMap: SparseArray<GenreModel>, replaceData: Boolean) {
-        val finalUpcomingMovieList = if (genreMap.size() == selectedGenreMap.size()) {
-            upcomingMovieList
-        } else {
-            upcomingMovieList.filter {
-                // Always consider null genres
-                it.genreList == null || it.genreList.any {
-                    selectedGenreMap.containsKey(it.id)
-                }
-            }
-        }
-
+    private fun filterUpcomingMovieList(favoriteMovieList: List<MovieImageGenreViewModel>, imageResponseModel: ConfigurationImageResponseModel, replaceData: Boolean) {
         if (replaceData) {
-            mView.replaceMovieList(finalUpcomingMovieList, imageResponseModel)
+            mView.replaceMovieList(favoriteMovieList, imageResponseModel)
         } else {
-            mView.addMoviesToList(finalUpcomingMovieList, imageResponseModel)
+            mView.addMoviesToList(favoriteMovieList, imageResponseModel)
         }
     }
 
@@ -182,5 +166,13 @@ constructor(private var movieRepository: MovieRepository, private var commonRepo
 
     override fun onChangeListViewType(useListViewType: Boolean) {
         commonRepository.putUseListViewType(useListViewType)
+    }
+
+    override fun handleSortMenuClick() {
+
+    }
+
+    fun onChangeListSort(index: Int) {
+
     }
 }

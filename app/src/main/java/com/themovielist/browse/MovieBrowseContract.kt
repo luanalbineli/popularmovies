@@ -4,18 +4,22 @@ import com.themovielist.base.BasePresenter
 import com.themovielist.model.MovieCastModel
 import com.themovielist.model.MovieModel
 import com.themovielist.model.MovieSizeModel
+import com.themovielist.model.response.ConfigurationImageResponseModel
+import com.themovielist.model.response.PaginatedArrayResponseModel
 import com.themovielist.model.view.MovieCastViewModel
+import com.themovielist.model.view.MovieImageGenreViewModel
 import com.themovielist.model.view.MovieSuggestionModel
 
 interface MovieBrowseContract {
     interface View {
         fun showLoadingIndicator()
         fun hideLoadingIndicator()
-        fun showMovieCastList(movieCastList: List<MovieCastModel>, profileSizeList: List<MovieSizeModel>)
         fun showErrorLoadingMovieCast(error: Throwable)
         fun showLoadingQueryResultIndicator()
         fun showSuggestion(suggestionList: List<MovieModel>)
         fun hideLoadingQueryResultIndicator()
+        fun closeSuggestion()
+        fun showMovieList(movieList: List<MovieImageGenreViewModel>, configurationImageResponseModel: ConfigurationImageResponseModel)
     }
 
     interface Presenter : BasePresenter<View> {

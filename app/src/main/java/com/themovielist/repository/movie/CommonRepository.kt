@@ -12,6 +12,7 @@ import com.themovielist.repository.RepositoryBase
 import com.themovielist.util.mapToListNotNull
 import io.reactivex.Single
 import retrofit2.Retrofit
+import timber.log.Timber
 import javax.inject.Inject
 
 class CommonRepository
@@ -24,9 +25,12 @@ constructor(retrofit: Retrofit, var applicationContext: PopularMovieApplication)
 
     @Synchronized
     fun getAllGenres(): Single<SparseArray<GenreModel>> {
+        Timber.d("Getting the genre map")
         return GENRE_MAP?.let {
+            Timber.d("The map is cached")
             Single.just(it)
         } ?: {
+            Timber.d("The map is not cached. There is a request for it? ${mGetAllGenresRequest != null}")
             mGetAllGenresRequest ?: observeOnMainThread(mApiInstance.getAllGenres()).map { result ->
                 SparseArray<GenreModel>().also { sparseArray ->
                     result.genreList.forEach { genreModel -> sparseArray.put(genreModel.id, genreModel) }
@@ -44,12 +48,18 @@ constructor(retrofit: Retrofit, var applicationContext: PopularMovieApplication)
 
     @Synchronized
     fun getConfiguration(): Single<ConfigurationResponseModel> {
+        Timber.d("Getting the configuration model")
         return mConfigurationResponseModel?.let {
+            Timber.d("The configuration model is cached")
             Single.just(it)
         } ?: {
+            Timber.d("The configuration model is no cached. And the request? ${mConfigurationRequest != null}")
             mConfigurationRequest ?: observeOnMainThread(mApiInstance.getConfiguration()).also {
                 mConfigurationRequest = it
-                it.subscribe({ response -> mConfigurationResponseModel = response })
+                it.subscribe({ response ->
+                    mConfigurationResponseModel = response
+                    mConfigurationRequest = null
+                })
             }
         }()
     }

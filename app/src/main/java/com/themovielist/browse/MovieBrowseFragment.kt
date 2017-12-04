@@ -10,11 +10,13 @@ import com.themovielist.base.BaseFragment
 import com.themovielist.base.BasePresenter
 import com.themovielist.injector.components.ApplicationComponent
 import com.themovielist.injector.components.DaggerFragmentComponent
-import com.themovielist.model.MovieCastModel
 import com.themovielist.model.MovieModel
-import com.themovielist.model.MovieSizeModel
+import com.themovielist.model.response.ConfigurationImageResponseModel
 import com.themovielist.model.view.MovieCastViewModel
+import com.themovielist.model.view.MovieImageGenreViewModel
 import com.themovielist.model.view.MovieSuggestionModel
+import com.themovielist.movielist.MovieListFragment
+import com.themovielist.util.setDisplay
 import kotlinx.android.synthetic.main.movie_browse_fragment.*
 import javax.inject.Inject
 
@@ -26,6 +28,8 @@ class MovieBrowseFragment : BaseFragment<MovieBrowseContract.View>(), MovieBrows
 
     @Inject
     lateinit var mPresenter: MovieBrowsePresenter
+
+    lateinit var mMovieListFragment: MovieListFragment
 
     override fun onInjectDependencies(applicationComponent: ApplicationComponent) {
         DaggerFragmentComponent.builder()
@@ -41,6 +45,13 @@ class MovieBrowseFragment : BaseFragment<MovieBrowseContract.View>(), MovieBrows
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        configureComponents()
+
+        val movieCastViewModel = buildMovieCastViewModel(savedInstanceState)
+        mPresenter.start(movieCastViewModel)
+    }
+
+    private fun configureComponents() {
         fsvMovieBrowseSearch.setOnQueryChangeListener { _, newQuery ->
             mPresenter.onQueryChanged(newQuery)
         }
@@ -62,8 +73,10 @@ class MovieBrowseFragment : BaseFragment<MovieBrowseContract.View>(), MovieBrows
             }
         })
 
-        val movieCastViewModel = buildMovieCastViewModel(savedInstanceState)
-        mPresenter.start(movieCastViewModel)
+        mMovieListFragment = fragmentManager.findFragmentById(R.id.fragmentBrowseMovieList) as? MovieListFragment ?:
+                childFragmentManager.findFragmentById(R.id.fragmentBrowseMovieList) as MovieListFragment
+
+        mMovieListFragment.useListLayout()
     }
 
     override fun showLoadingQueryResultIndicator() {
@@ -86,17 +99,26 @@ class MovieBrowseFragment : BaseFragment<MovieBrowseContract.View>(), MovieBrows
         }
     }
 
-    override fun showErrorLoadingMovieCast(error: Throwable) {
+    override fun closeSuggestion() {
+        fsvMovieBrowseSearch.closeMenu(false)
     }
 
-    override fun showMovieCastList(movieCastList: List<MovieCastModel>, profileSizeList: List<MovieSizeModel>) {
+    override fun showMovieList(movieList: List<MovieImageGenreViewModel>, configurationImageResponseModel: ConfigurationImageResponseModel) {
+        blah.setDisplay(false)
+        flMovieListContainer.setDisplay(true)
+        mMovieListFragment.replaceMoviesToList(movieList, configurationImageResponseModel)
+    }
+
+    override fun showErrorLoadingMovieCast(error: Throwable) {
+        mMovieListFragment.showErrorLoadingMovies()
     }
 
     override fun hideLoadingIndicator() {
+        mMovieListFragment.hideLoadingIndicator()
     }
 
     override fun showLoadingIndicator() {
-        //fragmentBrowseMovieList()
+        mMovieListFragment.showLoadingIndicator()
     }
 
     override fun onStop() {

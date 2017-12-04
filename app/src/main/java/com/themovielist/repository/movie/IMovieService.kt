@@ -30,7 +30,7 @@ interface IMovieService {
     fun getMovieCredits(@Path("movieId") movieId: Int): Single<MovieCreditsResponseModel>
 
     @GET("search/movie")
-    fun queryMovies(@Query("query") query: String): Single<PaginatedArrayResponseModel<MovieModel>>
+    fun queryMovies(@Query("query") query: String, @Query("page") page: Int): Single<PaginatedArrayResponseModel<MovieModel>>
 
     @GET("movie/{movieId}/recommendations")
     fun getMovieRecommendationsByMovieId(@Path("movieId") movieId: Int): Single<PaginatedArrayResponseModel<MovieModel>>

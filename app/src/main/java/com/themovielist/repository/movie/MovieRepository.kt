@@ -52,6 +52,10 @@ internal constructor(mRetrofit: Retrofit, private val mApplicationContext: Popul
                 })))
     }
 
+    fun getFavoriteMovieListWithGenreAndConfiguration(newQuery: String, pageIndex: Int): Single<HomeFullMovieListResponseModel> {
+        return getMoviesWithGenreAndConfiguration(queryMovies(newQuery, pageIndex))
+    }
+
     fun getMoviesByPopularityWithGenreAndConfiguration(pageIndex: Int) =
             getMoviesWithGenreAndConfiguration(mApiInstance.getPopularList(pageIndex))
 
@@ -168,6 +172,6 @@ internal constructor(mRetrofit: Retrofit, private val mApplicationContext: Popul
     fun getMovieDetail(movieId: Int): Observable<MovieDetailResponseModel> =
             observeOnMainThread(mApiInstance.getMovieDetail(movieId))
 
-    fun queryMovies(newQuery: String): Single<PaginatedArrayResponseModel<MovieModel>> =
-            observeOnMainThread(mApiInstance.queryMovies(newQuery))
+    fun queryMovies(newQuery: String, page: Int): Single<PaginatedArrayResponseModel<MovieModel>> =
+            observeOnMainThread(mApiInstance.queryMovies(newQuery, page))
 }
