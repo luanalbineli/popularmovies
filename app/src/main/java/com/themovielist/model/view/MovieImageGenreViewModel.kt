@@ -10,8 +10,7 @@ class MovieImageGenreViewModel(val genreList: List<GenreModel>?, movieModel: Mov
     constructor(parcel: Parcel) : this(
             parcel.createTypedArrayList(GenreModel),
             parcel.readParcelable<MovieModel>(MovieModel::class.java.classLoader),
-            parcel.readBoolean()) {
-    }
+            parcel.readBoolean())
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
         parcel.writeTypedList(genreList)

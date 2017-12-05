@@ -29,6 +29,10 @@
         <item name="android:fontFamily">sans-serif-light</item>
     </style>
 
+    <style name="LightSmallText" parent="Base.TextAppearance.AppCompat.Small">
+        <item name="android:fontFamily">sans-serif-light</item>
+    </style>
+
     <style name="ThinSmallText" parent="Base.TextAppearance.AppCompat.Small">
         <item name="android:fontFamily">sans-serif-thin</item>
     </style>

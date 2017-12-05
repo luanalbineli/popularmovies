@@ -1,8 +1,9 @@
 package com.themovielist.util
 
 import android.os.Parcel
+import java.util.*
 
-private val NULL_VALUE = 1.toByte()
+private const val NULL_VALUE = Byte.MIN_VALUE
 
 fun Parcel.writeIntArrayWithLength(intArray: IntArray) {
     this.writeInt(intArray.size)
@@ -15,6 +16,8 @@ fun Parcel.readIntArray(): IntArray {
     return intArray
 }
 
+// ##################### INT #####################
+
 fun Parcel.writeNullableInt(value: Int?) {
     this.writeByte(if (value == null) NULL_VALUE else 0)
     if (value != null) {
@@ -22,15 +25,32 @@ fun Parcel.writeNullableInt(value: Int?) {
     }
 }
 
+fun Parcel.readNullableInt(): Int? {
+    if (this.readByte() == NULL_VALUE) {
+        return null
+    }
+    return this.readInt()
+}
+
+// ##################### BOOLEAN #####################
+
 fun Parcel.readBoolean(): Boolean = this.readInt() == 1
 
 fun Parcel.writeBoolean(boolean: Boolean) {
     this.writeInt(if (boolean) 1 else 0)
 }
 
-fun Parcel.readNullableInt(): Int? {
-    if (this.readByte() == NULL_VALUE) {
-        return null
+// ##################### DATE #####################
+
+fun Parcel.readNullableDate(): Date? {
+    val nullableDate = this.readLong()
+    return if (nullableDate == NULL_VALUE.toLong()) {
+        null
+    } else {
+        Date(nullableDate)
     }
-    return this.readInt()
+}
+
+fun Parcel.writeNullableDate(date: Date?) {
+    this.writeLong(date?.time ?: NULL_VALUE.toLong())
 }

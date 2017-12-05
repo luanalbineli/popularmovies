@@ -4,7 +4,7 @@ import android.util.SparseArray
 import com.themovielist.enums.HomeMovieSortEnum
 import com.themovielist.model.GenreModel
 import com.themovielist.model.response.ConfigurationImageResponseModel
-import com.themovielist.model.response.HomeFullMovieListResponseModel
+import com.themovielist.model.response.MovieListResponseModel
 import com.themovielist.model.view.GenreListItemModel
 import com.themovielist.model.view.HomeFullMovieListViewModel
 import com.themovielist.model.view.MovieImageGenreViewModel
@@ -84,9 +84,9 @@ constructor(private var movieRepository: MovieRepository, private var commonRepo
 
     }
 
-    private fun handleSuccessfulUpcomingMoviesLoading(response: HomeFullMovieListResponseModel) {
+    private fun handleSuccessfulUpcomingMoviesLoading(response: MovieListResponseModel) {
         upcomingMoviesViewModel?.let {
-            if (response.upcomingMovieList.results.isEmpty()) {
+            if (response.movieWithGenreList.results.isEmpty()) {
                 if (it.pageIndex == ApiUtil.INITIAL_PAGE_INDEX) {
                     mView.showEmptyListMessage()
                 }
@@ -94,9 +94,9 @@ constructor(private var movieRepository: MovieRepository, private var commonRepo
                 buildMovieImageGenreViewModel(it, response)
             }
 
-            Timber.d("handleSuccessfulUpcomingMoviesLoading - Have more pages: ${response.upcomingMovieList.hasMorePages()}")
-            it.hasMorePages = response.upcomingMovieList.hasMorePages()
-            if (response.upcomingMovieList.hasMorePages()) {
+            Timber.d("handleSuccessfulUpcomingMoviesLoading - Have more pages: ${response.movieWithGenreList.hasMorePages()}")
+            it.hasMorePages = response.movieWithGenreList.hasMorePages()
+            if (response.movieWithGenreList.hasMorePages()) {
                 mView.enableLoadMoreListener()
             } else {
                 mView.disableLoadMoreListener()
@@ -115,8 +115,8 @@ constructor(private var movieRepository: MovieRepository, private var commonRepo
         }
     }
 
-    private fun buildMovieImageGenreViewModel(viewModel: HomeFullMovieListViewModel, response: HomeFullMovieListResponseModel) {
-        val finalMovieList = response.upcomingMovieList.results.map {
+    private fun buildMovieImageGenreViewModel(viewModel: HomeFullMovieListViewModel, response: MovieListResponseModel) {
+        val finalMovieList = response.movieWithGenreList.results.map {
             val genreList = commonRepository.fillMovieGenresList(it.movieModel, response.genreListModel)
             MovieImageGenreViewModel(genreList, it.movieModel, response.favoriteMovieIds.contains(it.movieModel.id))
         }

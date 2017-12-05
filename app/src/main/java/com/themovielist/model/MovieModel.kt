@@ -30,9 +30,6 @@ open class MovieModel constructor(@SerializedName("id")
                                   @SerializedName("backdrop_path")
                                   var backdropPath: String = "",
 
-                                  @SerializedName("vote_count")
-                                  var voteCount: Int = 0,
-
                                   @SerializedName("genre_ids")
                                   val genreIdList: IntArray) : Parcelable {
 
@@ -42,9 +39,8 @@ open class MovieModel constructor(@SerializedName("id")
             parcel.readString(),
             parcel.readString(),
             parcel.readDouble(),
-            Date(parcel.readLong()),
+            parcel.readNullableDate(),
             parcel.readString(),
-            parcel.readInt(),
             parcel.readIntArray())
 
     private constructor(contentValues: ContentValues) : this(
@@ -55,7 +51,6 @@ open class MovieModel constructor(@SerializedName("id")
             contentValues.getAsDouble(MovieContract.MovieEntry.COLUMN_VOTE_AVERAGE),
             Date(contentValues.getAsLong(MovieContract.MovieEntry.COLUMN_RELEASE_DATE)),
             contentValues.getAsString(MovieContract.MovieEntry.COLUMN_BACKDROP_PATH),
-            contentValues.getAsInteger(MovieContract.MovieEntry.COLUMN_VOTE_COUNT),
             contentValues.getAsIntArray(MovieContract.MovieEntry.COLUMN_GENRE_ID_LIST))
 
     private constructor(cursor: Cursor) : this(
@@ -66,7 +61,6 @@ open class MovieModel constructor(@SerializedName("id")
             cursor.getDouble(cursor.getColumnIndex(MovieContract.MovieEntry.COLUMN_VOTE_AVERAGE)),
             Date(cursor.getLong(cursor.getColumnIndex(MovieContract.MovieEntry.COLUMN_RELEASE_DATE))),
             cursor.getString(cursor.getColumnIndex(MovieContract.MovieEntry.COLUMN_BACKDROP_PATH)),
-            cursor.getInt(cursor.getColumnIndex(MovieContract.MovieEntry.COLUMN_VOTE_COUNT)),
             cursor.getIntArray(MovieContract.MovieEntry.COLUMN_VOTE_COUNT))
 
     fun toContentValues(): ContentValues {
@@ -81,11 +75,9 @@ open class MovieModel constructor(@SerializedName("id")
 
         contentValues.put(MovieContract.MovieEntry.COLUMN_VOTE_AVERAGE, voteAverage)
 
-        contentValues.put(MovieContract.MovieEntry.COLUMN_RELEASE_DATE, releaseDate!!.time)
+        contentValues.put(MovieContract.MovieEntry.COLUMN_RELEASE_DATE, releaseDate?.time)
 
         contentValues.put(MovieContract.MovieEntry.COLUMN_BACKDROP_PATH, backdropPath)
-
-        contentValues.put(MovieContract.MovieEntry.COLUMN_VOTE_COUNT, voteCount)
 
         contentValues.put(MovieContract.MovieEntry.COLUMN_GENRE_ID_LIST, genreIdList)
 
@@ -98,9 +90,8 @@ open class MovieModel constructor(@SerializedName("id")
         parcel.writeString(overview)
         parcel.writeString(title)
         parcel.writeDouble(voteAverage)
-        parcel.writeLong(releaseDate!!.time)
+        parcel.writeNullableDate(releaseDate)
         parcel.writeString(backdropPath)
-        parcel.writeInt(voteCount)
         parcel.writeIntArrayWithLength(genreIdList)
     }
 

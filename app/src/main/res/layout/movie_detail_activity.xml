@@ -106,8 +106,8 @@
 
                 <ImageView
                     android:id="@+id/ivMovieDetailRatingIcon"
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
+                    android:layout_width="@dimen/default_icon_size"
+                    android:layout_height="@dimen/default_icon_size"
                     android:layout_marginStart="8dp"
                     android:layout_marginTop="16dp"
                     app:layout_constraintEnd_toStartOf="@+id/ivMovieDetailTimeIcon"
@@ -117,8 +117,8 @@
 
                 <ImageView
                     android:id="@+id/ivMovieDetailTimeIcon"
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
+                    android:layout_width="@dimen/default_icon_size"
+                    android:layout_height="@dimen/default_icon_size"
                     android:layout_marginStart="8dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@+id/ivMovieDetailRatingIcon"
@@ -127,10 +127,10 @@
 
                 <TextView
                     android:id="@+id/tvMovieDetailRating"
+                    style="@style/LightSmallText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="4dp"
-                    android:fontFamily="sans-serif-light"
                     app:layout_constraintEnd_toEndOf="@+id/ivMovieDetailRatingIcon"
                     app:layout_constraintStart_toStartOf="@+id/ivMovieDetailRatingIcon"
                     app:layout_constraintTop_toBottomOf="@+id/ivMovieDetailRatingIcon"
@@ -138,10 +138,10 @@
 
                 <TextView
                     android:id="@+id/tvMovieDetailRuntime"
+                    style="@style/LightSmallText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="4dp"
-                    android:fontFamily="sans-serif-light"
                     app:layout_constraintEnd_toEndOf="@+id/ivMovieDetailTimeIcon"
                     app:layout_constraintStart_toStartOf="@+id/ivMovieDetailTimeIcon"
                     app:layout_constraintTop_toBottomOf="@+id/ivMovieDetailTimeIcon"

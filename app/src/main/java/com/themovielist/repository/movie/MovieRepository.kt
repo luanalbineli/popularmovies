@@ -1,6 +1,5 @@
 package com.themovielist.repository.movie
 
-
 import android.util.SparseArray
 import com.themovielist.PopularMovieApplication
 import com.themovielist.model.GenreModel
@@ -25,8 +24,10 @@ import javax.inject.Inject
 
 class MovieRepository @Inject
 internal constructor(mRetrofit: Retrofit, private val mApplicationContext: PopularMovieApplication, private val commonRepository: CommonRepository) : RepositoryBase<IMovieService>(mRetrofit) {
+    override val getApiInstanceType: Class<IMovieService>
+        get() = IMovieService::class.java
 
-    fun getFavoriteMovieListWithGenreAndConfiguration(): Single<HomeFullMovieListResponseModel> {
+    fun getFavoriteMovieListWithGenreAndConfiguration(): Single<MovieListResponseModel> {
         return getMoviesWithGenreAndConfiguration(
                 observeOnMainThread(Single.create({ emitter ->
                     mApplicationContext.safeContentResolver(emitter) {
@@ -52,7 +53,7 @@ internal constructor(mRetrofit: Retrofit, private val mApplicationContext: Popul
                 })))
     }
 
-    fun getFavoriteMovieListWithGenreAndConfiguration(newQuery: String, pageIndex: Int): Single<HomeFullMovieListResponseModel> {
+    fun getFavoriteMovieListWithGenreAndConfiguration(newQuery: String, pageIndex: Int): Single<MovieListResponseModel> {
         return getMoviesWithGenreAndConfiguration(queryMovies(newQuery, pageIndex))
     }
 
@@ -68,7 +69,7 @@ internal constructor(mRetrofit: Retrofit, private val mApplicationContext: Popul
     fun getPopularList(pageIndex: Int) =
             observeOnMainThread(mApiInstance.getPopularList(pageIndex))
 
-    private fun getMoviesWithGenreAndConfiguration(movieRequest: Single<PaginatedArrayResponseModel<MovieModel>>): Single<HomeFullMovieListResponseModel> {
+    fun getMoviesWithGenreAndConfiguration(movieRequest: Single<PaginatedArrayResponseModel<MovieModel>>): Single<MovieListResponseModel> {
         val configurationRequest = commonRepository.getConfiguration()
         val genreListRequest = commonRepository.getAllGenres()
         val favoriteMovies = getFavoriteMovieIds()
@@ -83,7 +84,7 @@ internal constructor(mRetrofit: Retrofit, private val mApplicationContext: Popul
                             genreList: SparseArray<GenreModel>,
                             favoriteMovieIds: Array<Int> ->
                     val movieWithGenreModel = commonRepository.fillMovieGenresList(upcomingMovieList, genreList)
-                    HomeFullMovieListResponseModel(configurationResponseModel, movieWithGenreModel, genreList, favoriteMovieIds)
+                    MovieListResponseModel(configurationResponseModel, movieWithGenreModel, genreList, favoriteMovieIds)
                 }))
     }
 
@@ -165,9 +166,6 @@ internal constructor(mRetrofit: Retrofit, private val mApplicationContext: Popul
 
     fun getMovieRecommendationsByMovieId(movieId: Int): Single<PaginatedArrayResponseModel<MovieModel>> =
             observeOnMainThread(mApiInstance.getMovieRecommendationsByMovieId(movieId))
-
-    override val getApiInstanceType: Class<IMovieService>
-        get() = IMovieService::class.java
 
     fun getMovieDetail(movieId: Int): Observable<MovieDetailResponseModel> =
             observeOnMainThread(mApiInstance.getMovieDetail(movieId))

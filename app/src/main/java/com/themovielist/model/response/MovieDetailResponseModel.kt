@@ -7,8 +7,8 @@ import java.util.*
 
 class MovieDetailResponseModel(id: Int = 0, posterPath: String, overview: String,
                                title: String, voteAverage: Double, releaseDate: Date? = null,
-                               backdropPath: String, voteCount: Int, genreIdList: IntArray) :
-        MovieModel(id, posterPath, overview, title, voteAverage, releaseDate, backdropPath, voteCount, genreIdList) {
+                               backdropPath: String, genreIdList: IntArray) :
+        MovieModel(id, posterPath, overview, title, voteAverage, releaseDate, backdropPath, genreIdList) {
 
     @SerializedName("reviews")
     lateinit var reviewsResponseModel: PaginatedArrayResponseModel<MovieReviewModel>

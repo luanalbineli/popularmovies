@@ -1,7 +1,6 @@
 package com.themovielist.intheaters
 
 import android.os.Bundle
-import android.support.v7.widget.GridLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,8 +10,11 @@ import com.themovielist.base.BasePresenter
 import com.themovielist.injector.components.ApplicationComponent
 import com.themovielist.injector.components.DaggerFragmentComponent
 import com.themovielist.model.MovieWithGenreModel
+import com.themovielist.model.response.ConfigurationImageResponseModel
+import com.themovielist.model.view.MovieImageGenreViewModel
+import com.themovielist.movielist.MovieListFragment
 import com.themovielist.util.ApiUtil
-import kotlinx.android.synthetic.main.in_theaters_fragment.*
+import kotlinx.android.synthetic.main.movie_header_detail.*
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -27,10 +29,6 @@ class InTheatersFragment : BaseFragment<InTheatersContract.View>(), InTheatersCo
     @Inject
     lateinit var mPresenter: InTheatersPresenter
 
-    private val mMovieListAdapter by lazy { InTheatersAdapter(R.string.the_list_is_empty, { /*mPresenter.tryAgain()*/ })}
-
-    private val mGridLayoutManager by lazy { GridLayoutManager(activity, 2) }
-
     override fun onInjectDependencies(applicationComponent: ApplicationComponent) {
         DaggerFragmentComponent.builder()
                 .applicationComponent(applicationComponent)
@@ -42,9 +40,16 @@ class InTheatersFragment : BaseFragment<InTheatersContract.View>(), InTheatersCo
         return inflater.inflate(R.layout.in_theaters_fragment, container, false)
     }
 
+    private lateinit var mMovieListFragment: MovieListFragment
+
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         activity.setTitle(R.string.cinema)
+
+        mMovieListFragment = fragmentManager.findFragmentById(R.id.fragmentMovieList) as? MovieListFragment ?:
+                childFragmentManager.findFragmentById(R.id.fragmentMovieList) as MovieListFragment
+
+        mMovieListFragment.useListLayout()
 
         mPresenter.start()
     }
@@ -63,13 +68,21 @@ class InTheatersFragment : BaseFragment<InTheatersContract.View>(), InTheatersCo
         tvMovieHeaderMovieGenres.text = movieWithGenreModel.genreList?.map { it.name }?.reduce { a, b -> "$a, $b"} ?: ""
     }
 
-    override fun showMovieList(results: List<MovieWithGenreModel>) {
+    override fun showMovieList(results: List<MovieImageGenreViewModel>, configurationResponseModel: ConfigurationImageResponseModel) {
+        mMovieListFragment.addMoviesToList(results, configurationResponseModel)
+    }
 
+    override fun showLoadingIndicator() {
+        mMovieListFragment.showLoadingIndicator()
+    }
+
+    override fun hideLoadingIndicator() {
+        mMovieListFragment.hideLoadingIndicator()
     }
 
     override fun showErrorLoadingMovies(error: Throwable) {
         Timber.e(error, "An error occurred while tried to fetch the in theaters movies: ${error.message}")
-        // TODO: Handle error.
+        mMovieListFragment.showErrorLoadingMovies()
     }
 
     companion object {

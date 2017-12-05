@@ -6,7 +6,6 @@ import com.themovielist.model.view.MovieSuggestionModel
 import com.themovielist.repository.movie.CommonRepository
 import com.themovielist.repository.movie.MovieRepository
 import com.themovielist.util.ApiUtil
-import com.themovielist.util.Defaults
 import io.reactivex.disposables.Disposable
 import timber.log.Timber
 import javax.inject.Inject
@@ -78,7 +77,7 @@ class MovieBrowsePresenter @Inject constructor(private val movieRepository: Movi
                     mRequest = null
                 }
                 .subscribe { response ->
-                    val finalMovieList = response.upcomingMovieList.results.map {
+                    val finalMovieList = response.movieWithGenreList.results.map {
                         val genreList = commonRepository.fillMovieGenresList(it.movieModel, response.genreListModel)
                         MovieImageGenreViewModel(genreList, it.movieModel, response.favoriteMovieIds.contains(it.movieModel.id))
                     }
