@@ -1,91 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <include
-        android:id="@+id/includeHeader"
-        layout="@layout/movie_header_detail"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/appBarLayoutMovieDetail"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+
+        <android.support.design.widget.CollapsingToolbarLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/collapse_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:contentScrim="?attr/colorPrimary"
+            app:expandedTitleMarginEnd="64dp"
+            app:expandedTitleMarginStart="48dp"
+            app:layout_scrollFlags="scroll|exitUntilCollapsed">
+
+            <include
+                layout="@layout/movie_header_detail"
+                app:layout_collapseMode="parallax" />
+
+        </android.support.design.widget.CollapsingToolbarLayout>
+    </android.support.design.widget.AppBarLayout>
 
     <fragment
         android:id="@+id/fragmentMovieList"
         android:name="com.themovielist.movielist.MovieListFragment"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/includeHeader" />
-
-    <!--<com.facebook.drawee.view.SimpleDraweeView
-        android:id="@+id/sdvMovieHeaderBackdrop"
-        android:layout_width="0dp"
-        android:layout_height="@dimen/in_theaters_backdrop_height"
-        android:contentDescription="@string/movie_detail_backdrop_content_description"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        fresco:actualImageScaleType="focusCrop"
-        fresco:placeholderImage="@android:color/darker_gray" />
-
-    <View
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:background="@drawable/movie_image_view_menu_background"
-        app:layout_constraintStart_toStartOf="@id/sdvMovieHeaderBackdrop"
-        app:layout_constraintEnd_toEndOf="@id/sdvMovieHeaderBackdrop"
-        app:layout_constraintTop_toTopOf="@id/sdvMovieHeaderBackdrop"
-        app:layout_constraintBottom_toBottomOf="@id/sdvMovieHeaderBackdrop" />
-
-    <TextView
-        android:id="@+id/tvMovieHeaderReleaseDate"
-        style="@style/LightMediumText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:textColor="@android:color/white"
-        app:layout_constraintBottom_toBottomOf="@+id/sdvMovieHeaderBackdrop"
-        app:layout_constraintStart_toStartOf="@+id/sdvMovieHeaderBackdrop"
-        fresco:text="1h 20m" />
-
-    <TextView
-        android:id="@+id/separator"
-        style="@style/Base.TextAppearance.AppCompat.Medium"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:textColor="@android:color/white"
-        app:layout_constraintBottom_toBottomOf="@id/tvMovieHeaderReleaseDate"
-        app:layout_constraintStart_toEndOf="@id/tvMovieHeaderReleaseDate"
-        android:text="@string/pipe_separator" />
-
-    <TextView
-        android:id="@+id/tvMovieHeaderMovieGenres"
-        style="@style/LightMediumText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:textColor="@android:color/white"
-        app:layout_constraintBottom_toBottomOf="@id/separator"
-        app:layout_constraintStart_toEndOf="@id/separator"
-        fresco:text="Action, Sci-Fi" />
-
-    <TextView
-        android:id="@+id/tvMovieHeaderMovieName"
-        style="@style/BlackLargeText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:textColor="@android:color/white"
-        app:layout_constraintBottom_toTopOf="@+id/tvMovieHeaderReleaseDate"
-        app:layout_constraintStart_toStartOf="@+id/tvMovieHeaderReleaseDate"
-        fresco:text="Dunkirk" />-->
-</android.support.constraint.ConstraintLayout>
+</android.support.design.widget.CoordinatorLayout>
