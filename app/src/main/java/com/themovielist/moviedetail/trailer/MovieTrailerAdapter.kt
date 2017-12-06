@@ -7,7 +7,7 @@ import com.themovielist.model.MovieTrailerModel
 import com.themovielist.ui.recyclerview.CustomRecyclerViewAdapter
 
 class MovieTrailerAdapter internal constructor() : CustomRecyclerViewAdapter<MovieTrailerModel, MovieTrailerViewHolder>() {
-    override fun onCreateItemViewHolder(parent: ViewGroup): MovieTrailerViewHolder {
+    override fun onCreateItemViewHolder(parent: ViewGroup, viewType: Int): MovieTrailerViewHolder {
         val itemView = LayoutInflater.from(parent.context).inflate(R.layout.movie_trailer_item, parent, false)
         return MovieTrailerViewHolder(itemView)
     }

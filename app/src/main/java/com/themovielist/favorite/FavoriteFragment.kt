@@ -67,10 +67,11 @@ class FavoriteFragment : BaseRecyclerViewFragment<FavoriteContract.View>(), Favo
         return false
     }
 
-    fun openDialogToSelectListSort(selectedSort: Int) {
+    override fun openDialogToSelectListSort(selectedSort: Int) {
         MaterialDialog.Builder(activity)
                 .title(R.string.select_the_sort)
                 .items(getString(R.string.added_order), getString(R.string.release_date))
+                .itemsCallbackSingleChoice(selectedSort, {_, _, _, _ -> true })
                 .positiveText(R.string.ok)
                 .negativeText(R.string.cancel)
                 .onPositive { _, which ->

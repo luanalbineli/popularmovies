@@ -11,7 +11,7 @@ import com.themovielist.util.dpToPx
 internal class MovieCastListAdapter(emptyMessageResId: Int, tryAgainClickListener: (() -> Unit)? = null) : CustomRecyclerViewAdapter<MovieCastModel, MovieCastListVH>(emptyMessageResId, tryAgainClickListener) {
     private var mPosterWidth: String? = null
 
-    override fun onCreateItemViewHolder(parent: ViewGroup): MovieCastListVH {
+    override fun onCreateItemViewHolder(parent: ViewGroup, viewType: Int): MovieCastListVH {
         val itemView = LayoutInflater.from(parent.context).inflate(R.layout.movie_cast_item, parent, false)
         return MovieCastListVH(itemView)
     }

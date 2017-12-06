@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import com.themovielist.R
 import com.themovielist.enums.RequestStatusDescriptor
 import timber.log.Timber
+import java.security.InvalidParameterException
 import java.util.*
 
 abstract class CustomRecyclerViewAdapter<TItem, THolder : CustomRecyclerViewHolder> private constructor(private val mItems: MutableList<TItem>) : RecyclerView.Adapter<CustomRecyclerViewHolder>() {
@@ -39,7 +40,7 @@ abstract class CustomRecyclerViewAdapter<TItem, THolder : CustomRecyclerViewHold
             val itemView = LayoutInflater.from(parent.context).inflate(R.layout.grid_status, parent, false)
             return GridStatusViewHolder(itemView, mTryAgainClickListener, mEmptyMessageResId)
         }
-        return onCreateItemViewHolder(parent)
+        return onCreateItemViewHolder(parent, viewType)
     }
 
     override fun onBindViewHolder(holder: CustomRecyclerViewHolder, position: Int) {
@@ -60,10 +61,18 @@ abstract class CustomRecyclerViewAdapter<TItem, THolder : CustomRecyclerViewHold
         return mItems.size + if (mRequestStatus == RequestStatusDescriptor.HIDDEN) 0 else 1 // List status.
     }
 
-    override fun getItemViewType(position: Int): Int {
+    final override fun getItemViewType(position: Int): Int {
         if (position == mItems.size) {
             return ViewType.GRID_STATUS
         }
+        val itemViewType = getItemViewTypeOverride(position)
+        if (itemViewType == ViewType.GRID_STATUS) {
+            throw InvalidParameterException("The view type must be different of ${ViewType.GRID_STATUS}")
+        }
+        return itemViewType
+    }
+
+    open protected fun getItemViewTypeOverride(position: Int): Int {
         return ViewType.ITEM
     }
 
@@ -148,7 +157,7 @@ abstract class CustomRecyclerViewAdapter<TItem, THolder : CustomRecyclerViewHold
         this.mOnItemClickListener = onItemClickListener
     }
 
-    protected abstract fun onCreateItemViewHolder(parent: ViewGroup): THolder
+    protected abstract fun onCreateItemViewHolder(parent: ViewGroup, viewType: Int): THolder
 
     protected abstract fun onBindItemViewHolder(holder: THolder, position: Int)
 }

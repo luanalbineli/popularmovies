@@ -11,7 +11,7 @@ import com.themovielist.util.dpToPx
 internal class HomeMovieListAdapter(emptyMessageResId: Int, tryAgainClickListener: (() -> Unit)? = null) : CustomRecyclerViewAdapter<MovieImageViewModel, HomeMovieListVH>(emptyMessageResId, tryAgainClickListener) {
     private var mPosterWidth: String? = null
 
-    override fun onCreateItemViewHolder(parent: ViewGroup): HomeMovieListVH {
+    override fun onCreateItemViewHolder(parent: ViewGroup, viewType: Int): HomeMovieListVH {
         val itemView = LayoutInflater.from(parent.context).inflate(R.layout.home_movie_list_item, parent, false)
         return HomeMovieListVH(itemView)
     }

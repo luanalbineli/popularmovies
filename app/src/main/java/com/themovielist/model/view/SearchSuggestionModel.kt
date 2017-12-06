@@ -6,7 +6,7 @@ import com.arlib.floatingsearchview.suggestions.model.SearchSuggestion
 import com.themovielist.model.MovieModel
 
 
-data class MovieSuggestionModel constructor(val movieModel: MovieModel) : SearchSuggestion {
+data class SearchSuggestionModel constructor(val movieModel: MovieModel) : SearchSuggestion {
     override fun getBody(): String {
         return movieModel.title
     }
@@ -21,12 +21,12 @@ data class MovieSuggestionModel constructor(val movieModel: MovieModel) : Search
         return 0
     }
 
-    companion object CREATOR : Parcelable.Creator<MovieSuggestionModel> {
-        override fun createFromParcel(parcel: Parcel): MovieSuggestionModel {
-            return MovieSuggestionModel(parcel)
+    companion object CREATOR : Parcelable.Creator<SearchSuggestionModel> {
+        override fun createFromParcel(parcel: Parcel): SearchSuggestionModel {
+            return SearchSuggestionModel(parcel)
         }
 
-        override fun newArray(size: Int): Array<MovieSuggestionModel?> {
+        override fun newArray(size: Int): Array<SearchSuggestionModel?> {
             return arrayOfNulls(size)
         }
     }

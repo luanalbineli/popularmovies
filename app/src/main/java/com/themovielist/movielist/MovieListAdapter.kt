@@ -5,7 +5,7 @@ import android.view.ViewGroup
 import com.themovielist.R
 
 internal class MovieListAdapter(emptyMessageResId: Int, tryAgainClickListener: (() -> Unit)?) : BaseMovieListAdapter(emptyMessageResId, tryAgainClickListener) {
-    override fun onCreateItemViewHolder(parent: ViewGroup): MovieListVH {
+    override fun onCreateItemViewHolder(parent: ViewGroup, viewType: Int): MovieListVH {
         val itemView = LayoutInflater.from(parent.context).inflate(R.layout.movie_list_item, parent, false)
         return MovieListVH(itemView)
     }

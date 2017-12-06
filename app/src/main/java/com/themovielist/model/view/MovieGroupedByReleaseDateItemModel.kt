@@ -1,0 +1,5 @@
+package com.themovielist.model.view
+
+import com.themovielist.enums.MovieGroupedByViewTypeEnum
+
+class MovieGroupedByReleaseDateItemModel(val movieImageGenreViewModel: MovieImageGenreViewModel): MovieGroupedByReleaseDateModel(MovieGroupedByViewTypeEnum.ITEM, movieImageGenreViewModel.movieModel.releaseDate)

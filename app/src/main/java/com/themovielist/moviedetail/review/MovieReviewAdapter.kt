@@ -11,7 +11,7 @@ class MovieReviewAdapter : CustomRecyclerViewAdapter<MovieReviewModel, MovieDeta
 
     constructor(tryAgainClickListener: (() -> Unit)?) : super(tryAgainClickListener)
 
-    override fun onCreateItemViewHolder(parent: ViewGroup): MovieDetailReviewViewHolder {
+    override fun onCreateItemViewHolder(parent: ViewGroup, viewType: Int): MovieDetailReviewViewHolder {
         val itemView = LayoutInflater.from(parent.context).inflate(R.layout.movie_review_item, parent, false)
         return MovieDetailReviewViewHolder(itemView)
     }

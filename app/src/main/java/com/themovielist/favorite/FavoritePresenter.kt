@@ -169,7 +169,7 @@ constructor(private var movieRepository: MovieRepository, private var commonRepo
     }
 
     override fun handleSortMenuClick() {
-
+        mView.openDialogToSelectListSort(0)
     }
 
     fun onChangeListSort(index: Int) {

@@ -7,7 +7,7 @@ import com.themovielist.model.view.GenreListItemModel
 import com.themovielist.ui.recyclerview.CustomRecyclerViewAdapter
 
 internal class GenreListAdapter(emptyMessageResId: Int, tryAgainClickListener: (() -> Unit)? = null) : CustomRecyclerViewAdapter<GenreListItemModel, GenreListVH>(emptyMessageResId, tryAgainClickListener) {
-    override fun onCreateItemViewHolder(parent: ViewGroup): GenreListVH {
+    override fun onCreateItemViewHolder(parent: ViewGroup, viewType: Int): GenreListVH {
         val itemView = LayoutInflater.from(parent.context).inflate(R.layout.genre_item, parent, false)
         return GenreListVH(itemView)
     }

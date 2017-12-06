@@ -1,14 +1,11 @@
 package com.themovielist.browse
 
 import com.themovielist.base.BasePresenter
-import com.themovielist.model.MovieCastModel
 import com.themovielist.model.MovieModel
-import com.themovielist.model.MovieSizeModel
 import com.themovielist.model.response.ConfigurationImageResponseModel
-import com.themovielist.model.response.PaginatedArrayResponseModel
 import com.themovielist.model.view.MovieCastViewModel
 import com.themovielist.model.view.MovieImageGenreViewModel
-import com.themovielist.model.view.MovieSuggestionModel
+import com.themovielist.model.view.SearchSuggestionModel
 
 interface MovieBrowseContract {
     interface View {
@@ -27,6 +24,6 @@ interface MovieBrowseContract {
         fun onStop()
         fun onQueryChanged(newQuery: String?)
         fun tryAgain()
-        fun onSelectSuggestion(movieSuggestionModel: MovieSuggestionModel)
+        fun onSelectSuggestion(movieSuggestionModel: SearchSuggestionModel)
     }
 }

@@ -2,7 +2,7 @@ package com.themovielist.browse
 
 import com.themovielist.model.view.MovieCastViewModel
 import com.themovielist.model.view.MovieImageGenreViewModel
-import com.themovielist.model.view.MovieSuggestionModel
+import com.themovielist.model.view.SearchSuggestionModel
 import com.themovielist.repository.movie.CommonRepository
 import com.themovielist.repository.movie.MovieRepository
 import com.themovielist.util.ApiUtil
@@ -64,7 +64,7 @@ class MovieBrowsePresenter @Inject constructor(private val movieRepository: Movi
 
     }
 
-    override fun onSelectSuggestion(movieSuggestionModel: MovieSuggestionModel) {
+    override fun onSelectSuggestion(movieSuggestionModel: SearchSuggestionModel) {
         Timber.d("onSelectSuggestion - movieSuggestionModel: $movieSuggestionModel")
         mView.closeSuggestion()
 

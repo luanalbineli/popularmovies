@@ -20,6 +20,7 @@ object FavoriteContract {
         fun scrollToItemPosition(firstVisibleItemPosition: Int)
         fun replaceMovieList(movieList: List<MovieImageGenreViewModel>, imageResponseModel: ConfigurationImageResponseModel)
         fun setListViewType(useListViewType: Boolean)
+        fun openDialogToSelectListSort(selectedSort: Int)
     }
 
     interface Presenter: BasePresenter<View> {

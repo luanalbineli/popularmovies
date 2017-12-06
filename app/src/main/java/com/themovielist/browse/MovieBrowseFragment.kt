@@ -14,7 +14,7 @@ import com.themovielist.model.MovieModel
 import com.themovielist.model.response.ConfigurationImageResponseModel
 import com.themovielist.model.view.MovieCastViewModel
 import com.themovielist.model.view.MovieImageGenreViewModel
-import com.themovielist.model.view.MovieSuggestionModel
+import com.themovielist.model.view.SearchSuggestionModel
 import com.themovielist.movielist.MovieListFragment
 import com.themovielist.util.setDisplay
 import kotlinx.android.synthetic.main.movie_browse_fragment.*
@@ -58,7 +58,7 @@ class MovieBrowseFragment : BaseFragment<MovieBrowseContract.View>(), MovieBrows
 
         fsvMovieBrowseSearch.setOnBindSuggestionCallback { suggestionView, _, _, searchSuggestion, _ ->
             suggestionView.setOnClickListener {
-                val movieSuggestionModel = searchSuggestion as MovieSuggestionModel
+                val movieSuggestionModel = searchSuggestion as SearchSuggestionModel
                 mPresenter.onSelectSuggestion(movieSuggestionModel)
             }
         }
@@ -84,7 +84,7 @@ class MovieBrowseFragment : BaseFragment<MovieBrowseContract.View>(), MovieBrows
     }
 
     override fun showSuggestion(suggestionList: List<MovieModel>) {
-        fsvMovieBrowseSearch.swapSuggestions(suggestionList.map { MovieSuggestionModel(it) })
+        fsvMovieBrowseSearch.swapSuggestions(suggestionList.map { SearchSuggestionModel(it) })
     }
 
     override fun hideLoadingQueryResultIndicator() {
