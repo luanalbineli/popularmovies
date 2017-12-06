@@ -61,7 +61,7 @@ open class MovieModel constructor(@SerializedName("id")
             cursor.getDouble(cursor.getColumnIndex(MovieContract.MovieEntry.COLUMN_VOTE_AVERAGE)),
             Date(cursor.getLong(cursor.getColumnIndex(MovieContract.MovieEntry.COLUMN_RELEASE_DATE))),
             cursor.getString(cursor.getColumnIndex(MovieContract.MovieEntry.COLUMN_BACKDROP_PATH)),
-            cursor.getIntArray(MovieContract.MovieEntry.COLUMN_VOTE_COUNT))
+            cursor.getIntArray(MovieContract.MovieEntry.COLUMN_GENRE_ID_LIST))
 
     fun toContentValues(): ContentValues {
         val contentValues = ContentValues()
