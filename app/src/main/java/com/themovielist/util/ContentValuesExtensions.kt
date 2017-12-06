@@ -11,7 +11,7 @@ fun ContentValues.getAsIntArray(columnName: String): IntArray {
 }
 
 fun ContentValues.put(columnName: String, intArray: IntArray) {
-    this.put(columnName, intArray.joinToString { SEPARATOR })
+    this.put(columnName, intArray.joinToString(separator = SEPARATOR))
 }
 
 internal fun stringToIntArray(stringContent: String): IntArray {

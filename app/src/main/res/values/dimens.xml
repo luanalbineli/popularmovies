@@ -26,4 +26,8 @@
 
     <!-- Genre list -->
     <dimen name="genre_horizontal_space">8dp</dimen>
+
+    <!-- RequestStatusView -->
+    <dimen name="text_error_title_size">56sp</dimen>
+    <dimen name="error_robot_height">140dp</dimen>
 </resources>

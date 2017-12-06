@@ -1,0 +1,4 @@
+<resources>
+    <dimen name="text_error_title_size">46sp</dimen>
+    <dimen name="error_robot_height">120dp</dimen>
+</resources>

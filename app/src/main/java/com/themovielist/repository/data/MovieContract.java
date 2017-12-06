@@ -4,11 +4,11 @@ import android.net.Uri;
 import android.provider.BaseColumns;
 
 public abstract class MovieContract {
-    public static final String CONTENT_AUTHORITY = "com.albineli.udacity.popuparmovies.provider";
+    static final String CONTENT_AUTHORITY = "com.albineli.udacity.popuparmovies.provider";
 
-    public static final Uri BASE_CONTENT_URI = Uri.parse("content://" + CONTENT_AUTHORITY);
+    static final Uri BASE_CONTENT_URI = Uri.parse("content://" + CONTENT_AUTHORITY);
 
-    public static final String PATH_MOVIE = "movie";
+    static final String PATH_MOVIE = "movie";
 
     public static final class MovieEntry implements BaseColumns {
         public static final Uri CONTENT_URI = BASE_CONTENT_URI
@@ -16,7 +16,7 @@ public abstract class MovieContract {
                 .appendPath(PATH_MOVIE)
                 .build();
 
-        public static final String TABLE_NAME = "movie";
+        static final String TABLE_NAME = "movie";
 
         public static final String COLUMN_POSTER_PATH = "posterPath";
 
@@ -29,8 +29,6 @@ public abstract class MovieContract {
         public static final String COLUMN_RELEASE_DATE = "releaseDate";
 
         public static final String COLUMN_BACKDROP_PATH = "backdropPath";
-
-        public static final String COLUMN_VOTE_COUNT = "voteCount";
 
         public static final String COLUMN_GENRE_ID_LIST = "genreIds";
 
