@@ -111,8 +111,10 @@ class MovieDetailActivity : BaseDaggerActivity<MovieDetailContract.View>(), Movi
 
     override fun showMovieInfo(movieWithGenreModel: MovieWithGenreModel) {
         val backdropWidth = ApiUtil.getDefaultPosterSize(UIUtil.getDisplayMetrics(sdvMovieHeaderBackdrop.context).widthPixels)
-        val backdropUrl = ApiUtil.buildPosterImageUrl(movieWithGenreModel.movieModel.backdropPath, backdropWidth)
-        sdvMovieHeaderBackdrop.setImageURI(backdropUrl)
+        movieWithGenreModel.movieModel.backdropPath?.let {
+            val backdropUrl = ApiUtil.buildPosterImageUrl(it, backdropWidth)
+            sdvMovieHeaderBackdrop.setImageURI(backdropUrl)
+        }
 
         tvMovieHeaderMovieName.text = movieWithGenreModel.movieModel.title
         tvMovieHeaderMovieGenres.text = movieWithGenreModel.concatenatedGenres()

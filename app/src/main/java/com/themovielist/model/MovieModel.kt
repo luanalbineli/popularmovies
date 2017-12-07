@@ -28,7 +28,7 @@ open class MovieModel constructor(@SerializedName("id")
                                   var releaseDate: Date? = null,
 
                                   @SerializedName("backdrop_path")
-                                  var backdropPath: String = "",
+                                  var backdropPath: String?,
 
                                   @SerializedName("genre_ids")
                                   val genreIdList: IntArray) : Parcelable {
@@ -60,7 +60,7 @@ open class MovieModel constructor(@SerializedName("id")
             cursor.getString(cursor.getColumnIndex(MovieContract.MovieEntry.COLUMN_TITLE)),
             cursor.getDouble(cursor.getColumnIndex(MovieContract.MovieEntry.COLUMN_VOTE_AVERAGE)),
             Date(cursor.getLong(cursor.getColumnIndex(MovieContract.MovieEntry.COLUMN_RELEASE_DATE))),
-            cursor.getString(cursor.getColumnIndex(MovieContract.MovieEntry.COLUMN_BACKDROP_PATH)),
+            cursor.getNullableString(MovieContract.MovieEntry.COLUMN_BACKDROP_PATH),
             cursor.getIntArray(MovieContract.MovieEntry.COLUMN_GENRE_ID_LIST))
 
     fun toContentValues(): ContentValues {
