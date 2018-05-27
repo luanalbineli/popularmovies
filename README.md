@@ -11,7 +11,7 @@ This is the second project of the Udacity's Android Nanodegree, that is basicall
   * And so on
 
 ##### Why architecture patterns?
-Separation of responsabilities. When you follow an architecture pattern,
+Split the responsabilities. When you follow an architecture pattern,
 I's easier to understand the flow of information, the responsabilities of each class/object, to maintain the code and test.
 
 
@@ -25,16 +25,16 @@ The application was divided into four tabs:
     * :white_check_mark: Option to see all movies ordered by popularity (infinite scroll);
     * :white_check_mark: Option to see all movies ordered by rating (infinite scroll);
 
-  * :x: Browse - Tab to the user search for new movies
-    * :x: Filter by genre
+  * :white_check_mark: Browse - Tab to the user search for new movies
+    * :soon: Filter by genre
     * :x: More filters...
 
-  * :x: Cinema
-    * :x: List of the movies in theaters
-    * :x: Show the upcoming movies
+  * :white_check_mark: Cinema
+    * :white_check_mark: List of the movies in theaters
+    * :soon: Show the upcoming movies
 
-  * :heavy_minus_sign: Favorite
-    * :soon: List your favorite movies
+  * :white_check_mark: Favorite
+    * :white_check_mark: List your favorite movies
     * :soon: Option to select the sorted by (added order, release date)
 
  * :white_check_mark: Movie detail screen
@@ -63,4 +63,4 @@ Some screenshots:
 \
 <img src="https://raw.github.com/luanalbineli/popularmovies/master/screenshots/Screenshot_1514071183.png" width="250">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="https://raw.github.com/luanalbineli/popularmovies/master/screenshots/Screenshot_1514083364.png" width="250">
 \
-<img src="https://raw.github.com/luanalbineli/popularmovies/master/screenshots/Screenshot_1514083379.png" width="250">
+<img src="https://raw.github.com/luanalbineli/popularmovies/master/screenshots/Screenshot_1514083379.png" width="250">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="https://raw.github.com/luanalbineli/popularmovies/master/screenshots/Screenshot_20180526-234522.png" width="250">

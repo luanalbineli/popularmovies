@@ -6,10 +6,12 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.UriMatcher;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
+import android.database.SQLException;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+
+import com.themovielist.model.MovieModel;
 
 
 public class MovieProvider extends ContentProvider {
@@ -24,11 +26,8 @@ public class MovieProvider extends ContentProvider {
         URI_MATCHER.addURI(MovieContract.CONTENT_AUTHORITY, MovieContract.PATH_MOVIE + "/*", CODE_MOVIE_DETAIL);
     }
 
-    private MovieDatabase mMovieDatabase;
-
     @Override
     public boolean onCreate() {
-        mMovieDatabase = new MovieDatabase(getContext());
         return true;
     }
 
@@ -45,21 +44,13 @@ public class MovieProvider extends ContentProvider {
             return null;
         }
 
-       /* MovieDAO movieDAO = MovieDatabaseRoom.getInstance(context).movieDAO();
+        MovieDAO movieDAO = MovieDatabaseRoom.Companion.getInstance(context).movieDAO();
         final Cursor cursor;
         if (code == CODE_MOVIES) {
             cursor = movieDAO.selectAll();
         } else {
             cursor = movieDAO.selectById((int) ContentUris.parseId(uri));
-        }*/
-        SQLiteDatabase sqLiteDatabase = mMovieDatabase.getReadableDatabase();
-
-        if (code == CODE_MOVIE_DETAIL) {
-            selection = MovieContract.MovieEntry._ID + " = ?";
-            selectionArgs = new String[]{String.valueOf(ContentUris.parseId(uri))};
         }
-
-        final Cursor cursor = sqLiteDatabase.query(MovieContract.MovieEntry.TABLE_NAME, columns, selection, selectionArgs, null, null, sort);
 
         cursor.setNotificationUri(context.getContentResolver(), uri);
         return cursor;
@@ -77,17 +68,15 @@ public class MovieProvider extends ContentProvider {
         switch (URI_MATCHER.match(uri)) {
             case CODE_MOVIES:
                 final Context context = getContext();
-                if (context == null) {
+                if (context == null || contentValues == null) {
                     return null;
                 }
-                /*final long id = MovieDatabaseRoom.getInstance(context).movieDAO()
-                        .insert(MovieModel.fromContentValues(contentValues));*/
 
-                SQLiteDatabase sqLiteDatabase = mMovieDatabase.getWritableDatabase();
+                final long id = MovieDatabaseRoom.Companion.getInstance(context).movieDAO()
+                        .insert(new MovieModel(contentValues));
 
-                long id = sqLiteDatabase.insert(MovieContract.MovieEntry.TABLE_NAME, null, contentValues);
-                if ( id <= 0 ) {
-                    throw new android.database.SQLException("Failed to insert a movie into " + uri);
+                if (id <= 0) {
+                    throw new SQLException("Failed to insert a movie into " + uri);
                 }
 
                 context.getContentResolver().notifyChange(uri, null);
@@ -110,14 +99,9 @@ public class MovieProvider extends ContentProvider {
                     return 0;
                 }
 
-                final SQLiteDatabase sqLiteDatabase = mMovieDatabase.getWritableDatabase();
+                final int count = MovieDatabaseRoom.Companion.getInstance(context).movieDAO()
+                        .deleteById((int) ContentUris.parseId(uri));
 
-                String movieId = uri.getPathSegments().get(1);
-                // Use selections/selectionArgs to filter for this ID
-                final int count = sqLiteDatabase.delete(MovieContract.MovieEntry.TABLE_NAME, MovieContract.MovieEntry._ID + " = ?", new String[] { movieId });
-
-                /*final int count = MovieDatabaseRoom.getInstance(context).movieDAO()
-                        .deleteById((int) ContentUris.parseId(uri));*/
                 context.getContentResolver().notifyChange(uri, null);
                 return count;
             default:

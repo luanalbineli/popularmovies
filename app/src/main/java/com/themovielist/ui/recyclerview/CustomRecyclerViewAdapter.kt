@@ -35,6 +35,9 @@ abstract class CustomRecyclerViewAdapter<TItem, THolder : CustomRecyclerViewHold
         }
     }
 
+    val isStatusError: Boolean
+        get() = mRequestStatus == RequestStatusDescriptor.ERROR
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CustomRecyclerViewHolder {
         if (viewType == ViewType.GRID_STATUS) {
             val itemView = LayoutInflater.from(parent.context).inflate(R.layout.grid_status, parent, false)
@@ -140,8 +143,9 @@ abstract class CustomRecyclerViewAdapter<TItem, THolder : CustomRecyclerViewHold
         redrawGridStatus(RequestStatusDescriptor.ERROR)
     }
 
+
     private fun redrawGridStatus(gridStatus: Int) {
-        Timber.i("REDRAWING THE GRID STATUS: " + gridStatus)
+        Timber.i("REDRAWING THE GRID STATUS: $gridStatus")
         val previousRequestStatus = mRequestStatus
         mRequestStatus = gridStatus
         if (mRequestStatus == RequestStatusDescriptor.HIDDEN) {

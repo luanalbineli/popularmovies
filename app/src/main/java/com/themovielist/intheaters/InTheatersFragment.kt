@@ -85,6 +85,11 @@ class InTheatersFragment : BaseFragment<InTheatersContract.View>(), InTheatersCo
         mMovieListFragment.showErrorLoadingMovies()
     }
 
+    override fun onStop() {
+        super.onStop()
+        mPresenter.onStop()
+    }
+
     companion object {
         fun getInstance(): InTheatersFragment = InTheatersFragment()
     }

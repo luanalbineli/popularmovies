@@ -16,7 +16,7 @@ public abstract class MovieContract {
                 .appendPath(PATH_MOVIE)
                 .build();
 
-        static final String TABLE_NAME = "movie";
+        public static final String TABLE_NAME = "movie_table";
 
         public static final String COLUMN_POSTER_PATH = "posterPath";
 

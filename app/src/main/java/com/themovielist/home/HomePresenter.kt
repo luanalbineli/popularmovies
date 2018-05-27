@@ -8,11 +8,13 @@ import com.themovielist.model.view.HomeViewModel
 import com.themovielist.repository.movie.MovieRepository
 import com.themovielist.util.ApiUtil
 import io.reactivex.Single
+import io.reactivex.disposables.Disposable
 import io.reactivex.functions.BiFunction
 import javax.inject.Inject
 
 class HomePresenter @Inject
 internal constructor(movieRepository: MovieRepository) : BasePresenterImpl(movieRepository), HomeContract.Presenter {
+    private var mRequest: Disposable? = null
     private lateinit var mView: HomeContract.View
 
     lateinit var viewModel: HomeViewModel
@@ -38,7 +40,7 @@ internal constructor(movieRepository: MovieRepository) : BasePresenterImpl(movie
         val popularRequest = mMovieRepository.getPopularList(ApiUtil.INITIAL_PAGE_INDEX)
         val topRatedRequest = mMovieRepository.getTopRatedList(ApiUtil.INITIAL_PAGE_INDEX)
 
-        Single.zip(popularRequest, topRatedRequest,
+        mRequest = Single.zip(popularRequest, topRatedRequest,
                 BiFunction<PaginatedArrayResponseModel<MovieModel>,
                         PaginatedArrayResponseModel<MovieModel>,
                         Pair<List<MovieModel>, List<MovieModel>>>
@@ -67,6 +69,14 @@ internal constructor(movieRepository: MovieRepository) : BasePresenterImpl(movie
 
     fun sellAllRatingMovieList() {
         mView.seeAllMoviesSortedBy(HomeMovieSortEnum.RATING)
+    }
+
+    override fun onStop() {
+        mRequest?.also {
+            if (it.isDisposed) {
+                it.dispose()
+            }
+        }
     }
 
     override fun onFavoriteMovieEvent(movie: MovieModel, favorite: Boolean) {

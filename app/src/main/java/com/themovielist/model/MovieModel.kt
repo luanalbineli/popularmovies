@@ -1,5 +1,8 @@
 package com.themovielist.model
 
+import android.arch.persistence.room.ColumnInfo
+import android.arch.persistence.room.Entity
+import android.arch.persistence.room.PrimaryKey
 import android.content.ContentValues
 import android.database.Cursor
 import android.os.Parcel
@@ -9,28 +12,38 @@ import com.themovielist.repository.data.MovieContract
 import com.themovielist.util.*
 import java.util.*
 
+@Entity(tableName = MovieContract.MovieEntry.TABLE_NAME)
 open class MovieModel constructor(@SerializedName("id")
+                                  @PrimaryKey
+                                  @ColumnInfo(name = MovieContract.MovieEntry._ID)
                                   var id: Int = 0,
 
                                   @SerializedName("poster_path")
+                                  @ColumnInfo(name = MovieContract.MovieEntry.COLUMN_POSTER_PATH)
                                   var posterPath: String? = "",
 
                                   @SerializedName("overview")
+                                  @ColumnInfo(name = MovieContract.MovieEntry.COLUMN_OVERVIEW)
                                   var overview: String = "",
 
                                   @SerializedName("title")
+                                  @ColumnInfo(name = MovieContract.MovieEntry.COLUMN_TITLE)
                                   var title: String = "",
 
                                   @SerializedName("vote_average")
+                                  @ColumnInfo(name = MovieContract.MovieEntry.COLUMN_VOTE_AVERAGE)
                                   var voteAverage: Double = 0.0,
 
                                   @SerializedName("release_date")
+                                  @ColumnInfo(name = MovieContract.MovieEntry.COLUMN_RELEASE_DATE)
                                   var releaseDate: Date? = null,
 
                                   @SerializedName("backdrop_path")
+                                  @ColumnInfo(name = MovieContract.MovieEntry.COLUMN_BACKDROP_PATH)
                                   var backdropPath: String?,
 
                                   @SerializedName("genre_ids")
+                                  @ColumnInfo(name = MovieContract.MovieEntry.COLUMN_GENRE_ID_LIST)
                                   val genreIdList: IntArray) : Parcelable {
 
     constructor(parcel: Parcel) : this(
@@ -43,7 +56,7 @@ open class MovieModel constructor(@SerializedName("id")
             parcel.readString(),
             parcel.readIntArray())
 
-    private constructor(contentValues: ContentValues) : this(
+    constructor(contentValues: ContentValues) : this(
             contentValues.getAsInteger(MovieContract.MovieEntry._ID),
             contentValues.getAsString(MovieContract.MovieEntry.COLUMN_POSTER_PATH),
             contentValues.getAsString(MovieContract.MovieEntry.COLUMN_OVERVIEW),

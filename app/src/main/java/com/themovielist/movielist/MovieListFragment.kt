@@ -175,7 +175,7 @@ class MovieListFragment : Fragment() {
 
     private fun configureRecyclerView(useDividerItemDecoration: Boolean) {
         val movieListAdapter = rvMovieList.adapter as? BaseMovieListAdapter
-        if (movieListAdapter != null) {
+        if (movieListAdapter != null && !movieListAdapter.isStatusError) {
             mAdapter.configurationImageModel = movieListAdapter.configurationImageModel
             mAdapter.addItems(movieListAdapter.items)
         }

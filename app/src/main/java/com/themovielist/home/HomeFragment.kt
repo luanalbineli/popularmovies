@@ -9,7 +9,6 @@ import com.themovielist.base.BaseFragment
 import com.themovielist.base.BasePresenter
 import com.themovielist.enums.RequestStatusDescriptor
 import com.themovielist.event.FavoriteMovieEvent
-import com.themovielist.favorite.FavoriteFragment
 import com.themovielist.home.fulllist.HomeFullMovieListActivity
 import com.themovielist.home.partiallist.HomeMovieListFragment
 import com.themovielist.injector.components.ApplicationComponent
@@ -112,7 +111,7 @@ class HomeFragment : BaseFragment<HomeContract.View>(), HomeContract.View {
 
     override fun onStop() {
         super.onStop()
-
+        mPresenter.onStop()
         EventBus.getDefault().unregister(this)
     }
 

@@ -18,5 +18,6 @@ interface HomeContract {
         fun start(viewModel: HomeViewModel)
         fun tryToLoadMoviesAgain()
         fun onFavoriteMovieEvent(movie: MovieModel, favorite: Boolean)
+        fun onStop()
     }
 }
