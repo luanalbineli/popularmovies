@@ -11,7 +11,7 @@ interface MovieBrowseContract {
     interface View {
         fun showLoadingIndicator()
         fun hideLoadingIndicator()
-        fun showErrorLoadingMovieCast(error: Throwable)
+        fun showErrorLoadingQueryResult(error: Throwable)
         fun showLoadingQueryResultIndicator()
         fun showSuggestion(suggestionList: List<MovieModel>)
         fun hideLoadingQueryResultIndicator()

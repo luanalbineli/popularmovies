@@ -7,11 +7,11 @@ import com.themovielist.model.response.ConfigurationImageResponseModel
 object ApiUtil {
     const val ORIGINAL_IMAGE_SIZE_NAME = "original"
 
-    private val BASE_URL_POSTER = "http://image.tmdb.org/t/p/"
+    private const val BASE_URL_POSTER = "http://image.tmdb.org/t/p/"
     private val POSTER_SIZE = intArrayOf(92, 154, 185, 342, 500, 780) // TODO: Hardcoded, we should call /configuration.
 
     fun buildPosterImageUrl(posterKey: String, posterWidth: String): String {
-        return BASE_URL_POSTER + posterWidth + "/" + posterKey
+        return "$BASE_URL_POSTER$posterWidth/$posterKey"
     }
 
     fun getDefaultPosterSize(widthPx: Int): String {

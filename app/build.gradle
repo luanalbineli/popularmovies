@@ -8,6 +8,7 @@ apply from: '../configuration.gradle'
 
 android {
     compileSdkVersion configuration.compileSdkVersion
+    buildToolsVersion configuration.buildToolsVersion
     defaultConfig {
         applicationId "com.albineli.popularmovies"
         minSdkVersion configuration.minSdkVersion
@@ -35,11 +36,10 @@ android {
     sourceSets {
         main.java.srcDirs += ['src/main/kotlin']
     }
-    buildToolsVersion '27.0.3'
 }
 
 dependencies {
-    def allLibs = [eventBus, fresco, materialRatingBar, likeButton, readMoreTextView, bottomBar, design, favoriteButton, floatingSearchView, materialDialog]
+    def allLibs = [eventBus, fresco, materialRatingBar, readMoreTextView, bottomBar, design, favoriteButton, floatingSearchView, materialDialog]
     implementation defaultLibs + allLibs
 
     // Leak Canary

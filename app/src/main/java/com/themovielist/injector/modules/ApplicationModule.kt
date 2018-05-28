@@ -54,13 +54,24 @@ class ApplicationModule(private val mPopularMovieApplication: PopularMovieApplic
     }
 
     private fun buildGsonConverter(): Converter.Factory {
+        // https://github.com/google/gson/issues/1096
+        val gson = GsonBuilder()
+                .setDateFormat(DEFAULT_DATE_FORMAT)
+                .create()
+
+        val dateTypeAdapter = gson.getAdapter(Date::class.java)
+
+        val safeDateTypeAdapter = dateTypeAdapter.nullSafe()
+
         val gsonBuilder = GsonBuilder()
-                .setDateFormat("yyyy-MM-dd")
+                .setDateFormat(DEFAULT_DATE_FORMAT)
+                .registerTypeAdapter(Date::class.java, safeDateTypeAdapter)
 
         return GsonConverterFactory.create(gsonBuilder.create())
     }
 
     companion object {
         private const val BASE_URL = "https://api.themoviedb.org/3/"
+        private const val DEFAULT_DATE_FORMAT = "yyyy-MM-dd"
     }
 }

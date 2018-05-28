@@ -76,6 +76,9 @@ class MovieBrowseFragment : BaseFragment<MovieBrowseContract.View>(), MovieBrows
         mMovieListFragment = fragmentManager.findFragmentById(R.id.fragmentBrowseMovieList) as? MovieListFragment ?:
                 childFragmentManager.findFragmentById(R.id.fragmentBrowseMovieList) as MovieListFragment
 
+        mMovieListFragment.onTryAgainListener = {
+            mPresenter.tryAgain()
+        }
         mMovieListFragment.useListLayout()
     }
 
@@ -100,7 +103,8 @@ class MovieBrowseFragment : BaseFragment<MovieBrowseContract.View>(), MovieBrows
     }
 
     override fun closeSuggestion() {
-        fsvMovieBrowseSearch.closeMenu(false)
+        fsvMovieBrowseSearch.clearSuggestions()
+        fsvMovieBrowseSearch.clearSearchFocus()
     }
 
     override fun showMovieList(movieList: List<MovieImageGenreViewModel>, configurationImageResponseModel: ConfigurationImageResponseModel) {
@@ -109,7 +113,7 @@ class MovieBrowseFragment : BaseFragment<MovieBrowseContract.View>(), MovieBrows
         mMovieListFragment.replaceMoviesToList(movieList, configurationImageResponseModel)
     }
 
-    override fun showErrorLoadingMovieCast(error: Throwable) {
+    override fun showErrorLoadingQueryResult(error: Throwable) {
         mMovieListFragment.showErrorLoadingMovies()
     }
 

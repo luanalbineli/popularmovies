@@ -57,11 +57,11 @@ class MovieBrowsePresenter @Inject constructor(private val movieRepository: Movi
                     else
                         response.results
             mView.showSuggestion(suggestion)
-        })
+        }, { error -> mView.showErrorLoadingQueryResult(error)})
     }
 
     override fun tryAgain() {
-
+        loadMovieResultByQuery(newQuery)
     }
 
     override fun onSelectSuggestion(movieSuggestionModel: SearchSuggestionModel) {
@@ -70,13 +70,17 @@ class MovieBrowsePresenter @Inject constructor(private val movieRepository: Movi
 
         newQuery = movieSuggestionModel.body
 
+        loadMovieResultByQuery(newQuery)
+    }
+
+    private fun loadMovieResultByQuery(newQuery: String) {
         mView.showLoadingIndicator()
         mRequest = movieRepository.getFavoriteMovieListWithGenreAndConfiguration(newQuery, ApiUtil.INITIAL_PAGE_INDEX)
                 .doAfterTerminate {
                     mView.hideLoadingIndicator()
                     mRequest = null
                 }
-                .subscribe { response ->
+                .subscribe({ response ->
                     val finalMovieList = response.movieWithGenreList.results.map {
                         val genreList = commonRepository.fillMovieGenresList(it.movieModel, response.genreListModel)
                         MovieImageGenreViewModel(genreList, it.movieModel, response.favoriteMovieIds.contains(it.movieModel.id))
@@ -84,8 +88,8 @@ class MovieBrowsePresenter @Inject constructor(private val movieRepository: Movi
                     /*viewModel.movieList.addAll(finalMovieList)
                     viewModel.imageResponseModel = response.configurationResponseModel.imageResponseModel*/
                     mView.showMovieList(finalMovieList, response.configurationResponseModel.imageResponseModel)
-                }
-
+                }, { error -> mView.showErrorLoadingQueryResult(error) }
+                )
     }
 
     override fun onStop() {
