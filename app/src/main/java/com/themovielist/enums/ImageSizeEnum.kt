@@ -4,7 +4,7 @@ import android.support.annotation.IntDef
 
 object ImageSizeEnum {
     @Retention(AnnotationRetention.SOURCE)
-    @IntDef(WIDTH.toLong(), HEIGHT.toLong())
+    @IntDef(WIDTH, HEIGHT)
     annotation class ImageSize
 
     const val WIDTH = 0

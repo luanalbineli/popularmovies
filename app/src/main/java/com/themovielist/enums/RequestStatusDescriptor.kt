@@ -4,7 +4,7 @@ import android.support.annotation.IntDef
 
 object RequestStatusDescriptor {
     @Retention(AnnotationRetention.SOURCE)
-    @IntDef(LOADING.toLong(), ERROR.toLong(), EMPTY.toLong(), HIDDEN.toLong())
+    @IntDef(LOADING, ERROR, EMPTY, HIDDEN)
     annotation class RequestStatus
 
     const val LOADING = 0

@@ -14,9 +14,9 @@
         android:layout_height="0dp"
         android:layout_weight="1" />
 
-    <com.ashokvarma.bottomnavigation.BottomNavigationBar
-        android:id="@+id/bnbBottomBar"
+    <android.support.design.widget.BottomNavigationView
+        android:id="@+id/bnvBottomNavigationView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-
+        android:layout_height="wrap_content"
+        app:menu="@menu/bottom_navigation_items"/>
 </LinearLayout>

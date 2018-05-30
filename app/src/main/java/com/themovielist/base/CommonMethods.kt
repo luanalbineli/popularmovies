@@ -22,16 +22,14 @@ interface CommonMethods {
         }()
     }
 
-    fun <T: Fragment> replaceFragmentIfNotExists(fragmentManager: FragmentManager, containerId: Int, tag: String, newFragmentInitializer: () -> T): T {
-        return tryToRetrieveFragmentInstance(fragmentManager, tag) ?: {
-            val newFragment = newFragmentInitializer.invoke()
+    fun <T: Fragment> replaceFragment(fragmentManager: FragmentManager, containerId: Int, tag: String, newFragmentInitializer: () -> T): T {
+        val newFragment = newFragmentInitializer.invoke()
 
-            fragmentManager.beginTransaction()
-                    .replace(containerId, newFragment, tag)
-                    .commit()
+        fragmentManager.beginTransaction()
+                .replace(containerId, newFragment, tag)
+                .commit()
 
-            newFragment
-        }()
+        return newFragment
     }
 
     fun configureToolbarBackButton(context: Context, toolbar: Toolbar, onBackPressed: () -> Unit) {
@@ -45,6 +43,6 @@ interface CommonMethods {
     private fun <T: Fragment> tryToRetrieveFragmentInstance(fragmentManager: FragmentManager, fragmentTag: String) : T? {
         val fragment: Fragment? = fragmentManager.findFragmentByTag(fragmentTag)
         Timber.i("fragment: $fragment")
-        return fragment as? T
+        return null
     }
 }
