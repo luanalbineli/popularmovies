@@ -29,7 +29,8 @@
     <string name="read_all_reviews_format">Read all reviews (%1$s)</string>
     <string name="see_all_trailers_format">See all trailers (%1$s)</string>
     <string name="cast">Cast</string>
-    <string name="search">Search…</string>
+    <string name="search">Search</string>
+    <string name="search_bold"><b>Search</b></string>
     <string name="type_at_least_three_characters">Type at least 3 characters</string>
     <string name="search_for_movies_here">Search for movies here</string>
     <string name="oops">Oops</string>
@@ -41,4 +42,6 @@
     <string name="cancel">Cancel</string>
     <string name="added_order">Added order</string>
     <string name="release_date">Release date</string>
+    <string name="most_popular">Most popular</string>
+    <string name="most_rated">Most rated</string>
 </resources>
