@@ -8,6 +8,7 @@ import com.themovielist.model.view.HomeViewModel
 import com.themovielist.repository.movie.MovieRepository
 import com.themovielist.util.ApiUtil
 import io.reactivex.Single
+import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.functions.BiFunction
 import javax.inject.Inject
@@ -47,6 +48,7 @@ internal constructor(movieRepository: MovieRepository) : BasePresenterImpl(movie
                 {t1, t2 ->
                     Pair(t1.results, t2.results)
                 })
+                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({ result ->
                     hideLoadingIndicatorAndShowMovies(result.first, result.second)
                     this.viewModel.movieListByPopularity = result.first

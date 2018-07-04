@@ -1,20 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout android:layout_height="match_parent" android:layout_width="match_parent"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
     <TextView xmlns:android="http://schemas.android.com/apk/res/android"
-        android:id="@+id/toolbar_title"
-        android:layout_width="wrap_content"
+        android:id="@+id/tvToolbarTitle"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
         android:text="@string/popular"
         android:textAlignment="center"
-        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
         android:textStyle="bold" />
-    <EditText
-        android:inputType="text"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center"
 
-        android:hint="@string/search_bold"/>
-</FrameLayout>
+    <ImageView
+        android:id="@+id/tvToolbarCancelSearch"
+        android:layout_width="28dp"
+        android:layout_height="28dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:visibility="gone"
+        app:srcCompat="@drawable/arrow_left" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="@+id/etToolbarSearchText"/>
+    <EditText
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="@android:color/transparent"
+        android:id="@+id/etToolbarSearchText"
+        android:inputType="text"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/tvToolbarCancelSearch"
+        app:layout_constraintTop_toTopOf="parent" />
+</android.support.constraint.ConstraintLayout>

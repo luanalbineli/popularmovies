@@ -49,8 +49,6 @@ class MainActivity : BaseActivity(), FragmentManager.OnBackStackChangedListener 
 
         bnvBottomNavigationView.selectedItemId = mSelectedItemId
 
-        setUpMainContentFragment()
-
         fragmentManager.addOnBackStackChangedListener(this)
 
         checkShouldDisplayBackButton()
