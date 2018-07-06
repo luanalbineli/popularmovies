@@ -27,19 +27,12 @@
         app:layout_constraintStart_toStartOf="@+id/sdvMovieImageView"
         app:layout_constraintTop_toTopOf="@+id/sdvMovieImageView" />
 
-    <com.github.ivbaranov.mfb.MaterialFavoriteButton
+    <com.themovielist.ui.FavoriteButton
         android:id="@+id/mfbMovieImageViewFavorite"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="36dp"
+        android:layout_height="36dp"
         app:layout_constraintEnd_toEndOf="@+id/sdvMovieImageView"
-        app:layout_constraintTop_toTopOf="@+id/sdvMovieImageView"
-        app:mfb_animate_favorite="false"
-        app:mfb_animate_unfavorite="false"
-        app:mfb_favorite_image="@drawable/heart"
-        app:mfb_not_favorite_image="@drawable/heart_outline"
-        app:mfb_padding="4"
-        app:mfb_size="36"
-        app:mfb_type="heart" />
+        app:layout_constraintTop_toTopOf="@+id/sdvMovieImageView" />
 
     <TextView
         android:id="@+id/tvMovieImageViewName"

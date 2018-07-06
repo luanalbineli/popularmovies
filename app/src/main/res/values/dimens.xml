@@ -6,8 +6,6 @@
     <dimen name="home_movie_list_text_margin_top">4dp</dimen>
     <dimen name="home_movie_list_image_space">16dp</dimen>
 
-
-
     <!-- MovieImageView -->
     <dimen name="movie_image_view_favorite_button">34dp</dimen>
     <dimen name="movie_image_view_detail_button">34sp</dimen>
@@ -30,4 +28,6 @@
     <!-- RequestStatusView -->
     <dimen name="text_error_title_size">56sp</dimen>
     <dimen name="error_robot_height">140dp</dimen>
+
+    <dimen name="favorite_button_size">36dp</dimen>
 </resources>

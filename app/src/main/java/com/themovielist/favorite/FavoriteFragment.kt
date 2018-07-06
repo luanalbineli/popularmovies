@@ -2,7 +2,6 @@ package com.themovielist.favorite
 
 import android.os.Bundle
 import android.view.*
-import com.afollestad.materialdialogs.DialogAction
 import com.afollestad.materialdialogs.MaterialDialog
 import com.themovielist.R
 import com.themovielist.base.BasePresenter
@@ -55,8 +54,10 @@ class FavoriteFragment : BaseRecyclerViewFragment<FavoriteContract.View>(), Favo
 
         configureComponents()
 
-        val viewModel = savedInstanceState?.getParcelable<HomeFullMovieListViewModel>(UPCOMING_MOVIES_VIEW_MODEL)
-        mPresenter.start(viewModel)
+        mMovieListFragment.onReadyToConfigure = {
+            val viewModel = savedInstanceState?.getParcelable<HomeFullMovieListViewModel>(UPCOMING_MOVIES_VIEW_MODEL)
+            mPresenter.start(viewModel)
+        }
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
@@ -81,8 +82,9 @@ class FavoriteFragment : BaseRecyclerViewFragment<FavoriteContract.View>(), Favo
     }
 
     private fun configureComponents() {
-        mMovieListFragment = fragmentManager.findFragmentById(R.id.fragmentMovieList) as? MovieListFragment ?:
-                childFragmentManager.findFragmentById(R.id.fragmentMovieList) as MovieListFragment
+        mMovieListFragment = addFragmentIfNotExists(childFragmentManager, R.id.flMovieListDefaultSortContainer, FAVORITE_MOVIE_LIST_FRAGMENT, {
+            MovieListFragment.getInstance()
+        })
 
         mMovieListFragment.onTryAgainListener = {
             mPresenter.tryAgain()
@@ -167,6 +169,7 @@ class FavoriteFragment : BaseRecyclerViewFragment<FavoriteContract.View>(), Favo
 
     companion object {
         private const val UPCOMING_MOVIES_VIEW_MODEL = "upcoming_movies_view_model"
+        private const val FAVORITE_MOVIE_LIST_FRAGMENT = "favorite_movie_list_fragment"
 
         fun getInstance(): FavoriteFragment = FavoriteFragment()
     }

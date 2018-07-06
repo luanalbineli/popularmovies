@@ -24,7 +24,6 @@ ext {
             materialRatingBar       : '1.1.1',
             readMoreTextView        : '2.0.1',
             leakCanary              : '1.5.4',
-            favoriteButton          : '0.1.4',
             floatingSearchView      : '2.1.1'
     ]
 
@@ -81,8 +80,6 @@ ext {
     mockitoAndroid = "org.mockito:mockito-android:$versions.mockito"
 
     materialRatingBar = "me.zhanghai.android.materialratingbar:library:$versions.materialRatingBar"
-
-    favoriteButton = "com.github.ivbaranov:materialfavoritebutton:$versions.favoriteButton"
 
     floatingSearchView = "com.github.arimorty:floatingsearchview:$versions.floatingSearchView"
 

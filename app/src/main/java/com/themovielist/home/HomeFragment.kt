@@ -58,13 +58,13 @@ class HomeFragment : BaseFragment<HomeContract.View>(), HomeContract.View {
         super.onViewCreated(view, savedInstanceState)
         activity.setTitle(R.string.home)
 
-        mPopularMovieListFragment = addFragmentIfNotExists(childFragmentManager, R.id.flHomePopularMovieContainer, POPULAR_MOVIE_LIST_TAG) {
+        mPopularMovieListFragment = addFragmentIfNotExists(childFragmentManager, R.id.flHomePopularMovieContainer, POPULAR_MOVIE_LIST_TAG, {
             HomeMovieListFragment.getInstance()
-        }
+        })
 
-        mTopRatedMovieListFragment = addFragmentIfNotExists(childFragmentManager, R.id.flHomeTopRatedMovieContainer, RATING_MOVIE_LIST_TAG) {
+        mTopRatedMovieListFragment = addFragmentIfNotExists(childFragmentManager, R.id.flHomeTopRatedMovieContainer, RATING_MOVIE_LIST_TAG, {
             HomeMovieListFragment.getInstance()
-        }
+        })
 
         rsvHomeMovieRequestStatus.setTryAgainClickListener { mPresenter.tryToLoadMoviesAgain() }
 

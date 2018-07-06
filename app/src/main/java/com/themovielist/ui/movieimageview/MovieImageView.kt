@@ -2,6 +2,8 @@ package com.themovielist.ui.movieimageview
 
 import android.content.Context
 import android.support.design.widget.Snackbar
+import android.support.v4.content.ContextCompat
+import android.support.v7.content.res.AppCompatResources
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.widget.FrameLayout
@@ -26,7 +28,7 @@ class MovieImageView constructor(context: Context, attributeSet: AttributeSet) :
     @Inject
     lateinit var mPresenter: MovieImageViewPresenter
 
-    private var mIsFavoritingManually = false
+    private var mFavoriteWithoutChangeEvent = false
 
     init {
         injectDependencies()
@@ -39,12 +41,23 @@ class MovieImageView constructor(context: Context, attributeSet: AttributeSet) :
 
         LayoutInflater.from(context).inflate(simpleDraweeViewLayout, this)
 
-        mfbMovieImageViewFavorite.setOnFavoriteChangeListener { _, _ ->
-            if (mIsFavoritingManually) {
+        mfbMovieImageViewFavorite.onFavorite = { isChecked ->
+            if (isChecked)
+                mfbMovieImageViewFavorite.setBackgroundDrawable(AppCompatResources.getDrawable(context, R.drawable.heart))
+            else
+                mfbMovieImageViewFavorite.setBackgroundDrawable(AppCompatResources.getDrawable(context, R.drawable.heart_outline))
+
+
+            if (!mFavoriteWithoutChangeEvent) {
+                mPresenter.toggleMovieFavorite()
+            }
+        }
+        /*mfbMovieImageViewFavorite.setOnFavoriteChangeListener { _, _ ->
+            if (mFavoriteWithoutChangeEvent) {
                 return@setOnFavoriteChangeListener
             }
-            mPresenter.toggleMovieFavorite()
-        }
+
+        }*/
 
         sdvMovieImageView.setOnClickListener { mPresenter.showMovieDetail() }
     }
@@ -97,10 +110,10 @@ class MovieImageView constructor(context: Context, attributeSet: AttributeSet) :
         mPresenter.onFavoriteMovieEvent(favoriteMovieEvent.movie, favoriteMovieEvent.favorite)
     }
 
-    override fun toggleMovieFavorite(favourite: Boolean) {
-        mIsFavoritingManually = true
-        mfbMovieImageViewFavorite.isFavorite = favourite
-        mIsFavoritingManually = false
+    override fun toggleMovieFavoriteWithoutChangeEvent(favourite: Boolean) {
+        mFavoriteWithoutChangeEvent = true
+        mfbMovieImageViewFavorite.isChecked = favourite
+        mFavoriteWithoutChangeEvent = false
     }
 
     override fun showErrorFavoriteMovie(error: Throwable) {
@@ -114,6 +127,6 @@ class MovieImageView constructor(context: Context, attributeSet: AttributeSet) :
 
     override fun showMovieInfo(movieImageViewModel: MovieImageViewModel) {
         tvMovieImageViewName.text = movieImageViewModel.movieModel.title
-        toggleMovieFavorite(movieImageViewModel.isFavorite)
+        toggleMovieFavoriteWithoutChangeEvent(movieImageViewModel.isFavorite)
     }
 }

@@ -9,7 +9,7 @@ object MovieImageViewContract {
     interface View {
         fun openMovieDetail(movieModel: MovieModel)
 
-        fun toggleMovieFavorite(favourite: Boolean)
+        fun toggleMovieFavoriteWithoutChangeEvent(favourite: Boolean)
         fun toggleMovieFavouriteEnabled(enabled: Boolean)
         fun showErrorFavoriteMovie(error: Throwable)
         fun showMovieInfo(movieImageViewModel: MovieImageViewModel)

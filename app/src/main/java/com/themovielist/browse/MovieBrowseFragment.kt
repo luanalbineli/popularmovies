@@ -23,6 +23,7 @@ import javax.inject.Inject
 class MovieBrowseFragment : BaseFragment<MovieBrowseContract.View>(), MovieBrowseContract.View {
     override val presenterImplementation: BasePresenter<MovieBrowseContract.View>
         get() = mPresenter
+
     override val viewImplementation: MovieBrowseContract.View
         get() = this
 
@@ -47,8 +48,12 @@ class MovieBrowseFragment : BaseFragment<MovieBrowseContract.View>(), MovieBrows
 
         configureComponents()
 
-        val movieCastViewModel = buildMovieCastViewModel(savedInstanceState)
-        mPresenter.start(movieCastViewModel)
+        mMovieListFragment.onReadyToConfigure = {
+            val movieCastViewModel = buildMovieCastViewModel(savedInstanceState)
+            mPresenter.start(movieCastViewModel)
+
+            mMovieListFragment.useListLayout()
+        }
     }
 
     private fun configureComponents() {
@@ -73,13 +78,13 @@ class MovieBrowseFragment : BaseFragment<MovieBrowseContract.View>(), MovieBrows
             }
         })
 
-        mMovieListFragment = fragmentManager.findFragmentById(R.id.fragmentBrowseMovieList) as? MovieListFragment ?:
-                childFragmentManager.findFragmentById(R.id.fragmentBrowseMovieList) as MovieListFragment
+        mMovieListFragment = addFragmentIfNotExists(childFragmentManager, R.id.flMovieListContainer, BROWSE_MOVIE_LIST_FRAGMENT, {
+            MovieListFragment.getInstance()
+        })
 
         mMovieListFragment.onTryAgainListener = {
             mPresenter.tryAgain()
         }
-        mMovieListFragment.useListLayout()
     }
 
     override fun showLoadingQueryResultIndicator() {
@@ -132,6 +137,8 @@ class MovieBrowseFragment : BaseFragment<MovieBrowseContract.View>(), MovieBrows
 
     companion object {
         const val MOVIE_CAST_VIEW_MODEL_BUNDLE_KEY = "movie_cast_view_model"
+        const val BROWSE_MOVIE_LIST_FRAGMENT = "browse_movie_list_fragment"
+
         fun getInstance(): MovieBrowseFragment {
             return MovieBrowseFragment()
         }

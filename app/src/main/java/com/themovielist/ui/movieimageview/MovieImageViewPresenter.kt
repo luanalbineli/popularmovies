@@ -31,7 +31,7 @@ class MovieImageViewPresenter @Inject constructor(private val mMovieRepository: 
                     mMovieImageViewModel.isFavorite = !mMovieImageViewModel.isFavorite
                 }, { error ->
                     // Return the like button to the old state.
-                    mView.toggleMovieFavorite(mMovieImageViewModel.isFavorite)
+                    mView.toggleMovieFavoriteWithoutChangeEvent(mMovieImageViewModel.isFavorite)
                     mView.showErrorFavoriteMovie(error)
                 })
     }
@@ -44,7 +44,7 @@ class MovieImageViewPresenter @Inject constructor(private val mMovieRepository: 
     override fun onFavoriteMovieEvent(movie: MovieModel, favourite: Boolean) {
         if (mMovieImageViewModel.movieModel == movie && mMovieImageViewModel.isFavorite != favourite) {
             mMovieImageViewModel.isFavorite = favourite
-            mView.toggleMovieFavorite(favourite)
+            mView.toggleMovieFavoriteWithoutChangeEvent(favourite)
         }
     }
 }

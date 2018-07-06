@@ -36,14 +36,6 @@ class MainActivity : BaseActivity(), FragmentManager.OnBackStackChangedListener 
         bnvBottomNavigationView.setOnNavigationItemSelectedListener { menuItem ->
             mSelectedItemId = menuItem.itemId
             setUpMainContentFragment()
-
-            // TODO: INTEGRATE THE SEARCH BAR WITH THE APP BAR
-            val appBarSearchMode = mSelectedItemId == R.id.bottom_menu_item_browse
-            appBarLayout.setDisplay(!appBarSearchMode)
-            val params = llContentContainer.layoutParams as CoordinatorLayout.LayoutParams
-            params.behavior = if (appBarSearchMode) null else AppBarLayout.ScrollingViewBehavior()
-            llContentContainer.requestLayout()
-
             true
         }
 

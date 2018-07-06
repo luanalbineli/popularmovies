@@ -14,6 +14,7 @@ import com.themovielist.model.response.ConfigurationImageResponseModel
 import com.themovielist.model.view.MovieImageGenreViewModel
 import com.themovielist.movielist.MovieListFragment
 import com.themovielist.util.ApiUtil
+import com.themovielist.util.yearFromCalendar
 import kotlinx.android.synthetic.main.movie_header_detail.*
 import timber.log.Timber
 import javax.inject.Inject
@@ -46,12 +47,14 @@ class InTheatersFragment : BaseFragment<InTheatersContract.View>(), InTheatersCo
         super.onViewCreated(view, savedInstanceState)
         activity.setTitle(R.string.cinema)
 
-        mMovieListFragment = fragmentManager.findFragmentById(R.id.fragmentMovieList) as? MovieListFragment ?:
-                childFragmentManager.findFragmentById(R.id.fragmentMovieList) as MovieListFragment
+        mMovieListFragment = addFragmentIfNotExists(childFragmentManager, R.id.flInTheatersMovieListContainer, IN_THEATERS_MOVIE_LIST_FRAGMENT, {
+            MovieListFragment.getInstance()
+        })
 
-        mMovieListFragment.useListLayout()
-
-        mPresenter.start()
+        mMovieListFragment.onReadyToConfigure = {
+            mMovieListFragment.useListLayout()
+            mPresenter.start()
+        }
     }
 
     override fun showMainMovieDetail(movieWithGenreModel: MovieWithGenreModel) {
@@ -62,8 +65,7 @@ class InTheatersFragment : BaseFragment<InTheatersContract.View>(), InTheatersCo
             sdvMovieHeaderBackdrop.setImageURI(posterUrl)
         }
 
-
-        tvMovieHeaderReleaseDate.text = "1h 20m" // TODO: TEST
+        tvMovieHeaderReleaseDate.text = movieWithGenreModel.movieModel.releaseDate?.yearFromCalendar.toString()
         tvMovieHeaderMovieName.text = movieWithGenreModel.movieModel.title
         tvMovieHeaderMovieGenres.text = movieWithGenreModel.genreList?.map { it.name }?.reduce { a, b -> "$a, $b"} ?: ""
     }
@@ -91,6 +93,8 @@ class InTheatersFragment : BaseFragment<InTheatersContract.View>(), InTheatersCo
     }
 
     companion object {
+        const val IN_THEATERS_MOVIE_LIST_FRAGMENT = "in_theaters_movie_list_fragment"
+
         fun getInstance(): InTheatersFragment = InTheatersFragment()
     }
 }

@@ -25,6 +25,8 @@ class MovieListFragment : Fragment() {
 
     var onChangeListViewType: ((isListViewType: Boolean) -> Unit)? = null
 
+    var onReadyToConfigure: (() -> Unit)? = null
+
     private lateinit var mAdapter: BaseMovieListAdapter
 
     private lateinit var mLayoutManager: LinearLayoutManager
@@ -78,7 +80,7 @@ class MovieListFragment : Fragment() {
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        Timber.d("rvMovieList: $rvMovieList")
+        onReadyToConfigure?.invoke()
     }
 
     fun enableLoadMoreListener() {
@@ -198,6 +200,10 @@ class MovieListFragment : Fragment() {
     }
 
     companion object {
+        fun getInstance(): MovieListFragment {
+            return MovieListFragment()
+        }
+
         const val LIST_THRESHOLD = 4
     }
 }
