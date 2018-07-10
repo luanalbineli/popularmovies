@@ -3,15 +3,12 @@ package com.themovielist.mainactivity
 import android.app.Fragment
 import android.app.FragmentManager
 import android.os.Bundle
-import android.support.design.widget.AppBarLayout
-import android.support.design.widget.CoordinatorLayout
 import com.themovielist.R
 import com.themovielist.base.BaseActivity
 import com.themovielist.browse.MovieBrowseFragment
 import com.themovielist.favorite.FavoriteFragment
 import com.themovielist.home.HomeFragment
 import com.themovielist.intheaters.InTheatersFragment
-import com.themovielist.util.setDisplay
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.content_main.*
 

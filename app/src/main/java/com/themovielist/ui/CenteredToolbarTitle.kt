@@ -25,12 +25,12 @@ class CenteredToolbarTitle constructor(context: Context, attributeSet: Attribute
         }
 
         tvToolbarCancelSearch.setOnClickListener { toggleEditTextFocused(false) }
+        tvToolbarClearSearch.setOnClickListener { etToolbarSearchText.text = null }
     }
 
     private fun toggleEditTextFocused(focused: Boolean) {
         tvToolbarTitle.visibility = if (focused) View.GONE else View.VISIBLE
-        etToolbarSearchText.visibility = if (focused) View.VISIBLE else View.GONE
-        tvToolbarCancelSearch.visibility = etToolbarSearchText.visibility
+        clToolbarSearchContainer.visibility = if (focused) View.VISIBLE else View.GONE
 
         val imm = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         if (focused) {
