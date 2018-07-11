@@ -3,6 +3,8 @@ package com.themovielist.ui.searchabletoolbar
 import android.content.Context
 import android.support.constraint.ConstraintLayout
 import android.support.v7.widget.Toolbar
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
@@ -31,7 +33,19 @@ class SearchableToolbar constructor(context: Context, attributeSet: AttributeSet
             toggleEditTextFocused(true)
         }
 
+        etToolbarSearchText.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(s: Editable?) { }
+
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) { }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                onSearchToolbarQueryChanged?.onChange(s.toString())
+            }
+
+        })
+
         tvToolbarCancelSearch.setOnClickListener { toggleEditTextFocused(false) }
+        tvToolbarClearSearch.setOnClickListener { etToolbarSearchText.text = null }
     }
 
     private fun toggleEditTextFocused(focused: Boolean) {
@@ -40,8 +54,7 @@ class SearchableToolbar constructor(context: Context, attributeSet: AttributeSet
         }
 
         tvToolbarTitle.visibility = if (focused) View.GONE else View.VISIBLE
-        etToolbarSearchText.visibility = if (focused) View.VISIBLE else View.GONE
-        tvToolbarCancelSearch.visibility = etToolbarSearchText.visibility
+        clToolbarSearchContainer.visibility = if (focused) View.VISIBLE else View.GONE
 
         val imm = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         if (focused) {

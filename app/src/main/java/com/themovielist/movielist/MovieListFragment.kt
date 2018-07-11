@@ -13,7 +13,6 @@ import com.themovielist.model.response.ConfigurationImageResponseModel
 import com.themovielist.model.view.MovieImageGenreViewModel
 import com.themovielist.ui.recyclerview.CustomRecyclerViewAdapter
 import kotlinx.android.synthetic.main.movie_list_fragment.*
-import timber.log.Timber
 
 
 class MovieListFragment : Fragment() {
@@ -44,10 +43,10 @@ class MovieListFragment : Fragment() {
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater?) {
         super.onCreateOptionsMenu(menu, inflater)
-        /*inflater?.inflate(R.menu.list_view_type, menu)
+        inflater?.inflate(R.menu.list_view_type, menu)
         mListViewTypeMenuItem = menu.findItem(R.id.movie_list_view_type)
 
-        toggleListViewTypeMenuItemIcon()*/
+        toggleListViewTypeMenuItemIcon()
     }
 
     private fun toggleListViewTypeMenuItemIcon() {

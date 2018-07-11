@@ -81,8 +81,6 @@ ext {
 
     materialRatingBar = "me.zhanghai.android.materialratingbar:library:$versions.materialRatingBar"
 
-    floatingSearchView = "com.github.arimorty:floatingsearchview:$versions.floatingSearchView"
-
     readMoreTextView = "com.borjabravo:readmoretextview:$versions.readMoreTextView"
 
     // LeakCanary

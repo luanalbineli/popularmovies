@@ -1,10 +1,11 @@
 package com.themovielist.browse
 
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.arlib.floatingsearchview.FloatingSearchView
 import com.themovielist.R
 import com.themovielist.base.BaseFragment
 import com.themovielist.base.BasePresenter
@@ -14,7 +15,6 @@ import com.themovielist.model.MovieModel
 import com.themovielist.model.response.ConfigurationImageResponseModel
 import com.themovielist.model.view.MovieCastViewModel
 import com.themovielist.model.view.MovieImageGenreViewModel
-import com.themovielist.model.view.SearchSuggestionModel
 import com.themovielist.movielist.MovieListFragment
 import com.themovielist.ui.searchabletoolbar.OnSearchToolbarQueryChanged
 import com.themovielist.util.setDisplay
@@ -32,6 +32,9 @@ class MovieBrowseFragment : BaseFragment<MovieBrowseContract.View>(), MovieBrows
     lateinit var mPresenter: MovieBrowsePresenter
 
     lateinit var mMovieListFragment: MovieListFragment
+
+    private val mQueryChangedHandler = Handler(Looper.getMainLooper())
+    private lateinit var mPerformQueryRunnable: Runnable
 
     override fun onInjectDependencies(applicationComponent: ApplicationComponent) {
         DaggerFragmentComponent.builder()
@@ -58,27 +61,6 @@ class MovieBrowseFragment : BaseFragment<MovieBrowseContract.View>(), MovieBrows
     }
 
     private fun configureComponents() {
-        fsvMovieBrowseSearch.setOnQueryChangeListener { _, newQuery ->
-            mPresenter.onQueryChanged(newQuery)
-        }
-
-        fsvMovieBrowseSearch.setOnBindSuggestionCallback { suggestionView, _, _, searchSuggestion, _ ->
-            suggestionView.setOnClickListener {
-                val movieSuggestionModel = searchSuggestion as SearchSuggestionModel
-                mPresenter.onSelectSuggestion(movieSuggestionModel)
-            }
-        }
-
-        fsvMovieBrowseSearch.setOnFocusChangeListener(object : FloatingSearchView.OnFocusChangeListener {
-            override fun onFocusCleared() {
-                fsvMovieBrowseSearch.setSearchHint(getString(R.string.search))
-            }
-
-            override fun onFocus() {
-                fsvMovieBrowseSearch.setSearchHint(getString(R.string.type_at_least_three_characters))
-            }
-        })
-
         mMovieListFragment = addFragmentIfNotExists(childFragmentManager, R.id.flMovieListContainer, BROWSE_MOVIE_LIST_FRAGMENT, {
             MovieListFragment.getInstance()
         })
@@ -86,18 +68,6 @@ class MovieBrowseFragment : BaseFragment<MovieBrowseContract.View>(), MovieBrows
         mMovieListFragment.onTryAgainListener = {
             mPresenter.tryAgain()
         }
-    }
-
-    override fun showLoadingQueryResultIndicator() {
-        fsvMovieBrowseSearch.showProgress()
-    }
-
-    override fun showSuggestion(suggestionList: List<MovieModel>) {
-        fsvMovieBrowseSearch.swapSuggestions(suggestionList.map { SearchSuggestionModel(it) })
-    }
-
-    override fun hideLoadingQueryResultIndicator() {
-        fsvMovieBrowseSearch.hideProgress()
     }
 
     private fun buildMovieCastViewModel(savedInstanceState: Bundle?): MovieCastViewModel {
@@ -108,15 +78,13 @@ class MovieBrowseFragment : BaseFragment<MovieBrowseContract.View>(), MovieBrows
         }
     }
 
-    override fun closeSuggestion() {
-        fsvMovieBrowseSearch.clearSuggestions()
-        fsvMovieBrowseSearch.clearSearchFocus()
+    override fun showMovieList(movieList: List<MovieImageGenreViewModel>, configurationImageResponseModel: ConfigurationImageResponseModel) {
+        mMovieListFragment.replaceMoviesToList(movieList, configurationImageResponseModel)
     }
 
-    override fun showMovieList(movieList: List<MovieImageGenreViewModel>, configurationImageResponseModel: ConfigurationImageResponseModel) {
-        blah.setDisplay(false)
-        flMovieListContainer.setDisplay(true)
-        mMovieListFragment.replaceMoviesToList(movieList, configurationImageResponseModel)
+    private fun toggleBackDropAndListVisibility(backDropVisible: Boolean) {
+        clMovieBrowseBackdropContainer.setDisplay(backDropVisible)
+        flMovieListContainer.setDisplay(!backDropVisible)
     }
 
     override fun showErrorLoadingQueryResult(error: Throwable) {
@@ -129,10 +97,19 @@ class MovieBrowseFragment : BaseFragment<MovieBrowseContract.View>(), MovieBrows
 
     override fun showLoadingIndicator() {
         mMovieListFragment.showLoadingIndicator()
+        toggleBackDropAndListVisibility(false)
     }
 
     override fun onChange(query: String) {
+        if (::mPerformQueryRunnable.isInitialized) {
+            mQueryChangedHandler.removeCallbacks(mPerformQueryRunnable)
+        }
 
+        mPerformQueryRunnable = Runnable {
+            mPresenter.onQueryChanged(query)
+        }
+
+        mQueryChangedHandler.postDelayed(mPerformQueryRunnable, QUERY_WAIT_CHANGE_MILLISECONDS)
     }
 
     override fun onStop() {
@@ -143,6 +120,7 @@ class MovieBrowseFragment : BaseFragment<MovieBrowseContract.View>(), MovieBrows
     companion object {
         const val MOVIE_CAST_VIEW_MODEL_BUNDLE_KEY = "movie_cast_view_model"
         const val BROWSE_MOVIE_LIST_FRAGMENT = "browse_movie_list_fragment"
+        const val QUERY_WAIT_CHANGE_MILLISECONDS = 300L
 
         fun getInstance(): MovieBrowseFragment {
             return MovieBrowseFragment()

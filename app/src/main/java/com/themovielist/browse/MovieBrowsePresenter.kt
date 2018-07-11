@@ -2,12 +2,10 @@ package com.themovielist.browse
 
 import com.themovielist.model.view.MovieCastViewModel
 import com.themovielist.model.view.MovieImageGenreViewModel
-import com.themovielist.model.view.SearchSuggestionModel
 import com.themovielist.repository.movie.CommonRepository
 import com.themovielist.repository.movie.MovieRepository
 import com.themovielist.util.ApiUtil
 import io.reactivex.disposables.Disposable
-import timber.log.Timber
 import javax.inject.Inject
 
 class MovieBrowsePresenter @Inject constructor(private val movieRepository: MovieRepository,
@@ -32,44 +30,13 @@ class MovieBrowsePresenter @Inject constructor(private val movieRepository: Movi
         mView.hideLoadingIndicator()*/
     }
 
-    override fun onQueryChanged(newQuery: String?) {
-        mView.showLoadingQueryResultIndicator()
-        mRequest?.let {
-            if (!it.isDisposed) {
-                it.dispose()
-            }
-        }
+    override fun onQueryChanged(newQuery: String) {
+        this.newQuery = newQuery
 
-        if (newQuery == null || newQuery.length < 3) {
-            mView.hideLoadingQueryResultIndicator()
-            return
-        }
-
-        mView.showLoadingQueryResultIndicator()
-        mRequest = movieRepository.queryMovies(newQuery, ApiUtil.INITIAL_PAGE_INDEX)
-                .doAfterTerminate {
-                    mView.hideLoadingQueryResultIndicator()
-                    mRequest = null
-                }
-                .subscribe({ response ->
-                    val suggestion = if (response.results.size > 10)
-                        response.results.subList(0, 11)
-                    else
-                        response.results
-            mView.showSuggestion(suggestion)
-        }, { error -> mView.showErrorLoadingQueryResult(error)})
-    }
-
-    override fun tryAgain() {
         loadMovieResultByQuery(newQuery)
     }
 
-    override fun onSelectSuggestion(movieSuggestionModel: SearchSuggestionModel) {
-        Timber.d("onSelectSuggestion - movieSuggestionModel: $movieSuggestionModel")
-        mView.closeSuggestion()
-
-        newQuery = movieSuggestionModel.body
-
+    override fun tryAgain() {
         loadMovieResultByQuery(newQuery)
     }
 

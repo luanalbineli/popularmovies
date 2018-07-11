@@ -1,6 +1,6 @@
 # Popular Movies
 
-This is the second project of the Udacity's Android Nanodegree, that is basically an Android application that consumes the services exposed by [TMDb](https://www.themoviedb.org).
+This is a powerful version of the second project of the Udacity's Android Nanodegree, that is "basically" an Android application that consumes the services exposed by [TMDb](https://www.themoviedb.org).
 
 ### Patters, libraries and technology:
   * MVP
@@ -8,6 +8,10 @@ This is the second project of the Udacity's Android Nanodegree, that is basicall
   * Kotlin
   * RxJava
   * Retrofit
+  * Room
+  * Timber
+  * Fresco
+  * EventBus
   * And so on
 
 ##### Why architecture patterns?
