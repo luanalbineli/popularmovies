@@ -1,4 +1,4 @@
-package com.themovielist.ui
+package com.themovielist.ui.searchabletoolbar
 
 import android.content.Context
 import android.support.constraint.ConstraintLayout
@@ -11,7 +11,14 @@ import com.themovielist.R
 import kotlinx.android.synthetic.main.toolbar_title.view.*
 
 
-class CenteredToolbarTitle constructor(context: Context, attributeSet: AttributeSet): Toolbar(context, attributeSet) {
+class SearchableToolbar constructor(context: Context, attributeSet: AttributeSet) : Toolbar(context, attributeSet) {
+    var onSearchToolbarQueryChanged: OnSearchToolbarQueryChanged? = null
+        set(value) {
+            if (field != null) {
+                toggleEditTextFocused(false)
+            }
+            field = value
+        }
     private val mFrameLayout by lazy {
         LayoutInflater.from(context).inflate(R.layout.toolbar_title, this, false) as ConstraintLayout
     }
@@ -28,6 +35,10 @@ class CenteredToolbarTitle constructor(context: Context, attributeSet: Attribute
     }
 
     private fun toggleEditTextFocused(focused: Boolean) {
+        if (onSearchToolbarQueryChanged == null) {
+            return
+        }
+
         tvToolbarTitle.visibility = if (focused) View.GONE else View.VISIBLE
         etToolbarSearchText.visibility = if (focused) View.VISIBLE else View.GONE
         tvToolbarCancelSearch.visibility = etToolbarSearchText.visibility

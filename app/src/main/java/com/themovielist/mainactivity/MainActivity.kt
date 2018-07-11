@@ -3,17 +3,16 @@ package com.themovielist.mainactivity
 import android.app.Fragment
 import android.app.FragmentManager
 import android.os.Bundle
-import android.support.design.widget.AppBarLayout
-import android.support.design.widget.CoordinatorLayout
 import com.themovielist.R
 import com.themovielist.base.BaseActivity
 import com.themovielist.browse.MovieBrowseFragment
 import com.themovielist.favorite.FavoriteFragment
 import com.themovielist.home.HomeFragment
 import com.themovielist.intheaters.InTheatersFragment
-import com.themovielist.util.setDisplay
+import com.themovielist.ui.searchabletoolbar.OnSearchToolbarQueryChanged
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.content_main.*
+import java.security.InvalidParameterException
 
 
 class MainActivity : BaseActivity(), FragmentManager.OnBackStackChangedListener {
@@ -27,7 +26,7 @@ class MainActivity : BaseActivity(), FragmentManager.OnBackStackChangedListener 
         vsMainContent.layoutResource = R.layout.content_main
         vsMainContent.inflate()
 
-        setSupportActionBar(toolbar)
+        setSupportActionBar(searchableToolbar)
 
         if (savedInstanceState != null && savedInstanceState.containsKey(SELECTED_TAB_BUNDLE_KEY)) {
             mSelectedItemId = savedInstanceState.getInt(SELECTED_TAB_BUNDLE_KEY)
@@ -47,20 +46,36 @@ class MainActivity : BaseActivity(), FragmentManager.OnBackStackChangedListener 
     }
 
     private fun setUpMainContentFragment() {
+        var fragmentInstance: Fragment? = null
+        var fragmentTag = ""
         when (mSelectedItemId) {
-            R.id.bottom_menu_item_home -> checkChangeMainContent(HOME_FRAGMENT_TAG) {
-                HomeFragment.getInstance()
+            R.id.bottom_menu_item_home -> {
+                fragmentInstance = HomeFragment.getInstance()
+                fragmentTag = HOME_FRAGMENT_TAG
             }
-            R.id.bottom_menu_item_browse -> checkChangeMainContent(BROWSE_FRAGMENT_TAG) {
-                MovieBrowseFragment.getInstance()
+            R.id.bottom_menu_item_browse -> {
+                fragmentInstance = MovieBrowseFragment.getInstance()
+                fragmentTag = BROWSE_FRAGMENT_TAG
             }
-            R.id.bottom_menu_item_cinema -> checkChangeMainContent(IN_THEATERS_FRAGMENT_TAG) {
-                InTheatersFragment.getInstance()
+            R.id.bottom_menu_item_cinema ->  {
+                fragmentInstance = InTheatersFragment.getInstance()
+                fragmentTag = IN_THEATERS_FRAGMENT_TAG
             }
-            R.id.bottom_menu_item_favorite -> checkChangeMainContent(FAVORITE_FRAGMENT_TAG) {
-                FavoriteFragment.getInstance()
+            R.id.bottom_menu_item_favorite ->  {
+                fragmentInstance = FavoriteFragment.getInstance()
+                fragmentTag = FAVORITE_FRAGMENT_TAG
             }
         }
+
+        if (fragmentInstance === null) {
+            throw InvalidParameterException("mSelectedItemId: $mSelectedItemId")
+        }
+
+        checkChangeMainContent(fragmentTag) {
+            fragmentInstance
+        }
+
+        searchableToolbar.onSearchToolbarQueryChanged = (fragmentInstance as? OnSearchToolbarQueryChanged)
     }
 
     private fun checkChangeMainContent(fragmentTag: String, fragmentInstanceInvoker: () -> Fragment) {

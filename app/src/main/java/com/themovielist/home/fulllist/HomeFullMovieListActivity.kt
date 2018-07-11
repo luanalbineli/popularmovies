@@ -17,7 +17,6 @@ import com.themovielist.moviedetail.MovieDetailActivity
 import com.themovielist.movielist.MovieListFragment
 import kotlinx.android.synthetic.main.activity_home_full_movie_list.*
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.movie_detail_activity.*
 import timber.log.Timber
 import java.security.InvalidParameterException
 import javax.inject.Inject
@@ -62,9 +61,9 @@ class HomeFullMovieListActivity : BaseDaggerActivity<HomeFullMovieListContract.V
     }
 
     private fun configureComponents() {
-        setSupportActionBar(toolbar)
+        setSupportActionBar(searchableToolbar)
 
-        configureToolbarBackButton(this, toolbar) {
+        configureToolbarBackButton(this, searchableToolbar) {
             onBackPressed()
         }
 

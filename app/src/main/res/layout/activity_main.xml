@@ -13,8 +13,8 @@
         android:id="@+id/appBarLayout"
         android:theme="@style/AppTheme.AppBarOverlay">
 
-        <com.themovielist.ui.CenteredToolbarTitle
-            android:id="@+id/toolbar"
+        <com.themovielist.ui.searchabletoolbar.SearchableToolbar
+            android:id="@+id/searchableToolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:background="?attr/colorPrimary"

@@ -16,11 +16,12 @@ import com.themovielist.model.view.MovieCastViewModel
 import com.themovielist.model.view.MovieImageGenreViewModel
 import com.themovielist.model.view.SearchSuggestionModel
 import com.themovielist.movielist.MovieListFragment
+import com.themovielist.ui.searchabletoolbar.OnSearchToolbarQueryChanged
 import com.themovielist.util.setDisplay
 import kotlinx.android.synthetic.main.movie_browse_fragment.*
 import javax.inject.Inject
 
-class MovieBrowseFragment : BaseFragment<MovieBrowseContract.View>(), MovieBrowseContract.View {
+class MovieBrowseFragment : BaseFragment<MovieBrowseContract.View>(), MovieBrowseContract.View, OnSearchToolbarQueryChanged {
     override val presenterImplementation: BasePresenter<MovieBrowseContract.View>
         get() = mPresenter
 
@@ -128,6 +129,10 @@ class MovieBrowseFragment : BaseFragment<MovieBrowseContract.View>(), MovieBrows
 
     override fun showLoadingIndicator() {
         mMovieListFragment.showLoadingIndicator()
+    }
+
+    override fun onChange(query: String) {
+
     }
 
     override fun onStop() {
