@@ -61,9 +61,9 @@ class MovieBrowseFragment : BaseFragment<MovieBrowseContract.View>(), MovieBrows
     }
 
     private fun configureComponents() {
-        mMovieListFragment = addFragmentIfNotExists(childFragmentManager, R.id.flMovieListContainer, BROWSE_MOVIE_LIST_FRAGMENT, {
+        mMovieListFragment = addFragmentIfNotExists(childFragmentManager, R.id.flMovieListContainer, BROWSE_MOVIE_LIST_FRAGMENT) {
             MovieListFragment.getInstance()
-        })
+        }
 
         mMovieListFragment.onTryAgainListener = {
             mPresenter.tryAgain()
