@@ -13,8 +13,8 @@ class GridStatusViewHolder internal constructor(itemView: View, tryAgainClick: (
         itemView.rsvRequestStatus.setTryAgainClickListener(tryAgainClick)
     }
 
-    fun bind(@RequestStatusDescriptor.RequestStatus requestStatus: Int, numberOfItems: Int) {
+    fun bind(@RequestStatusDescriptor.RequestStatus requestStatus: Long, numberOfItems: Int) {
         itemView.rsvRequestStatus.setRequestStatus(requestStatus, numberOfItems == 0)
-        Timber.i("REDRAWING GRID STATUS: " + requestStatus)
+        Timber.i("REDRAWING GRID STATUS: $requestStatus")
     }
 }

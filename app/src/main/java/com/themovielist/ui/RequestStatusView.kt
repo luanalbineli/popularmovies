@@ -15,7 +15,7 @@ import kotlinx.android.synthetic.main.request_status.view.*
 
 class RequestStatusView(context: Context, attrs: AttributeSet?) : FrameLayout(context, attrs) {
     @RequestStatusDescriptor.RequestStatus
-    private var mRequestStatus: Int = 0
+    private var mRequestStatus: Long = 0L
 
     private var mTryAgainClickListener: (() -> Unit)? = null
 
@@ -28,7 +28,7 @@ class RequestStatusView(context: Context, attrs: AttributeSet?) : FrameLayout(co
         inflater.inflate(R.layout.request_status, this)
     }
 
-    fun setRequestStatus(requestStatus: Int, matchParentHeight: Boolean = false) {
+    fun setRequestStatus(requestStatus: Long, matchParentHeight: Boolean = false) {
         this.mRequestStatus = requestStatus
         redrawStatus(matchParentHeight)
     }

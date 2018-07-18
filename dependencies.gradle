@@ -1,7 +1,7 @@
 ext {
     versions = [
-            support                 : '27.1.0',
-            constraintLayout        : '1.0.2',
+            support                 : '28.0.0-alpha3',
+            constraintLayout        : '1.1.0',
             rxAndroid               : '2.0.2',
             rxJava                  : '2.1.14',
             dagger                  : '2.10',
@@ -24,18 +24,11 @@ ext {
             materialRatingBar       : '1.1.1',
             readMoreTextView        : '2.0.1',
             leakCanary              : '1.5.4',
-            floatingSearchView      : '2.1.1'
+            floatingSearchView      : '2.1.1',
+            androidMaterial         : '1.0.0-alpha3'
     ]
 
-    supportV13 = "com.android.support:support-v13:$versions.support"
-
-    supportV7 = "com.android.support:appcompat-v7:$versions.support"
-
-    recyclerView = "com.android.support:recyclerview-v7:$versions.support"
-
-    cardView = "com.android.support:cardview-v7:$versions.support"
-
-    design = "com.android.support:design:$versions.support"
+    androidMaterial = "com.google.android.material:material:$versions.androidMaterial"
 
     rxJava = [
             "io.reactivex.rxjava2:rxjava:$versions.rxJava",
@@ -98,7 +91,7 @@ ext {
 
     daggerMock = "com.github.fabioCollini:DaggerMock:$versions.daggerMock"
 
-    defaultLibs = rxJava + retrofit + kotlin + constraintLayout + gson + timber
+    defaultLibs = rxJava + retrofit + kotlin + gson + timber + androidMaterial + constraintLayout
 
     unitTestLibs = [jUnitDep, mockitoCore]
     androidTestLibs = espresso + [mockitoAndroid, hamcrestCore, daggerMock]

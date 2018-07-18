@@ -7,8 +7,8 @@ object RequestStatusDescriptor {
     @IntDef(LOADING, ERROR, EMPTY, HIDDEN)
     annotation class RequestStatus
 
-    const val LOADING = 0
-    const val ERROR = 1
-    const val EMPTY = 2
-    const val HIDDEN = 3
+    const val LOADING = 0L
+    const val ERROR = 1L
+    const val EMPTY = 2L
+    const val HIDDEN = 3L
 }

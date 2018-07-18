@@ -1,12 +1,11 @@
 package com.themovielist.ui.movieimageview
 
 import android.content.Context
-import android.support.design.widget.Snackbar
-import android.support.v4.content.ContextCompat
 import android.support.v7.content.res.AppCompatResources
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.widget.FrameLayout
+import com.google.android.material.snackbar.Snackbar
 import com.themovielist.PopularMovieApplication
 import com.themovielist.R
 import com.themovielist.event.FavoriteMovieEvent

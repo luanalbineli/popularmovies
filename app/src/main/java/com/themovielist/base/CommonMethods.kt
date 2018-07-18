@@ -4,6 +4,7 @@ import android.app.Fragment
 import android.app.FragmentManager
 import android.content.Context
 import android.support.v4.content.ContextCompat
+import android.support.v7.content.res.AppCompatResources
 import android.support.v7.widget.Toolbar
 import com.themovielist.R
 import com.themovielist.util.UIUtil
@@ -33,7 +34,7 @@ interface CommonMethods {
     }
 
     fun configureToolbarBackButton(context: Context, toolbar: Toolbar, onBackPressed: () -> Unit) {
-        ContextCompat.getDrawable(context, R.drawable.arrow_left)?.let {
+        AppCompatResources.getDrawable(context, R.drawable.arrow_left)?.let {
             UIUtil.paintDrawable(it, context.resources.getColor(android.R.color.white))
             toolbar.navigationIcon = it
             toolbar.setNavigationOnClickListener { _ -> onBackPressed() }
@@ -43,6 +44,6 @@ interface CommonMethods {
     private fun <T: Fragment> tryToRetrieveFragmentInstance(fragmentManager: FragmentManager, fragmentTag: String) : T? {
         val fragment: Fragment? = fragmentManager.findFragmentByTag(fragmentTag)
         Timber.i("fragment: $fragment")
-        return null
+        return fragment as T?
     }
 }

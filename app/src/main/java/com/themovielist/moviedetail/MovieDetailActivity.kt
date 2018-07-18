@@ -4,9 +4,10 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.support.annotation.StringRes
-import android.support.design.widget.Snackbar
 import android.support.v7.content.res.AppCompatResources
 import android.view.MenuItem
+import com.google.android.material.appbar.AppBarLayout
+import com.google.android.material.snackbar.Snackbar
 import com.themovielist.R
 import com.themovielist.base.BaseDaggerActivity
 import com.themovielist.base.BasePresenter
@@ -95,7 +96,7 @@ class MovieDetailActivity : BaseDaggerActivity<MovieDetailContract.View>(), Movi
 
         var isShow = false
         var scrollRange = -1
-        appBarLayoutMovieDetail.addOnOffsetChangedListener({ appBarLayout, verticalOffset ->
+       /* appBarLayoutMovieDetail.addOnOffsetChangedListener(AppBarLayout.BaseOnOffsetChangedListener({ appBarLayout, verticalOffset ->
             if (scrollRange == -1) {
                 scrollRange = appBarLayout.totalScrollRange
             }
@@ -106,7 +107,7 @@ class MovieDetailActivity : BaseDaggerActivity<MovieDetailContract.View>(), Movi
                 collapse_toolbar.title = " "
                 isShow = false
             }
-        })
+        }))*/
     }
 
     override fun showMovieInfo(movieWithGenreModel: MovieWithGenreModel) {

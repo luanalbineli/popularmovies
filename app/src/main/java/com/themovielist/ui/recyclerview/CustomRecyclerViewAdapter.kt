@@ -144,7 +144,7 @@ abstract class CustomRecyclerViewAdapter<TItem, THolder : CustomRecyclerViewHold
     }
 
 
-    private fun redrawGridStatus(gridStatus: Int) {
+    private fun redrawGridStatus(gridStatus: Long) {
         Timber.i("REDRAWING THE GRID STATUS: $gridStatus")
         val previousRequestStatus = mRequestStatus
         mRequestStatus = gridStatus

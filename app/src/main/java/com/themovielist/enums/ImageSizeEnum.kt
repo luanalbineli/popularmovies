@@ -7,6 +7,6 @@ object ImageSizeEnum {
     @IntDef(WIDTH, HEIGHT)
     annotation class ImageSize
 
-    const val WIDTH = 0
-    const val HEIGHT = 1
+    const val WIDTH = 0L
+    const val HEIGHT = 1L
 }

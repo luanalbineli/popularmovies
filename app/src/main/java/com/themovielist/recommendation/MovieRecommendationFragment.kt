@@ -7,11 +7,13 @@ import android.view.ViewGroup
 import com.themovielist.R
 import com.themovielist.base.BaseFragment
 import com.themovielist.base.BasePresenter
+import com.themovielist.browse.MovieBrowseFragment
 import com.themovielist.home.partiallist.HomeMovieListFragment
 import com.themovielist.injector.components.ApplicationComponent
 import com.themovielist.injector.components.DaggerFragmentComponent
 import com.themovielist.model.MovieModel
 import com.themovielist.model.view.MovieListViewModel
+import com.themovielist.movielist.MovieListFragment
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -44,8 +46,9 @@ class MovieRecommendationFragment : BaseFragment<MovieRecommendationContract.Vie
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        mMovieRecommendationList = fragmentManager.findFragmentById(R.id.fragmentMovieRecommendationList) as? HomeMovieListFragment? ?:
-                childFragmentManager.findFragmentById(R.id.fragmentMovieRecommendationList) as HomeMovieListFragment
+        mMovieRecommendationList = addFragmentIfNotExists(childFragmentManager, R.id.flMovieRecommendationListContainer, MOVIE_RECCOMENDATIONLIST_FRAGMENT) {
+            HomeMovieListFragment.getInstance()
+        }
 
         val movieCastViewModel = buildMovieCastViewModel(savedInstanceState)
         mPresenter.start(movieCastViewModel)
@@ -90,5 +93,6 @@ class MovieRecommendationFragment : BaseFragment<MovieRecommendationContract.Vie
 
     companion object {
         const val MOVIE_LIST_VIEW_MODEL_BUNDLE_KEY = "movie_list_view_model"
+        const val MOVIE_RECCOMENDATIONLIST_FRAGMENT = "MOVIE_RECCOMENDATIONLIST_FRAGMENT"
     }
 }
