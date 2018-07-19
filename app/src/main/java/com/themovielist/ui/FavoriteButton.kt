@@ -1,10 +1,10 @@
 package com.themovielist.ui
 
 import android.content.Context
-import android.support.v7.content.res.AppCompatResources
 import android.util.AttributeSet
 import android.widget.CompoundButton
 import android.widget.ToggleButton
+import androidx.appcompat.content.res.AppCompatResources
 import com.themovielist.R
 
 class FavoriteButton(context: Context, attributeSet: AttributeSet): ToggleButton(context, attributeSet), CompoundButton.OnCheckedChangeListener {

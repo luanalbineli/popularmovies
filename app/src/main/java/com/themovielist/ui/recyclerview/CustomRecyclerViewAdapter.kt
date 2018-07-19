@@ -1,9 +1,9 @@
 package com.themovielist.ui.recyclerview
 
 import android.support.annotation.StringRes
-import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.recyclerview.widget.RecyclerView
 import com.themovielist.R
 import com.themovielist.enums.RequestStatusDescriptor
 import timber.log.Timber

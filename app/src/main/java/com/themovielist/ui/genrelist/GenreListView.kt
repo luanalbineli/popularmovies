@@ -1,10 +1,10 @@
 package com.themovielist.ui.genrelist
 
 import android.content.Context
-import android.support.v7.widget.LinearLayoutManager
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.widget.FrameLayout
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.themovielist.R
 import com.themovielist.model.view.GenreListItemModel
 import com.themovielist.ui.recyclerview.HorizonalSpaceItemDecoration

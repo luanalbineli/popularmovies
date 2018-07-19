@@ -1,10 +1,10 @@
 package com.themovielist.ui.movieimageview
 
 import android.content.Context
-import android.support.v7.content.res.AppCompatResources
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.widget.FrameLayout
+import androidx.appcompat.content.res.AppCompatResources
 import com.google.android.material.snackbar.Snackbar
 import com.themovielist.PopularMovieApplication
 import com.themovielist.R
@@ -51,12 +51,6 @@ class MovieImageView constructor(context: Context, attributeSet: AttributeSet) :
                 mPresenter.toggleMovieFavorite()
             }
         }
-        /*mfbMovieImageViewFavorite.setOnFavoriteChangeListener { _, _ ->
-            if (mFavoriteWithoutChangeEvent) {
-                return@setOnFavoriteChangeListener
-            }
-
-        }*/
 
         sdvMovieImageView.setOnClickListener { mPresenter.showMovieDetail() }
     }

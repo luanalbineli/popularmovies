@@ -2,7 +2,6 @@ package com.themovielist.favorite
 
 import android.os.Bundle
 import android.view.*
-import com.afollestad.materialdialogs.MaterialDialog
 import com.themovielist.R
 import com.themovielist.base.BasePresenter
 import com.themovielist.base.BaseRecyclerViewFragment
@@ -69,7 +68,7 @@ class FavoriteFragment : BaseRecyclerViewFragment<FavoriteContract.View>(), Favo
     }
 
     override fun openDialogToSelectListSort(selectedSort: Int) {
-        MaterialDialog.Builder(activity)
+     /*   MaterialDialog.Builder(activity)
                 .title(R.string.select_the_sort)
                 .items(getString(R.string.added_order), getString(R.string.release_date))
                 .itemsCallbackSingleChoice(selectedSort, {_, _, _, _ -> true })
@@ -78,7 +77,7 @@ class FavoriteFragment : BaseRecyclerViewFragment<FavoriteContract.View>(), Favo
                 .onPositive { _, which ->
                     mPresenter.onChangeListSort(which.ordinal)
                 }
-                .show()
+                .show()*/
     }
 
     private fun configureComponents() {

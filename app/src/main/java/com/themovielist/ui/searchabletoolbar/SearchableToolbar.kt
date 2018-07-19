@@ -1,14 +1,14 @@
 package com.themovielist.ui.searchabletoolbar
 
 import android.content.Context
-import android.support.constraint.ConstraintLayout
-import android.support.v7.widget.Toolbar
+import androidx.constraintlayout.ConstraintLayout
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
 import android.view.inputmethod.InputMethodManager
+import androidx.appcompat.widget.Toolbar
 import com.themovielist.R
 import kotlinx.android.synthetic.main.toolbar_title.view.*
 

@@ -15,7 +15,7 @@ android {
         targetSdkVersion configuration.targetSdkVersion
         versionCode 1
         versionName "1.0"
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
         buildConfigField("String", "API_KEY", API_KEY)
 
@@ -39,7 +39,7 @@ android {
 }
 
 dependencies {
-    def allLibs = [eventBus, fresco, readMoreTextView, materialDialog]
+    def allLibs = [eventBus, fresco]
     implementation defaultLibs + allLibs
 
     // Leak Canary

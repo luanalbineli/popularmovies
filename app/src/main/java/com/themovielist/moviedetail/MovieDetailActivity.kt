@@ -4,9 +4,8 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.support.annotation.StringRes
-import android.support.v7.content.res.AppCompatResources
 import android.view.MenuItem
-import com.google.android.material.appbar.AppBarLayout
+import androidx.appcompat.content.res.AppCompatResources
 import com.google.android.material.snackbar.Snackbar
 import com.themovielist.R
 import com.themovielist.base.BaseDaggerActivity
@@ -188,7 +187,8 @@ class MovieDetailActivity : BaseDaggerActivity<MovieDetailContract.View>(), Movi
     }
 
     override fun bindMovieReviewInfo(movieReviewList: List<MovieReviewModel>) {
-        val reviewSection = findViewById<MovieDetailSectionView<MovieReviewModel>>(R.id.mdsMovieDetailReviewSection)
+
+        val reviewSection = findViewById(R.id.mdsMovieDetailReviewSection) as MovieDetailSectionView<MovieReviewModel>
         reviewSection.onBindSectionContent = { itemView, movieReviewModel ->
             MovieDetailReviewViewHolder.bindLayout(itemView, movieReviewModel.author, movieReviewModel.content)
         }
@@ -200,7 +200,7 @@ class MovieDetailActivity : BaseDaggerActivity<MovieDetailContract.View>(), Movi
     }
 
     override fun bindMovieTrailerInfo(movieTrailerList: List<MovieTrailerModel>) {
-        val trailerSection = findViewById<MovieDetailSectionView<MovieTrailerModel>>(R.id.mdsMovieDetailTrailerSection)
+        val trailerSection = findViewById(R.id.mdsMovieDetailTrailerSection) as MovieDetailSectionView<MovieTrailerModel>
         trailerSection.onBindSectionContent = { itemView, movieTrailerModel ->
             MovieTrailerViewHolder.bindLayout(itemView, movieTrailerModel)
             itemView.setOnClickListener { YouTubeUtil.openYouTubeVideo(this, movieTrailerModel.source) }
