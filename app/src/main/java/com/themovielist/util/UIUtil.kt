@@ -5,9 +5,9 @@ import android.graphics.PorterDuff
 import android.graphics.PorterDuffColorFilter
 import android.graphics.drawable.Drawable
 import android.os.Build
-import android.support.annotation.ColorInt
 import android.util.DisplayMetrics
 import android.view.WindowManager
+import androidx.annotation.ColorInt
 
 object UIUtil {
 

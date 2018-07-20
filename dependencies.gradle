@@ -25,7 +25,7 @@ ext {
             readMoreTextView        : '2.0.1',
             leakCanary              : '1.5.4',
             floatingSearchView      : '2.1.1',
-            androidMaterial         : '1.0.0-alpha3'
+            androidMaterial         : '1.0.0-beta01'
     ]
 
     supportV7 = "androidx.appcompat:appcompat:1.0.0-beta01"

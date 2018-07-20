@@ -9,23 +9,19 @@
         android:id="@+id/flMovieListContainer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:visibility="gone">
-    </FrameLayout>
-    <androidx.constraintlayout.ConstraintLayout
+        android:visibility="gone" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/clMovieBrowseBackdropContainer"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/fsvMovieBrowseSearch">
+        android:layout_height="match_parent">
 
         <ImageView
             android:id="@+id/ivMagnify"
             android:layout_width="64dp"
             android:layout_height="64dp"
-            android:layout_marginTop="8dp"
-            app:layout_constraintBottom_toTopOf="parent"
+            android:layout_marginBottom="32dp"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -39,5 +35,5 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/ivMagnify" />
-    </androidx.constraintlayout.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </FrameLayout>

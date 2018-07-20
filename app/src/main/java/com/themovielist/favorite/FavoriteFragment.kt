@@ -81,9 +81,9 @@ class FavoriteFragment : BaseRecyclerViewFragment<FavoriteContract.View>(), Favo
     }
 
     private fun configureComponents() {
-        mMovieListFragment = addFragmentIfNotExists(childFragmentManager, R.id.flMovieListDefaultSortContainer, FAVORITE_MOVIE_LIST_FRAGMENT, {
+        mMovieListFragment = addFragmentIfNotExists(childFragmentManager, R.id.flMovieListDefaultSortContainer, FAVORITE_MOVIE_LIST_FRAGMENT) {
             MovieListFragment.getInstance()
-        })
+        }
 
         mMovieListFragment.onTryAgainListener = {
             mPresenter.tryAgain()

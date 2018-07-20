@@ -3,10 +3,10 @@ package com.themovielist.base
 import android.app.DialogFragment
 import android.os.Bundle
 import android.os.Parcelable
-import android.support.annotation.StringRes
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.StringRes
 import com.themovielist.PopularMovieApplication
 import com.themovielist.R
 import com.themovielist.injector.components.ApplicationComponent

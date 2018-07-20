@@ -1,7 +1,7 @@
 package com.themovielist.repository.data
 
-import android.arch.persistence.room.TypeConverter
 import android.text.TextUtils
+import androidx.room.TypeConverter
 import java.util.*
 
 

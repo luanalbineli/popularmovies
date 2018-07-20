@@ -1,13 +1,13 @@
 package com.themovielist.ui
 
 import android.content.Context
-import android.support.annotation.StringRes
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
 import android.widget.FrameLayout
+import androidx.annotation.StringRes
 import com.themovielist.R
 import com.themovielist.enums.RequestStatusDescriptor
 import kotlinx.android.synthetic.main.request_status.view.*
@@ -15,7 +15,7 @@ import kotlinx.android.synthetic.main.request_status.view.*
 
 class RequestStatusView(context: Context, attrs: AttributeSet?) : FrameLayout(context, attrs) {
     @RequestStatusDescriptor.RequestStatus
-    private var mRequestStatus: Long = 0L
+    private var mRequestStatus: Int = 0
 
     private var mTryAgainClickListener: (() -> Unit)? = null
 
@@ -28,7 +28,7 @@ class RequestStatusView(context: Context, attrs: AttributeSet?) : FrameLayout(co
         inflater.inflate(R.layout.request_status, this)
     }
 
-    fun setRequestStatus(requestStatus: Long, matchParentHeight: Boolean = false) {
+    fun setRequestStatus(requestStatus: Int, matchParentHeight: Boolean = false) {
         this.mRequestStatus = requestStatus
         redrawStatus(matchParentHeight)
     }

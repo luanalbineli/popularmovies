@@ -4,14 +4,14 @@ import android.os.Parcel
 import android.os.Parcelable
 import com.themovielist.enums.ImageSizeEnum
 
-data class MovieSizeModel constructor(val size: Int, @ImageSizeEnum.ImageSize val sizeType: Long) : Parcelable {
+data class MovieSizeModel constructor(val size: Int, @ImageSizeEnum.ImageSize val sizeType: Int) : Parcelable {
     constructor(parcel: Parcel) : this(
             parcel.readInt(),
-            parcel.readLong())
+            parcel.readInt())
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
         parcel.writeInt(size)
-        parcel.writeLong(sizeType)
+        parcel.writeInt(sizeType)
     }
 
     override fun describeContents(): Int {

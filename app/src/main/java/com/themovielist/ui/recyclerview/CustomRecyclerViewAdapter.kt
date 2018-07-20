@@ -1,8 +1,8 @@
 package com.themovielist.ui.recyclerview
 
-import android.support.annotation.StringRes
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.annotation.StringRes
 import androidx.recyclerview.widget.RecyclerView
 import com.themovielist.R
 import com.themovielist.enums.RequestStatusDescriptor
@@ -144,7 +144,7 @@ abstract class CustomRecyclerViewAdapter<TItem, THolder : CustomRecyclerViewHold
     }
 
 
-    private fun redrawGridStatus(gridStatus: Long) {
+    private fun redrawGridStatus(gridStatus: Int) {
         Timber.i("REDRAWING THE GRID STATUS: $gridStatus")
         val previousRequestStatus = mRequestStatus
         mRequestStatus = gridStatus

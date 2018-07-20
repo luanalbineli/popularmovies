@@ -1,14 +1,14 @@
 package com.themovielist.enums
 
-import android.support.annotation.IntDef
+import androidx.annotation.IntDef
 
 object RequestStatusDescriptor {
     @Retention(AnnotationRetention.SOURCE)
     @IntDef(LOADING, ERROR, EMPTY, HIDDEN)
     annotation class RequestStatus
 
-    const val LOADING = 0L
-    const val ERROR = 1L
-    const val EMPTY = 2L
-    const val HIDDEN = 3L
+    const val LOADING = 0
+    const val ERROR = 1
+    const val EMPTY = 2
+    const val HIDDEN = 3
 }

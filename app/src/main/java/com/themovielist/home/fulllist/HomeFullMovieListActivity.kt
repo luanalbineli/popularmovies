@@ -7,6 +7,7 @@ import com.themovielist.R
 import com.themovielist.base.BaseDaggerActivity
 import com.themovielist.base.BasePresenter
 import com.themovielist.enums.HomeMovieSortEnum
+import com.themovielist.favorite.FavoriteFragment
 import com.themovielist.injector.components.ApplicationComponent
 import com.themovielist.injector.components.DaggerFragmentComponent
 import com.themovielist.model.response.ConfigurationImageResponseModel
@@ -53,23 +54,24 @@ class HomeFullMovieListActivity : BaseDaggerActivity<HomeFullMovieListContract.V
         vsMainContent.layoutResource = R.layout.activity_home_full_movie_list
         vsMainContent.inflate()
 
-        configureComponents()
-
-        val upcomingMoviesViewModel = savedInstanceState?.getParcelable<HomeFullMovieListViewModel>(UPCOMING_MOVIES_VIEW_MODEL)
-
-        mPresenter.start(upcomingMoviesViewModel, filter)
+        configureComponents(filter, savedInstanceState)
     }
 
-    private fun configureComponents() {
+    private fun configureComponents(filter: Int, savedInstanceState: Bundle?) {
         setSupportActionBar(searchableToolbar)
 
         configureToolbarBackButton(this, searchableToolbar) {
             onBackPressed()
         }
 
-        val fragmentInstance = fragmentManager.findFragmentById(R.id.fragmentUpcomingMovieList)
+        mMovieListFragment = addFragmentIfNotExists(fragmentManager, R.id.flHomeFullHomeMovieList, HOME_FULL_MOVIE_LIST_FRAGMENT) {
+            MovieListFragment.getInstance()
+        }
+        mMovieListFragment.onReadyToConfigure = {
+            val upcomingMoviesViewModel = savedInstanceState?.getParcelable<HomeFullMovieListViewModel>(UPCOMING_MOVIES_VIEW_MODEL)
+            mPresenter.start(upcomingMoviesViewModel, filter)
+        }
 
-        mMovieListFragment = fragmentInstance as MovieListFragment
         mMovieListFragment.onTryAgainListener = {
             mPresenter.tryAgain()
         }
@@ -170,6 +172,7 @@ class HomeFullMovieListActivity : BaseDaggerActivity<HomeFullMovieListContract.V
     companion object {
         private const val UPCOMING_MOVIES_VIEW_MODEL = "upcoming_movies_view_model"
         private const val HOME_MOVIE_SORT = "home_movie_sort"
+        private const val HOME_FULL_MOVIE_LIST_FRAGMENT = "HOME_FULL_MOVIE_LIST_FRAGMENT"
 
         fun getInstance(): HomeFullMovieListActivity = HomeFullMovieListActivity()
         fun getIntent(context: Context, homeMovieSort: Int): Intent =

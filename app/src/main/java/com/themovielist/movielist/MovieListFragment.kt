@@ -148,7 +148,7 @@ class MovieListFragment : Fragment() {
 
         toggleListViewTypeMenuItemIcon()
 
-        mAdapter = MovieGridAdapter(R.string.the_list_is_empty, { onTryAgainListener?.invoke() })
+        mAdapter = MovieGridAdapter(R.string.the_list_is_empty) { onTryAgainListener?.invoke() }
         mLayoutManager = GridLayoutManager(activity, 2).also {
             it.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
                 override fun getSpanSize(position: Int): Int =
