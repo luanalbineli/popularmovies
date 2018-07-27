@@ -47,23 +47,18 @@ class MovieBrowseFragment : BaseFragment<MovieBrowseContract.View>(), MovieBrows
         return inflater.inflate(R.layout.movie_browse_fragment, container, false)
     }
 
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        activity?.setTitle(R.string.browse)
         configureComponents()
 
-        mMovieListFragment.onReadyToConfigure = {
-            val movieCastViewModel = buildMovieCastViewModel(savedInstanceState)
-            mPresenter.start(movieCastViewModel)
-
-            mMovieListFragment.useListLayout()
-        }
+        val movieCastViewModel = buildMovieCastViewModel(savedInstanceState)
+        mPresenter.start(movieCastViewModel)
     }
 
     private fun configureComponents() {
-        mMovieListFragment = addFragmentIfNotExists(childFragmentManager, R.id.flMovieListContainer, BROWSE_MOVIE_LIST_FRAGMENT) {
-            MovieListFragment.getInstance()
-        }
+        mMovieListFragment = childFragmentManager.findFragmentById(R.id.fragmentMovieListBrowse) as MovieListFragment
+        mMovieListFragment.useListLayout()
 
         mMovieListFragment.onTryAgainListener = {
             mPresenter.tryAgain()

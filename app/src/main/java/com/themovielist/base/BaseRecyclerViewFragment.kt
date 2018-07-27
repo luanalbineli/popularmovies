@@ -22,8 +22,10 @@ abstract class BaseRecyclerViewFragment<TView>: BaseFragment<TView>() {
     }
 
     protected fun useHorizontalSpaceDecorator() {
-        val dividerAmountOfSpace = activity.resources.getDimension(R.dimen.home_movie_list_image_space)
-        val spaceItemViewDecoration = HorizonalSpaceItemDecoration(dividerAmountOfSpace.toInt())
-        rvRecyclerView.addItemDecoration(spaceItemViewDecoration)
+        activity?.let {
+            val dividerAmountOfSpace = it.resources.getDimension(R.dimen.home_movie_list_image_space)
+            val spaceItemViewDecoration = HorizonalSpaceItemDecoration(dividerAmountOfSpace.toInt())
+            rvRecyclerView.addItemDecoration(spaceItemViewDecoration)
+        }
     }
 }

@@ -1,9 +1,9 @@
 package com.themovielist.movielist
 
-import android.app.Fragment
 import android.os.Bundle
 import android.view.*
 import androidx.appcompat.content.res.AppCompatResources
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -23,8 +23,6 @@ class MovieListFragment : Fragment() {
     var onLoadMoreMovies: (() -> Unit)? = null
 
     var onChangeListViewType: ((isListViewType: Boolean) -> Unit)? = null
-
-    var onReadyToConfigure: (() -> Unit)? = null
 
     private lateinit var mAdapter: BaseMovieListAdapter
 
@@ -51,7 +49,7 @@ class MovieListFragment : Fragment() {
 
     private fun toggleListViewTypeMenuItemIcon() {
         mListViewTypeMenuItem?.let {
-            it.icon = AppCompatResources.getDrawable(activity, if (mIsListViewType) {
+            it.icon = AppCompatResources.getDrawable(activity!!, if (mIsListViewType) {
                 R.drawable.view_grid
             } else {
                 R.drawable.view_list
@@ -75,12 +73,6 @@ class MovieListFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View =
             inflater.inflate(R.layout.movie_list_fragment, container, false)
-
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        onReadyToConfigure?.invoke()
-    }
 
     fun enableLoadMoreListener() {
         // https://codentrick.com/load-more-recyclerview-bottom-progressbar
@@ -145,7 +137,9 @@ class MovieListFragment : Fragment() {
 
     fun useGridLayout() {
         mIsListViewType = false
+    }
 
+    private fun configureGridLayout() {
         toggleListViewTypeMenuItemIcon()
 
         mAdapter = MovieGridAdapter(R.string.the_list_is_empty) { onTryAgainListener?.invoke() }
@@ -165,7 +159,9 @@ class MovieListFragment : Fragment() {
 
     fun useListLayout() {
         mIsListViewType = true
+    }
 
+    private fun configureListLayout() {
         toggleListViewTypeMenuItemIcon()
 
         mAdapter = MovieListAdapter(R.string.the_list_is_empty, { onTryAgainListener?.invoke() })

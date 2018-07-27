@@ -10,6 +10,7 @@ import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.widget.Toolbar
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.themovielist.R
+import com.themovielist.util.getScreenSize
 import kotlinx.android.synthetic.main.toolbar_title.view.*
 
 
@@ -24,6 +25,8 @@ class SearchableToolbar constructor(context: Context, attributeSet: AttributeSet
     private val mFrameLayout by lazy {
         LayoutInflater.from(context).inflate(R.layout.toolbar_title, this, false) as ConstraintLayout
     }
+
+    private val mScreenWidth by lazy { context.getScreenSize().x }
 
     init {
         super.setTitle(null) // Clear the default TextView title
@@ -71,5 +74,13 @@ class SearchableToolbar constructor(context: Context, attributeSet: AttributeSet
 
     override fun setTitle(title: CharSequence?) {
         tvToolbarTitle.text = title
+    }
+
+    override fun onLayout(changed: Boolean, l: Int, t: Int, r: Int, b: Int) {
+        super.onLayout(changed, l, t, r, b)
+
+        val location = IntArray(2)
+        mFrameLayout.getLocationOnScreen(location)
+        mFrameLayout.translationX = mFrameLayout.translationX + (-location[0] + mScreenWidth / 2 - mFrameLayout.width / 2)
     }
 }

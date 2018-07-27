@@ -9,7 +9,13 @@
         android:id="@+id/flMovieListContainer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:visibility="gone" />
+        android:visibility="gone">
+        <fragment
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:name="com.themovielist.movielist.MovieListFragment"
+            android:id="@+id/fragmentMovieListBrowse" />
+    </FrameLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/clMovieBrowseBackdropContainer"

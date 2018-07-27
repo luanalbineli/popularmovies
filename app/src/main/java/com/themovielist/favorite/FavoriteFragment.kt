@@ -47,16 +47,14 @@ class FavoriteFragment : BaseRecyclerViewFragment<FavoriteContract.View>(), Favo
         return inflater.inflate(R.layout.favorite_fragment, container, false)
     }
 
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        activity.setTitle(R.string.favorite)
+        activity?.setTitle(R.string.favorite)
 
         configureComponents()
 
-        mMovieListFragment.onReadyToConfigure = {
-            val viewModel = savedInstanceState?.getParcelable<HomeFullMovieListViewModel>(UPCOMING_MOVIES_VIEW_MODEL)
-            mPresenter.start(viewModel)
-        }
+        val viewModel = savedInstanceState?.getParcelable<HomeFullMovieListViewModel>(UPCOMING_MOVIES_VIEW_MODEL)
+        mPresenter.start(viewModel)
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
@@ -81,9 +79,7 @@ class FavoriteFragment : BaseRecyclerViewFragment<FavoriteContract.View>(), Favo
     }
 
     private fun configureComponents() {
-        mMovieListFragment = addFragmentIfNotExists(childFragmentManager, R.id.flMovieListDefaultSortContainer, FAVORITE_MOVIE_LIST_FRAGMENT) {
-            MovieListFragment.getInstance()
-        }
+        mMovieListFragment = childFragmentManager.findFragmentById(R.id.fragmentMovieListFavorite) as MovieListFragment
 
         mMovieListFragment.onTryAgainListener = {
             mPresenter.tryAgain()
@@ -112,7 +108,7 @@ class FavoriteFragment : BaseRecyclerViewFragment<FavoriteContract.View>(), Favo
     }
 
     override fun showMovieDetail(movieImageGenreViewModel: MovieImageGenreViewModel) {
-        val movieDetailIntent = MovieDetailActivity.getDefaultIntent(activity, movieImageGenreViewModel.movieModel)
+        val movieDetailIntent = MovieDetailActivity.getDefaultIntent(activity!!, movieImageGenreViewModel.movieModel)
         startActivity(movieDetailIntent)
     }
 
@@ -155,10 +151,10 @@ class FavoriteFragment : BaseRecyclerViewFragment<FavoriteContract.View>(), Favo
         mMovieListFragment.showEmptyListMessage()
     }
 
-    override fun onSaveInstanceState(outState: Bundle?) {
+    override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         mPresenter.upcomingMoviesViewModel?.let {
-            outState?.putParcelable(UPCOMING_MOVIES_VIEW_MODEL, it)
+            outState.putParcelable(UPCOMING_MOVIES_VIEW_MODEL, it)
         }
     }
 

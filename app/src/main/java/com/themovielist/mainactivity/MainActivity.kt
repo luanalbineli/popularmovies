@@ -1,8 +1,8 @@
 package com.themovielist.mainactivity
 
-import android.app.Fragment
-import android.app.FragmentManager
 import android.os.Bundle
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
 import com.themovielist.R
 import com.themovielist.base.BaseActivity
 import com.themovielist.browse.MovieBrowseFragment
@@ -38,9 +38,10 @@ class MainActivity : BaseActivity(), FragmentManager.OnBackStackChangedListener 
             true
         }
 
+
         bnvBottomNavigationView.selectedItemId = mSelectedItemId
 
-        fragmentManager.addOnBackStackChangedListener(this)
+        supportFragmentManager.addOnBackStackChangedListener(this)
 
         checkShouldDisplayBackButton()
     }
@@ -79,17 +80,12 @@ class MainActivity : BaseActivity(), FragmentManager.OnBackStackChangedListener 
     }
 
     private fun checkChangeMainContent(fragmentTag: String, fragmentInstanceInvoker: () -> Fragment) {
-        replaceFragment(fragmentManager, R.id.flMainContent, fragmentTag, fragmentInstanceInvoker)
+        replaceFragment(supportFragmentManager, R.id.flMainContent, fragmentTag, fragmentInstanceInvoker)
     }
 
     private fun checkShouldDisplayBackButton() {
-        val shouldDisplayBackButton = fragmentManager.backStackEntryCount > 0
+        val shouldDisplayBackButton = supportFragmentManager.backStackEntryCount > 0
         supportActionBar?.setDisplayHomeAsUpEnabled(shouldDisplayBackButton)
-    }
-
-    override fun onSupportNavigateUp(): Boolean {
-        fragmentManager.popBackStack()
-        return true
     }
 
     override fun onBackStackChanged() {

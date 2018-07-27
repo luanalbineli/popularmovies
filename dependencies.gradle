@@ -1,6 +1,6 @@
 ext {
     versions = [
-            support                 : '28.0.0-alpha3',
+            support                 : '28.0.0-beta1',
             constraintLayout        : '1.1.2',
             rxAndroid               : '2.0.2',
             rxJava                  : '2.1.14',
@@ -27,6 +27,8 @@ ext {
             floatingSearchView      : '2.1.1',
             androidMaterial         : '1.0.0-beta01'
     ]
+
+    fragmentSupport = "com.android.support:support-fragment:$versions.support"
 
     supportV7 = "androidx.appcompat:appcompat:1.0.0-beta01"
 
@@ -93,7 +95,7 @@ ext {
 
     daggerMock = "com.github.fabioCollini:DaggerMock:$versions.daggerMock"
 
-    defaultLibs = rxJava + retrofit + kotlin + gson + timber + androidMaterial + constraintLayout + supportV7
+    defaultLibs = rxJava + retrofit + kotlin + gson + timber + androidMaterial + constraintLayout + supportV7 + fragmentSupport
 
     unitTestLibs = [jUnitDep, mockitoCore]
     androidTestLibs = espresso + [mockitoAndroid, hamcrestCore, daggerMock]

@@ -40,15 +40,13 @@ class MovieRecommendationFragment : BaseFragment<MovieRecommendationContract.Vie
                 .inject(this)
     }
 
-    override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?) =
-            inflater?.inflate(R.layout.movie_recommendation_fragment, container, false)
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) =
+            inflater.inflate(R.layout.movie_recommendation_fragment, container, false)
 
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        mMovieRecommendationList = addFragmentIfNotExists(childFragmentManager, R.id.flMovieRecommendationListContainer, MOVIE_RECCOMENDATIONLIST_FRAGMENT) {
-            HomeMovieListFragment.getInstance()
-        }
+        mMovieRecommendationList = childFragmentManager.findFragmentById(R.id.fragmentMovieListRecommendation) as HomeMovieListFragment
 
         val movieCastViewModel = buildMovieCastViewModel(savedInstanceState)
         mPresenter.start(movieCastViewModel)
@@ -79,7 +77,7 @@ class MovieRecommendationFragment : BaseFragment<MovieRecommendationContract.Vie
         mMovieRecommendationList.showLoadingIndicator()
     }
 
-    override fun onSaveInstanceState(outState: Bundle?) {
+    override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
        /* if (this.mPresenter.movieListViewModel != null) {
 

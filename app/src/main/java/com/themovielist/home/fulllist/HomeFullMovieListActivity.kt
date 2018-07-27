@@ -3,6 +3,8 @@ package com.themovielist.home.fulllist
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.view.Gravity
+import androidx.drawerlayout.widget.DrawerLayout
 import com.themovielist.R
 import com.themovielist.base.BaseDaggerActivity
 import com.themovielist.base.BasePresenter
@@ -18,6 +20,7 @@ import com.themovielist.moviedetail.MovieDetailActivity
 import com.themovielist.movielist.MovieListFragment
 import kotlinx.android.synthetic.main.activity_home_full_movie_list.*
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.home_full_list_activity.*
 import timber.log.Timber
 import java.security.InvalidParameterException
 import javax.inject.Inject
@@ -50,27 +53,26 @@ class HomeFullMovieListActivity : BaseDaggerActivity<HomeFullMovieListContract.V
         }
 
         setContentView(R.layout.activity_main)
+       /* val gravity = Gravity.LEFT or Gravity.RIGHT or Gravity.CENTER_HORIZONTAL or Gravity.FILL_HORIZONTAL or Gravity.CENTER or Gravity.FILL or Gravity.START or Gravity.END
+        button_test.setOnClickListener { home_full_list_drawer.openDrawer(gravity) }*/
 
         vsMainContent.layoutResource = R.layout.activity_home_full_movie_list
         vsMainContent.inflate()
 
         configureComponents(filter, savedInstanceState)
+
+        val upcomingMoviesViewModel = savedInstanceState?.getParcelable<HomeFullMovieListViewModel>(UPCOMING_MOVIES_VIEW_MODEL)
+        mPresenter.start(upcomingMoviesViewModel, filter)
     }
 
     private fun configureComponents(filter: Int, savedInstanceState: Bundle?) {
-        setSupportActionBar(searchableToolbar)
+        //setSupportActionBar(searchableToolbar)
 
         configureToolbarBackButton(this, searchableToolbar) {
             onBackPressed()
         }
 
-        mMovieListFragment = addFragmentIfNotExists(fragmentManager, R.id.flHomeFullHomeMovieList, HOME_FULL_MOVIE_LIST_FRAGMENT) {
-            MovieListFragment.getInstance()
-        }
-        mMovieListFragment.onReadyToConfigure = {
-            val upcomingMoviesViewModel = savedInstanceState?.getParcelable<HomeFullMovieListViewModel>(UPCOMING_MOVIES_VIEW_MODEL)
-            mPresenter.start(upcomingMoviesViewModel, filter)
-        }
+        mMovieListFragment = supportFragmentManager.findFragmentById(R.id.fragmentMovieListHomeList) as MovieListFragment
 
         mMovieListFragment.onTryAgainListener = {
             mPresenter.tryAgain()

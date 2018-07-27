@@ -43,18 +43,14 @@ class InTheatersFragment : BaseFragment<InTheatersContract.View>(), InTheatersCo
 
     private lateinit var mMovieListFragment: MovieListFragment
 
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        activity.setTitle(R.string.cinema)
+        activity?.setTitle(R.string.cinema)
 
-        mMovieListFragment = addFragmentIfNotExists(childFragmentManager, R.id.flInTheatersMovieListContainer, IN_THEATERS_MOVIE_LIST_FRAGMENT, {
-            MovieListFragment.getInstance()
-        })
+        mMovieListFragment = childFragmentManager.findFragmentById(R.id.fragmentMovieListInTheaters) as MovieListFragment
 
-        mMovieListFragment.onReadyToConfigure = {
-            mMovieListFragment.useListLayout()
-            mPresenter.start()
-        }
+        mMovieListFragment.useListLayout()
+        mPresenter.start()
     }
 
     override fun showMainMovieDetail(movieWithGenreModel: MovieWithGenreModel) {

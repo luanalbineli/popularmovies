@@ -1,10 +1,10 @@
 package com.themovielist.base
 
-import android.app.Fragment
-import android.app.FragmentManager
 import android.content.Context
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.appcompat.widget.Toolbar
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
 import com.themovielist.R
 import com.themovielist.util.UIUtil
 import timber.log.Timber

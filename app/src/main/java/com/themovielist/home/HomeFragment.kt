@@ -56,7 +56,7 @@ class HomeFragment : BaseFragment<HomeContract.View>(), HomeContract.View {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        activity.setTitle(R.string.home)
+        activity?.setTitle(R.string.home)
 
         mPopularMovieListFragment = addFragmentIfNotExists(childFragmentManager, R.id.flHomePopularMovieContainer, POPULAR_MOVIE_LIST_TAG) {
             HomeMovieListFragment.getInstance()
@@ -99,14 +99,14 @@ class HomeFragment : BaseFragment<HomeContract.View>(), HomeContract.View {
     }
 
     override fun seeAllMoviesSortedBy(homeMovieSort: Int) {
-        val intent = HomeFullMovieListActivity.getIntent(activity, homeMovieSort)
+        val intent = HomeFullMovieListActivity.getIntent(activity!!, homeMovieSort)
         startActivity(intent)
     }
 
-    override fun onSaveInstanceState(outState: Bundle?) {
+    override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
 
-        outState?.putParcelable(HOME_VIEW_MODEL_BUNDLE_KEY, mPresenter.viewModel)
+        outState.putParcelable(HOME_VIEW_MODEL_BUNDLE_KEY, mPresenter.viewModel)
     }
 
     override fun onStop() {

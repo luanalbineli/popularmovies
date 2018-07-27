@@ -37,7 +37,7 @@ class MovieCastListFragment : BaseRecyclerViewFragment<MovieCastContract.View>()
                 .inject(this)
     }
 
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         rvRecyclerView.adapter = mAdapter
