@@ -46,9 +46,9 @@ class MovieDetailActivity : BaseDaggerActivity<MovieDetailContract.View>(), Movi
 
     private var mFavoriteMenuItem: MenuItem? = null
 
-    private val mMovieCastFragment by lazy { fragmentManager.findFragmentById(R.id.fragmentMovieDetailCast) as MovieCastListFragment }
+    private val mMovieCastFragment by lazy { supportFragmentManager.findFragmentById(R.id.fragmentMovieDetailCast) as MovieCastListFragment }
 
-    private val mMovieRecommendationListFragment by lazy { fragmentManager.findFragmentById(R.id.fragmentMovieRecommendationList) as MovieRecommendationFragment }
+    private val mMovieRecommendationListFragment by lazy { supportFragmentManager.findFragmentById(R.id.fragmentMovieRecommendationList) as MovieRecommendationFragment }
 
     override fun onInjectDependencies(applicationComponent: ApplicationComponent) {
         DaggerFragmentComponent.builder()
@@ -68,7 +68,7 @@ class MovieDetailActivity : BaseDaggerActivity<MovieDetailContract.View>(), Movi
 
         setContentView(R.layout.movie_detail_activity)
 
-        // supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         configureToolbar()
 
@@ -153,12 +153,12 @@ class MovieDetailActivity : BaseDaggerActivity<MovieDetailContract.View>(), Movi
 
     override fun showAllReviews(movieReviewList: List<MovieReviewModel>, hasMore: Boolean, movieId: Int) {
         val movieReviewListDialog = MovieReviewListDialog.getInstance(movieReviewList, movieId, hasMore)
-        movieReviewListDialog.show(fragmentManager, "movie_review_dialog")
+        movieReviewListDialog.show(supportFragmentManager, "movie_review_dialog")
     }
 
     override fun showAllTrailers(movieTrailerList: List<MovieTrailerModel>) {
         val movieTrailerListDialog = MovieTrailerListDialog.getInstance(movieTrailerList)
-        movieTrailerListDialog.show(fragmentManager, "movie_trailer_dialog")
+        movieTrailerListDialog.show(supportFragmentManager, "movie_trailer_dialog")
     }
 
     private fun showToastMessage(@StringRes messageResId: Int) {

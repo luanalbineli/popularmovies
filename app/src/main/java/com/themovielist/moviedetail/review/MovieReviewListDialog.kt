@@ -13,7 +13,6 @@ import com.themovielist.injector.components.ApplicationComponent
 import com.themovielist.injector.components.DaggerFragmentComponent
 import com.themovielist.model.MovieReviewModel
 import kotlinx.android.synthetic.main.fullscreen_fragment_dialog_with_list.*
-import java.security.InvalidParameterException
 import javax.inject.Inject
 
 class MovieReviewListDialog : BaseFullscreenDialogWithList<MovieReviewModel, MovieReviewListDialogContract.View>(), MovieReviewListDialogContract.View {
@@ -31,14 +30,11 @@ class MovieReviewListDialog : BaseFullscreenDialogWithList<MovieReviewModel, Mov
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        if (!arguments.containsKey(HAS_MORE_BUNDLE_KEY) || !arguments.containsKey(MOVIE_ID_BUNDLE_KEY)) {
-            throw InvalidParameterException("movie")
+        arguments?.let {
+            mHasMore = it.getBoolean(HAS_MORE_BUNDLE_KEY)
+
+            mMovieId = it.getInt(MOVIE_ID_BUNDLE_KEY)
         }
-
-
-        mHasMore = arguments.getBoolean(HAS_MORE_BUNDLE_KEY)
-
-        mMovieId = arguments.getInt(MOVIE_ID_BUNDLE_KEY)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -91,7 +87,7 @@ class MovieReviewListDialog : BaseFullscreenDialogWithList<MovieReviewModel, Mov
 
     override fun onInjectDependencies(applicationComponent: ApplicationComponent) {
         DaggerFragmentComponent.builder()
-                .applicationComponent(PopularMovieApplication.getApplicationComponent(activity))
+                .applicationComponent(PopularMovieApplication.getApplicationComponent(context!!))
                 .build()
                 .inject(this)
     }
@@ -103,14 +99,14 @@ class MovieReviewListDialog : BaseFullscreenDialogWithList<MovieReviewModel, Mov
         get() = this
 
     companion object {
-        private val HAS_MORE_BUNDLE_KEY = "movie_review_has_more"
-        private val MOVIE_ID_BUNDLE_KEY = "movie_id"
+        private const val HAS_MORE_BUNDLE_KEY = "movie_review_has_more"
+        private const val MOVIE_ID_BUNDLE_KEY = "movie_id"
 
         fun getInstance(movieModelList: List<MovieReviewModel>, movieId: Int, hasMore: Boolean): MovieReviewListDialog {
             val instance = BaseFullscreenDialogWithList.createNewInstance(MovieReviewListDialog::class.java, movieModelList)
-            if (instance.arguments != null) {
-                instance.arguments.putBoolean(HAS_MORE_BUNDLE_KEY, hasMore)
-                instance.arguments.putInt(MOVIE_ID_BUNDLE_KEY, movieId)
+            instance.arguments?.let {
+                it.putBoolean(HAS_MORE_BUNDLE_KEY, hasMore)
+                it.putInt(MOVIE_ID_BUNDLE_KEY, movieId)
             }
 
             return instance

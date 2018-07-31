@@ -6,7 +6,7 @@ import android.content.Intent
 import android.net.Uri
 
 object YouTubeUtil {
-    private val VIDEO_URL_OPEN = "https://www.youtube.com/watch?v=%1\$s"
+    private const val VIDEO_URL_OPEN = "https://www.youtube.com/watch?v=%1\$s"
 
     // TODO: Try to open the YouTube app first.
     fun openYouTubeVideo(context: Context, videoKey: String) {

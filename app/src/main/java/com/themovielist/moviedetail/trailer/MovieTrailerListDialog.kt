@@ -32,7 +32,11 @@ class MovieTrailerListDialog : BaseFullscreenDialogWithList<MovieTrailerModel, M
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        mMovieReviewAdapter.setOnItemClickListener { _, item -> YouTubeUtil.openYouTubeVideo(activity, item.source) }
+        mMovieReviewAdapter.setOnItemClickListener { _, item ->
+            context?.let {
+                YouTubeUtil.openYouTubeVideo(it, item.source)
+            }
+        }
 
         val dividerItemDecoration = DividerItemDecoration(rvFullscreenFragmentDialog.context, mLinearLayoutManager.orientation)
 
@@ -51,7 +55,7 @@ class MovieTrailerListDialog : BaseFullscreenDialogWithList<MovieTrailerModel, M
 
     override fun onInjectDependencies(applicationComponent: ApplicationComponent) {
         DaggerFragmentComponent.builder()
-                .applicationComponent(PopularMovieApplication.getApplicationComponent(activity))
+                .applicationComponent(PopularMovieApplication.getApplicationComponent(activity!!))
                 .build()
                 .inject(this)
     }
