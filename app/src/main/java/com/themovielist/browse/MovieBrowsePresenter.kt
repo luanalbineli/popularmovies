@@ -6,6 +6,7 @@ import com.themovielist.repository.movie.CommonRepository
 import com.themovielist.repository.movie.MovieRepository
 import com.themovielist.util.ApiUtil
 import io.reactivex.disposables.Disposable
+import timber.log.Timber
 import javax.inject.Inject
 
 class MovieBrowsePresenter @Inject constructor(private val movieRepository: MovieRepository,
@@ -33,6 +34,10 @@ class MovieBrowsePresenter @Inject constructor(private val movieRepository: Movi
     override fun onQueryChanged(newQuery: String) {
         this.newQuery = newQuery
 
+        if (newQuery.length < 3) {
+            return
+        }
+
         loadMovieResultByQuery(newQuery)
     }
 
@@ -42,9 +47,9 @@ class MovieBrowsePresenter @Inject constructor(private val movieRepository: Movi
 
     private fun loadMovieResultByQuery(newQuery: String) {
         mView.showLoadingIndicator()
+        mView.clearMovieList()
         mRequest = movieRepository.getFavoriteMovieListWithGenreAndConfiguration(newQuery, ApiUtil.INITIAL_PAGE_INDEX)
                 .doAfterTerminate {
-                    mView.hideLoadingIndicator()
                     mRequest = null
                 }
                 .subscribe({ response ->
@@ -55,6 +60,7 @@ class MovieBrowsePresenter @Inject constructor(private val movieRepository: Movi
                     /*viewModel.movieList.addAll(finalMovieList)
                     viewModel.imageResponseModel = response.configurationResponseModel.imageResponseModel*/
                     mView.showMovieList(finalMovieList, response.configurationResponseModel.imageResponseModel)
+
                 }, { error -> mView.showErrorLoadingQueryResult(error) }
                 )
     }

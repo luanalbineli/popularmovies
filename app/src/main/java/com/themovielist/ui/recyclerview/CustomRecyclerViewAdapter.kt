@@ -30,8 +30,8 @@ abstract class CustomRecyclerViewAdapter<TItem, THolder : CustomRecyclerViewHold
 
     interface ViewType {
         companion object {
-            val GRID_STATUS = 0
-            val ITEM = 1
+            const val GRID_STATUS = 0
+            const val ITEM = 1
         }
     }
 
@@ -47,12 +47,12 @@ abstract class CustomRecyclerViewAdapter<TItem, THolder : CustomRecyclerViewHold
     }
 
     override fun onBindViewHolder(holder: CustomRecyclerViewHolder, position: Int) {
+        Timber.d("onBindViewHolder - Binding the view. Position: $position | GRID_STATUS: ${holder.itemViewType == ViewType.GRID_STATUS} | Holder: $holder")
         if (holder.itemViewType == ViewType.GRID_STATUS) {
             val gridStatusViewHolder = holder as GridStatusViewHolder
             gridStatusViewHolder.bind(mRequestStatus, mItems.size)
             return
         }
-
 
         onBindItemViewHolder(holder as THolder, position)
         holder.itemView.setOnClickListener {
@@ -75,7 +75,7 @@ abstract class CustomRecyclerViewAdapter<TItem, THolder : CustomRecyclerViewHold
         return itemViewType
     }
 
-    open protected fun getItemViewTypeOverride(position: Int): Int {
+    protected open fun getItemViewTypeOverride(position: Int): Int {
         return ViewType.ITEM
     }
 
@@ -89,6 +89,7 @@ abstract class CustomRecyclerViewAdapter<TItem, THolder : CustomRecyclerViewHold
         val itemCount = mItems.size
         mItems.addAll(items)
         notifyItemRangeInserted(itemCount, items.size)
+        Timber.i("addItems - itemCount: $itemCount | items.size: ${items.size}")
     }
 
     fun replaceItems(items: List<TItem>) {
@@ -113,16 +114,12 @@ abstract class CustomRecyclerViewAdapter<TItem, THolder : CustomRecyclerViewHold
         notifyItemRemoved(index)
     }
 
-    fun insertItemByIndex(item: TItem, index: Int) {
-        mItems.add(index, item)
-        notifyItemInserted(index)
-    }
-
     val items: List<TItem>
         get() = mItems
 
     fun showLoading() {
         redrawGridStatus(RequestStatusDescriptor.LOADING)
+        Timber.i("REDRAWING the grid status to SHOW the loading indicator")
     }
 
     fun hideRequestStatus() {
@@ -130,6 +127,7 @@ abstract class CustomRecyclerViewAdapter<TItem, THolder : CustomRecyclerViewHold
     }
 
     fun hideLoadingIndicator() {
+        Timber.i("REDRAWING the grid status to HIDE the loading indicator: ${mRequestStatus == RequestStatusDescriptor.LOADING}")
         if (mRequestStatus == RequestStatusDescriptor.LOADING) { // Hide only if is loading
             hideRequestStatus()
         }
@@ -137,15 +135,15 @@ abstract class CustomRecyclerViewAdapter<TItem, THolder : CustomRecyclerViewHold
 
     fun showEmptyMessage() {
         redrawGridStatus(RequestStatusDescriptor.EMPTY)
+        Timber.i("REDRAWING the grid status as EMPTY")
     }
 
     fun showErrorMessage() {
         redrawGridStatus(RequestStatusDescriptor.ERROR)
+        Timber.i("REDRAWING the grid status as ERROR")
     }
 
-
     private fun redrawGridStatus(gridStatus: Int) {
-        Timber.i("REDRAWING THE GRID STATUS: $gridStatus")
         val previousRequestStatus = mRequestStatus
         mRequestStatus = gridStatus
         if (mRequestStatus == RequestStatusDescriptor.HIDDEN) {

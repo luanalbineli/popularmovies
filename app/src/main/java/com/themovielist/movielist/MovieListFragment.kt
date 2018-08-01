@@ -74,6 +74,14 @@ class MovieListFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View =
             inflater.inflate(R.layout.movie_list_fragment, container, false)
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        if (::mAdapter.isInitialized && rvMovieList.adapter === null) {
+            configureRecyclerView(mIsListViewType)
+        }
+    }
+
     fun enableLoadMoreListener() {
         // https://codentrick.com/load-more-recyclerview-bottom-progressbar
         disableLoadMoreListener()
@@ -137,9 +145,7 @@ class MovieListFragment : Fragment() {
 
     fun useGridLayout() {
         mIsListViewType = false
-    }
 
-    private fun configureGridLayout() {
         toggleListViewTypeMenuItemIcon()
 
         mAdapter = MovieGridAdapter(R.string.the_list_is_empty) { onTryAgainListener?.invoke() }
@@ -159,18 +165,19 @@ class MovieListFragment : Fragment() {
 
     fun useListLayout() {
         mIsListViewType = true
-    }
 
-    private fun configureListLayout() {
         toggleListViewTypeMenuItemIcon()
 
-        mAdapter = MovieListAdapter(R.string.the_list_is_empty, { onTryAgainListener?.invoke() })
+        mAdapter = MovieListAdapter(R.string.the_list_is_empty) { onTryAgainListener?.invoke() }
         mLayoutManager = LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
 
         configureRecyclerView(true)
     }
 
     private fun configureRecyclerView(useDividerItemDecoration: Boolean) {
+        if (rvMovieList == null) {
+            return
+        }
         val movieListAdapter = rvMovieList.adapter as? BaseMovieListAdapter
         if (movieListAdapter != null && !movieListAdapter.isStatusError) {
             mAdapter.configurationImageModel = movieListAdapter.configurationImageModel
@@ -192,6 +199,10 @@ class MovieListFragment : Fragment() {
 
         rvMovieList.layoutManager = mLayoutManager
         rvMovieList.adapter = mAdapter
+    }
+
+    fun clearMovieList() {
+        mAdapter.clearItems()
     }
 
     companion object {

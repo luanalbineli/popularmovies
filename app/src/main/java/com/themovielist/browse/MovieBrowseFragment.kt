@@ -19,6 +19,7 @@ import com.themovielist.movielist.MovieListFragment
 import com.themovielist.ui.searchabletoolbar.OnSearchToolbarQueryChanged
 import com.themovielist.util.setDisplay
 import kotlinx.android.synthetic.main.movie_browse_fragment.*
+import timber.log.Timber
 import javax.inject.Inject
 
 class MovieBrowseFragment : BaseFragment<MovieBrowseContract.View>(), MovieBrowseContract.View, OnSearchToolbarQueryChanged {
@@ -74,7 +75,12 @@ class MovieBrowseFragment : BaseFragment<MovieBrowseContract.View>(), MovieBrows
     }
 
     override fun showMovieList(movieList: List<MovieImageGenreViewModel>, configurationImageResponseModel: ConfigurationImageResponseModel) {
-        mMovieListFragment.replaceMoviesToList(movieList, configurationImageResponseModel)
+        Timber.i("showMovieList - Adding the movie list to the recyclerview: ${movieList.size}")
+        mMovieListFragment.addMoviesToList(movieList, configurationImageResponseModel)
+    }
+
+    override fun clearMovieList() {
+        mMovieListFragment.clearMovieList()
     }
 
     private fun toggleBackDropAndListVisibility(backDropVisible: Boolean) {
@@ -86,22 +92,20 @@ class MovieBrowseFragment : BaseFragment<MovieBrowseContract.View>(), MovieBrows
         mMovieListFragment.showErrorLoadingMovies()
     }
 
-    override fun hideLoadingIndicator() {
-        mMovieListFragment.hideLoadingIndicator()
-    }
-
     override fun showLoadingIndicator() {
         mMovieListFragment.showLoadingIndicator()
         toggleBackDropAndListVisibility(false)
     }
 
     override fun onChange(query: String) {
+        Timber.i("onChange - Changing the query: $query")
         if (::mPerformQueryRunnable.isInitialized) {
             mQueryChangedHandler.removeCallbacks(mPerformQueryRunnable)
         }
 
         mPerformQueryRunnable = Runnable {
             mPresenter.onQueryChanged(query)
+            Timber.i("onChange - Running the query: $query")
         }
 
         mQueryChangedHandler.postDelayed(mPerformQueryRunnable, QUERY_WAIT_CHANGE_MILLISECONDS)
@@ -114,8 +118,7 @@ class MovieBrowseFragment : BaseFragment<MovieBrowseContract.View>(), MovieBrows
 
     companion object {
         const val MOVIE_CAST_VIEW_MODEL_BUNDLE_KEY = "movie_cast_view_model"
-        const val BROWSE_MOVIE_LIST_FRAGMENT = "browse_movie_list_fragment"
-        const val QUERY_WAIT_CHANGE_MILLISECONDS = 300L
+        const val QUERY_WAIT_CHANGE_MILLISECONDS = 500L
 
         fun getInstance(): MovieBrowseFragment {
             return MovieBrowseFragment()

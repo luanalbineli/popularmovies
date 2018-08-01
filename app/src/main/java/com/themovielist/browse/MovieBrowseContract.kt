@@ -8,9 +8,9 @@ import com.themovielist.model.view.MovieImageGenreViewModel
 interface MovieBrowseContract {
     interface View {
         fun showLoadingIndicator()
-        fun hideLoadingIndicator()
         fun showErrorLoadingQueryResult(error: Throwable)
         fun showMovieList(movieList: List<MovieImageGenreViewModel>, configurationImageResponseModel: ConfigurationImageResponseModel)
+        fun clearMovieList()
     }
 
     interface Presenter : BasePresenter<View> {
