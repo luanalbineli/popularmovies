@@ -83,7 +83,7 @@ class MovieListFragment : Fragment() {
     }
 
     fun enableLoadMoreListener() {
-        // https://codentrick.com/load-more-recyclerview-bottom-progressbar
+        // Remove a possible previous attached scroll listener
         disableLoadMoreListener()
 
         val treshold = if (rvMovieList.layoutManager is GridLayoutManager) {

@@ -59,14 +59,14 @@ class HomeFullMovieListActivity : BaseDaggerActivity<HomeFullMovieListContract.V
         vsMainContent.layoutResource = R.layout.activity_home_full_movie_list
         vsMainContent.inflate()
 
-        configureComponents(filter, savedInstanceState)
+        configureComponents()
 
         val upcomingMoviesViewModel = savedInstanceState?.getParcelable<HomeFullMovieListViewModel>(UPCOMING_MOVIES_VIEW_MODEL)
         mPresenter.start(upcomingMoviesViewModel, filter)
     }
 
-    private fun configureComponents(filter: Int, savedInstanceState: Bundle?) {
-        //setSupportActionBar(searchableToolbar)
+    private fun configureComponents() {
+        setSupportActionBar(searchableToolbar)
 
         configureToolbarBackButton(this, searchableToolbar) {
             onBackPressed()
