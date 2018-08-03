@@ -13,6 +13,7 @@ import com.themovielist.model.response.ConfigurationImageResponseModel
 import com.themovielist.model.view.MovieImageGenreViewModel
 import com.themovielist.ui.recyclerview.CustomRecyclerViewAdapter
 import kotlinx.android.synthetic.main.movie_list_fragment.*
+import timber.log.Timber
 
 
 class MovieListFragment : Fragment() {
@@ -71,12 +72,14 @@ class MovieListFragment : Fragment() {
         return super.onOptionsItemSelected(item)
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View =
-            inflater.inflate(R.layout.movie_list_fragment, container, false)
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+        return inflater.inflate(R.layout.movie_list_fragment, container, false)
+    }
+
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        Timber.wtf("onViewCreated. If I remove this log, the app will crash!!! WTFFFF? $rvMovieList")
         if (::mAdapter.isInitialized && rvMovieList.adapter === null) {
             configureRecyclerView(mIsListViewType)
         }
@@ -112,6 +115,7 @@ class MovieListFragment : Fragment() {
     }
 
     fun disableLoadMoreListener() {
+        Timber.i("disableLoadMoreListener: $rvMovieList")
         rvMovieList.clearOnScrollListeners()
     }
 

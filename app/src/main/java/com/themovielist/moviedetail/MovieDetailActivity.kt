@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.MenuItem
 import androidx.annotation.StringRes
 import androidx.appcompat.content.res.AppCompatResources
+import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.snackbar.Snackbar
 import com.themovielist.R
 import com.themovielist.base.BaseDaggerActivity
@@ -95,7 +96,7 @@ class MovieDetailActivity : BaseDaggerActivity<MovieDetailContract.View>(), Movi
 
         var isShow = false
         var scrollRange = -1
-       /* appBarLayoutMovieDetail.addOnOffsetChangedListener(AppBarLayout.BaseOnOffsetChangedListener({ appBarLayout, verticalOffset ->
+        appBarLayoutMovieDetail.addOnOffsetChangedListener(AppBarLayout.OnOffsetChangedListener { appBarLayout, verticalOffset ->
             if (scrollRange == -1) {
                 scrollRange = appBarLayout.totalScrollRange
             }
@@ -103,10 +104,10 @@ class MovieDetailActivity : BaseDaggerActivity<MovieDetailContract.View>(), Movi
                 collapse_toolbar.title = mPresenter.getMovieName()
                 isShow = true
             } else if(isShow) {
-                collapse_toolbar.title = " "
+                collapse_toolbar.title = ""
                 isShow = false
             }
-        }))*/
+        })
     }
 
     override fun showMovieInfo(movieWithGenreModel: MovieWithGenreModel) {
@@ -187,8 +188,7 @@ class MovieDetailActivity : BaseDaggerActivity<MovieDetailContract.View>(), Movi
     }
 
     override fun bindMovieReviewInfo(movieReviewList: List<MovieReviewModel>) {
-
-        val reviewSection = findViewById(R.id.mdsMovieDetailReviewSection) as MovieDetailSectionView<MovieReviewModel>
+        val reviewSection = findViewById<MovieDetailSectionView<MovieReviewModel>>(R.id.mdsMovieDetailReviewSection)
         reviewSection.onBindSectionContent = { itemView, movieReviewModel ->
             MovieDetailReviewViewHolder.bindLayout(itemView, movieReviewModel.author, movieReviewModel.content)
         }
@@ -200,7 +200,7 @@ class MovieDetailActivity : BaseDaggerActivity<MovieDetailContract.View>(), Movi
     }
 
     override fun bindMovieTrailerInfo(movieTrailerList: List<MovieTrailerModel>) {
-        val trailerSection = findViewById(R.id.mdsMovieDetailTrailerSection) as MovieDetailSectionView<MovieTrailerModel>
+        val trailerSection = findViewById<MovieDetailSectionView<MovieTrailerModel>>(R.id.mdsMovieDetailTrailerSection)
         trailerSection.onBindSectionContent = { itemView, movieTrailerModel ->
             MovieTrailerViewHolder.bindLayout(itemView, movieTrailerModel)
             itemView.setOnClickListener { YouTubeUtil.openYouTubeVideo(this, movieTrailerModel.source) }

@@ -14,6 +14,14 @@ import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.*
 import javax.inject.Singleton
+import com.google.gson.JsonParseException
+import com.google.gson.JsonDeserializationContext
+import com.google.gson.JsonElement
+import com.google.gson.JsonDeserializer
+import java.lang.reflect.Type
+import java.text.DateFormat
+import java.text.ParseException
+import java.text.SimpleDateFormat
 
 
 @Module
@@ -54,9 +62,23 @@ class ApplicationModule(private val mPopularMovieApplication: PopularMovieApplic
     }
 
     private fun buildGsonConverter(): Converter.Factory {
-        // https://github.com/google/gson/issues/1096
         val gson = GsonBuilder()
-                .setDateFormat(DEFAULT_DATE_FORMAT)
+                // Handle empty release_date cases.
+                .registerTypeAdapter(Date::class.java, object : JsonDeserializer<Date> {
+                    var dateFormat: DateFormat = SimpleDateFormat(DEFAULT_DATE_FORMAT, Locale.getDefault())
+                    @Throws(JsonParseException::class)
+                    override fun deserialize(json: JsonElement, typeOfT: Type, context: JsonDeserializationContext): Date? {
+                        return try {
+                            if (json.asString.isNullOrEmpty())
+                                null
+                            else
+                                dateFormat.parse(json.asString)
+                        } catch (e: ParseException) {
+                            null
+                        }
+
+                    }
+                })
                 .create()
 
         val dateTypeAdapter = gson.getAdapter(Date::class.java)

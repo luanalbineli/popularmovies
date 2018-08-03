@@ -12,6 +12,7 @@ This is a powerful version of the second project of the Udacity's Android Nanode
   * Timber
   * Fresco
   * EventBus
+  * AndroidX
   * And so on
 
 ##### Why architecture patterns?

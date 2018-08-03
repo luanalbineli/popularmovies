@@ -16,18 +16,18 @@ class GenreListVH(itemView: View)
     : CustomRecyclerViewHolder(itemView) {
 
     fun bind(genreModel: GenreListItemModel) {
-        itemView.tvGenreName.text = genreModel.genreModel.name
+        itemView.chipGenre.text = genreModel.genreModel.name
 
         val color = if (genreModel.selected)
             Color.parseColor(CommonRepository.GENRE_COLOR_MAP.get(genreModel.genreModel.id))
         else
             ContextCompat.getColor(itemView.context, android.R.color.darker_gray)
-
-        val background = itemView.tvGenreName.background
+        itemView.chipGenre.isChecked = genreModel.selected
+        /*val background = itemView.tvGenreName.background
         when (background) {
             is ShapeDrawable -> background.paint.color = color
             is GradientDrawable -> background.setColor(color)
             is ColorDrawable -> background.color = color
-        }
+        }*/
     }
 }
