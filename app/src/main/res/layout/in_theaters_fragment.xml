@@ -28,9 +28,29 @@
     </com.google.android.material.appbar.AppBarLayout>
 
     <fragment
+        android:id="@+id/fragmentMovieListInTheaters"
+        android:name="com.themovielist.movielist.MovieListFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        android:name="com.themovielist.movielist.MovieListFragment"
-        android:id="@+id/fragmentMovieListInTheaters" />
+        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:layout_width="wrap_content"
+        android:id="@+id/fab_filter"
+        android:layout_gravity="bottom|end"
+        android:layout_marginLeft="32dp"
+        android:layout_marginBottom="32dp"
+        android:layout_height="wrap_content" />
+    
+    <fragment
+        app:behavior_hideable="true"
+        app:behavior_peekHeight="64dp"
+        app:behavior_skipCollapsed="true"
+        android:id="@+id/filter_fragment"
+        app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior"
+        android:layout_gravity="top|bottom|center_vertical|fill_vertical|center|fill"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="4dp"
+        android:layout_width="match_parent"
+        android:name="com.themovielist.intheaters.FilterFragment" />
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

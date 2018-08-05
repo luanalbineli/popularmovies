@@ -75,7 +75,7 @@ internal constructor(movieRepository: MovieRepository) : BasePresenterImpl(movie
 
     override fun onStop() {
         mRequest?.also {
-            if (it.isDisposed) {
+            if (!it.isDisposed) {
                 it.dispose()
             }
         }

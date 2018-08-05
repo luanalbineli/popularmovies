@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.themovielist.R
 import com.themovielist.base.BaseFragment
 import com.themovielist.base.BasePresenter
@@ -15,6 +16,7 @@ import com.themovielist.model.view.MovieImageGenreViewModel
 import com.themovielist.movielist.MovieListFragment
 import com.themovielist.util.ApiUtil
 import com.themovielist.util.yearFromCalendar
+import kotlinx.android.synthetic.main.in_theaters_fragment.*
 import kotlinx.android.synthetic.main.movie_header_detail.*
 import timber.log.Timber
 import javax.inject.Inject
@@ -48,9 +50,17 @@ class InTheatersFragment : BaseFragment<InTheatersContract.View>(), InTheatersCo
         activity?.setTitle(R.string.cinema)
 
         mMovieListFragment = childFragmentManager.findFragmentById(R.id.fragmentMovieListInTheaters) as MovieListFragment
+        val filterFragment = childFragmentManager.findFragmentById(R.id.filter_fragment) as FilterFragment
 
         mMovieListFragment.useListLayout()
         mPresenter.start()
+
+        val bottomSheetBehaviour = BottomSheetBehavior.from(filterFragment.view)
+        bottomSheetBehaviour.state = BottomSheetBehavior.STATE_HIDDEN
+        fab_filter.setOnClickListener {
+            bottomSheetBehaviour.state = BottomSheetBehavior.STATE_EXPANDED
+        }
+
     }
 
     override fun showMainMovieDetail(movieWithGenreModel: MovieWithGenreModel) {

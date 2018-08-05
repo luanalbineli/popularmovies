@@ -3,13 +3,11 @@ package com.themovielist.home.fulllist
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.view.Gravity
-import androidx.drawerlayout.widget.DrawerLayout
+import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.themovielist.R
 import com.themovielist.base.BaseDaggerActivity
 import com.themovielist.base.BasePresenter
 import com.themovielist.enums.HomeMovieSortEnum
-import com.themovielist.favorite.FavoriteFragment
 import com.themovielist.injector.components.ApplicationComponent
 import com.themovielist.injector.components.DaggerFragmentComponent
 import com.themovielist.model.response.ConfigurationImageResponseModel
@@ -20,7 +18,6 @@ import com.themovielist.moviedetail.MovieDetailActivity
 import com.themovielist.movielist.MovieListFragment
 import kotlinx.android.synthetic.main.activity_home_full_movie_list.*
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.home_full_list_activity.*
 import timber.log.Timber
 import java.security.InvalidParameterException
 import javax.inject.Inject
@@ -53,8 +50,6 @@ class HomeFullMovieListActivity : BaseDaggerActivity<HomeFullMovieListContract.V
         }
 
         setContentView(R.layout.activity_main)
-       /* val gravity = Gravity.LEFT or Gravity.RIGHT or Gravity.CENTER_HORIZONTAL or Gravity.FILL_HORIZONTAL or Gravity.CENTER or Gravity.FILL or Gravity.START or Gravity.END
-        button_test.setOnClickListener { home_full_list_drawer.openDrawer(gravity) }*/
 
         vsMainContent.layoutResource = R.layout.activity_home_full_movie_list
         vsMainContent.inflate()
@@ -93,6 +88,13 @@ class HomeFullMovieListActivity : BaseDaggerActivity<HomeFullMovieListContract.V
 
         glvGenreList.onSelectGenreListener = { _, genreListItemModel ->
             mPresenter.onChangeSelectedGenre(genreListItemModel)
+        }
+
+        val bottomSheetBehavior = BottomSheetBehavior.from(glvGenreList)
+        bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
+
+        fab_filter.setOnClickListener {
+            bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
         }
     }
 
