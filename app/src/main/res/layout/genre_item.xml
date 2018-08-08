@@ -11,5 +11,6 @@
     style="@style/Widget.MaterialComponents.Chip.Filter"
     android:id="@+id/chipGenre"
     tools:text="CHIP_GENRE_TEST"
+    android:layout_margin="8dp"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content" />

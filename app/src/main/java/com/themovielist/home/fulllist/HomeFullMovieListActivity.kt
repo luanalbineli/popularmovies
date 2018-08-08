@@ -60,10 +60,15 @@ class HomeFullMovieListActivity : BaseDaggerActivity<HomeFullMovieListContract.V
         mPresenter.start(upcomingMoviesViewModel, filter)
     }
 
+    private val mFilterBottomSheetBehavior by lazy { BottomSheetBehavior.from(clGenreFilterContainer) }
+
+    private var mUserPressedBackFromToobar = false
+
     private fun configureComponents() {
         setSupportActionBar(searchableToolbar)
 
         configureToolbarBackButton(this, searchableToolbar) {
+            mUserPressedBackFromToobar = true
             onBackPressed()
         }
 
@@ -90,11 +95,10 @@ class HomeFullMovieListActivity : BaseDaggerActivity<HomeFullMovieListContract.V
             mPresenter.onChangeSelectedGenre(genreListItemModel)
         }
 
-        val bottomSheetBehavior = BottomSheetBehavior.from(glvGenreList)
-        bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
+        mFilterBottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
 
         fab_filter.setOnClickListener {
-            bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
+            mFilterBottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
         }
     }
 
@@ -104,6 +108,14 @@ class HomeFullMovieListActivity : BaseDaggerActivity<HomeFullMovieListContract.V
         } else {
           R.string.rating
         })
+    }
+
+    override fun onBackPressed() {
+        if (!mUserPressedBackFromToobar && mFilterBottomSheetBehavior.state == BottomSheetBehavior.STATE_EXPANDED) {
+            mFilterBottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
+        } else {
+            super.onBackPressed()
+        }
     }
 
     override fun setListViewType(useListViewType: Boolean) {
@@ -176,7 +188,6 @@ class HomeFullMovieListActivity : BaseDaggerActivity<HomeFullMovieListContract.V
     companion object {
         private const val UPCOMING_MOVIES_VIEW_MODEL = "upcoming_movies_view_model"
         private const val HOME_MOVIE_SORT = "home_movie_sort"
-        private const val HOME_FULL_MOVIE_LIST_FRAGMENT = "HOME_FULL_MOVIE_LIST_FRAGMENT"
 
         fun getInstance(): HomeFullMovieListActivity = HomeFullMovieListActivity()
         fun getIntent(context: Context, homeMovieSort: Int): Intent =

@@ -4,6 +4,7 @@ import android.content.Context
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.widget.FrameLayout
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.themovielist.R
 import com.themovielist.model.view.GenreListItemModel
@@ -27,7 +28,7 @@ class GenreListView(context: Context?, attrs: AttributeSet?) : FrameLayout(conte
         val spaceItemViewDecoration = HorizonalSpaceItemDecoration(dividerAmountOfSpace.toInt())
         rvGenreList.addItemDecoration(spaceItemViewDecoration)
 
-        val linearLayoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+        val linearLayoutManager = GridLayoutManager(context, 2)
         rvGenreList.layoutManager = linearLayoutManager
 
         mGenreListAdapter.setOnItemClickListener { position, item ->

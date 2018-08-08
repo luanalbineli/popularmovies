@@ -44,4 +44,5 @@
     <string name="release_date">Release date</string>
     <string name="most_popular">Most popular</string>
     <string name="most_rated">Most rated</string>
+    <string name="genre_filter">Genre filter</string>
 </resources>
