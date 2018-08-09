@@ -4,16 +4,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:id="@+id/llContentContainer"
     app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-    <!-- This could be your fragment container, or something -->
     <FrameLayout
         android:id="@+id/flMainContent"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1" />
-
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         style="@style/Widget.MaterialComponents.BottomNavigationView.Colored"
@@ -21,9 +18,4 @@
         android:layout_height="wrap_content"
         android:id="@+id/bnvBottomNavigationView"
         app:menu="@menu/bottom_navigation_items"/>
-    <!--<android.support.design.widget.BottomNavigationView
-        android:id="@+id/bnvBottomNavigationView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:menu="@menu/bottom_navigation_items"/>-->
 </LinearLayout>

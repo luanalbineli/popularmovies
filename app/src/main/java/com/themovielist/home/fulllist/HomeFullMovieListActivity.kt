@@ -95,11 +95,11 @@ class HomeFullMovieListActivity : BaseDaggerActivity<HomeFullMovieListContract.V
             mPresenter.onChangeSelectedGenre(genreListItemModel)
         }
 
-        mFilterBottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
+       /* mFilterBottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
 
         fab_filter.setOnClickListener {
             mFilterBottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
-        }
+        }*/
     }
 
     override fun setTitleByFilter(filter: Int) {

@@ -21,16 +21,17 @@
         app:srcCompat="@drawable/ic_filter" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/clGenreFilterContainer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/clGenreFilterContainer"
         android:background="@drawable/genre_filter_background"
         app:behavior_hideable="true"
         app:behavior_peekHeight="0dp"
-        app:behavior_skipCollapsed="true"
-        app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
+        app:elevation="8dp"
+        app:behavior_skipCollapsed="true">
 
         <TextView
+            app:elevation="8dp"
             android:id="@+id/genreFilterTitle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -47,7 +48,10 @@
             android:layout_height="0dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/genreFilterTitle" />
+            app:layout_constraintTop_toBottomOf="@+id/genreFilterTitle"
+            app:layout_constraintVertical_bias="0.0" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

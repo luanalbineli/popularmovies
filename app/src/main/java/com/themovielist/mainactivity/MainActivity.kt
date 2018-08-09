@@ -17,39 +17,45 @@ import java.security.InvalidParameterException
 
 class MainActivity : BaseActivity(), FragmentManager.OnBackStackChangedListener {
     // Default tab.
-    private var mSelectedItemId = R.id.bottom_menu_item_home
+    private var mSelectedNavItemId = Int.MIN_VALUE
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        setContentView(R.layout.content_main)
 
-        vsMainContent.layoutResource = R.layout.content_main
-        vsMainContent.inflate()
+        /*vsMainContent.layoutResource = R.layout.content_main
+        vsMainContent.inflate()*/
 
-        setSupportActionBar(searchableToolbar)
-
-        if (savedInstanceState != null && savedInstanceState.containsKey(SELECTED_TAB_BUNDLE_KEY)) {
-            mSelectedItemId = savedInstanceState.getInt(SELECTED_TAB_BUNDLE_KEY)
-        }
-
-        bnvBottomNavigationView.setOnNavigationItemSelectedListener { menuItem ->
-            mSelectedItemId = menuItem.itemId
-            setUpMainContentFragment()
-            true
-        }
-
-
-        bnvBottomNavigationView.selectedItemId = mSelectedItemId
+        configureBottomNavigationView(savedInstanceState)
 
         supportFragmentManager.addOnBackStackChangedListener(this)
 
         checkShouldDisplayBackButton()
     }
 
+    private fun configureBottomNavigationView(savedInstanceState: Bundle?) {
+        var initialSelectedNavItemId = R.id.bottom_menu_item_home
+        if (savedInstanceState != null && savedInstanceState.containsKey(SELECTED_TAB_BUNDLE_KEY)) {
+            initialSelectedNavItemId = savedInstanceState.getInt(SELECTED_TAB_BUNDLE_KEY)
+        }
+
+        bnvBottomNavigationView.setOnNavigationItemSelectedListener { menuItem ->
+            if (mSelectedNavItemId == menuItem.itemId) {
+                return@setOnNavigationItemSelectedListener true
+            }
+            mSelectedNavItemId = menuItem.itemId
+            setUpMainContentFragment()
+            true
+        }
+
+
+        bnvBottomNavigationView.selectedItemId = initialSelectedNavItemId
+    }
+
     private fun setUpMainContentFragment() {
         var fragmentInstance: Fragment? = null
         var fragmentTag = ""
-        when (mSelectedItemId) {
+        when (mSelectedNavItemId) {
             R.id.bottom_menu_item_home -> {
                 fragmentInstance = HomeFragment.getInstance()
                 fragmentTag = HOME_FRAGMENT_TAG
@@ -69,14 +75,14 @@ class MainActivity : BaseActivity(), FragmentManager.OnBackStackChangedListener 
         }
 
         if (fragmentInstance === null) {
-            throw InvalidParameterException("mSelectedItemId: $mSelectedItemId")
+            throw InvalidParameterException("mSelectedNavItemId: $mSelectedNavItemId")
         }
 
         checkChangeMainContent(fragmentTag) {
             fragmentInstance
         }
 
-        searchableToolbar.onSearchToolbarQueryChanged = (fragmentInstance as? OnSearchToolbarQueryChanged)
+        // searchableToolbar.onSearchToolbarQueryChanged = (fragmentInstance as? OnSearchToolbarQueryChanged)
     }
 
     private fun checkChangeMainContent(fragmentTag: String, fragmentInstanceInvoker: () -> Fragment) {
@@ -94,7 +100,7 @@ class MainActivity : BaseActivity(), FragmentManager.OnBackStackChangedListener 
 
     public override fun onSaveInstanceState(outState: Bundle?) {
         super.onSaveInstanceState(outState)
-        outState?.putInt(SELECTED_TAB_BUNDLE_KEY, mSelectedItemId)
+        outState?.putInt(SELECTED_TAB_BUNDLE_KEY, mSelectedNavItemId)
     }
 
     companion object {
