@@ -1,8 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:animateLayoutChanges="true"
+    tools:context="com.themovielist.mainactivity.MainActivity">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appBarLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/AppTheme.AppBarOverlay">
+
+        <com.themovielist.ui.searchabletoolbar.SearchableToolbar
+            android:id="@+id/searchableToolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            app:popupTheme="@style/AppTheme.PopupOverlay" />
+
+    </com.google.android.material.appbar.AppBarLayout>
 
     <fragment
         android:id="@+id/fragmentMovieListHomeList"
@@ -20,6 +38,7 @@
         android:layout_marginBottom="16dp"
         app:srcCompat="@drawable/ic_filter" />
 
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/clGenreFilterContainer"
         android:layout_width="match_parent"
@@ -27,23 +46,25 @@
         android:background="@drawable/genre_filter_background"
         app:behavior_hideable="true"
         app:behavior_peekHeight="0dp"
+        app:behavior_skipCollapsed="true"
         app:elevation="8dp"
-        app:behavior_skipCollapsed="true">
+        app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
 
         <TextView
-            app:elevation="8dp"
             android:id="@+id/genreFilterTitle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
             android:gravity="center"
             android:text="@string/genre_filter"
+            app:elevation="8dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <com.themovielist.ui.genrelist.GenreListView
             android:id="@+id/glvGenreList"
+            android:layout_marginTop="16dp"
             android:layout_width="0dp"
             android:layout_height="0dp"
             app:layout_constraintBottom_toBottomOf="parent"

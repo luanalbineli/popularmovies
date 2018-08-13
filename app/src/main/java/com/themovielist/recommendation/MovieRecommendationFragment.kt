@@ -77,12 +77,16 @@ class MovieRecommendationFragment : BaseFragment<MovieRecommendationContract.Vie
         mMovieRecommendationList.showLoadingIndicator()
     }
 
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-       /* if (this.mPresenter.movieListViewModel != null) {
-
-        }*/
+    override fun showEmptyRecommendationListMessage() {
+        mMovieRecommendationList.showEmptyMessageList()
     }
+
+  /*  override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+       *//* if (this.mPresenter.movieListViewModel != null) {
+
+        }*//*
+    }*/
 
     override fun onStop() {
         super.onStop()
@@ -91,6 +95,5 @@ class MovieRecommendationFragment : BaseFragment<MovieRecommendationContract.Vie
 
     companion object {
         const val MOVIE_LIST_VIEW_MODEL_BUNDLE_KEY = "movie_list_view_model"
-        const val MOVIE_RECCOMENDATIONLIST_FRAGMENT = "MOVIE_RECCOMENDATIONLIST_FRAGMENT"
     }
 }

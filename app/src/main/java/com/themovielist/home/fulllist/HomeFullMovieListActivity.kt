@@ -16,8 +16,7 @@ import com.themovielist.model.view.HomeFullMovieListViewModel
 import com.themovielist.model.view.MovieImageGenreViewModel
 import com.themovielist.moviedetail.MovieDetailActivity
 import com.themovielist.movielist.MovieListFragment
-import kotlinx.android.synthetic.main.activity_home_full_movie_list.*
-import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.home_full_movie_list_activity.*
 import timber.log.Timber
 import java.security.InvalidParameterException
 import javax.inject.Inject
@@ -29,10 +28,15 @@ class HomeFullMovieListActivity : BaseDaggerActivity<HomeFullMovieListContract.V
 
     override val viewImplementation: HomeFullMovieListContract.View
         get() = this
+
     @Inject
     lateinit var mPresenter: HomeFullMovieListPresenter
 
     private lateinit var mMovieListFragment: MovieListFragment
+
+    private val mFilterBottomSheetBehavior by lazy { BottomSheetBehavior.from(clGenreFilterContainer) }
+
+    private var mUserPressedBackFromToobar = false
 
     override fun onInjectDependencies(applicationComponent: ApplicationComponent) {
         DaggerFragmentComponent.builder()
@@ -49,20 +53,13 @@ class HomeFullMovieListActivity : BaseDaggerActivity<HomeFullMovieListContract.V
             throw InvalidParameterException(HOME_MOVIE_SORT)
         }
 
-        setContentView(R.layout.activity_main)
-
-        vsMainContent.layoutResource = R.layout.activity_home_full_movie_list
-        vsMainContent.inflate()
+        setContentView(R.layout.home_full_movie_list_activity)
 
         configureComponents()
 
         val upcomingMoviesViewModel = savedInstanceState?.getParcelable<HomeFullMovieListViewModel>(UPCOMING_MOVIES_VIEW_MODEL)
         mPresenter.start(upcomingMoviesViewModel, filter)
     }
-
-    private val mFilterBottomSheetBehavior by lazy { BottomSheetBehavior.from(clGenreFilterContainer) }
-
-    private var mUserPressedBackFromToobar = false
 
     private fun configureComponents() {
         setSupportActionBar(searchableToolbar)
@@ -95,11 +92,11 @@ class HomeFullMovieListActivity : BaseDaggerActivity<HomeFullMovieListContract.V
             mPresenter.onChangeSelectedGenre(genreListItemModel)
         }
 
-       /* mFilterBottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
+        mFilterBottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
 
         fab_filter.setOnClickListener {
             mFilterBottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
-        }*/
+        }
     }
 
     override fun setTitleByFilter(filter: Int) {
@@ -154,7 +151,7 @@ class HomeFullMovieListActivity : BaseDaggerActivity<HomeFullMovieListContract.V
     }
 
     override fun showErrorLoadingUpcomingMovies(error: Throwable) {
-        Timber.e(error, "An error occurred while tried to load the upcoming movies")
+        Timber.e(error, "An error occurred while tried to load the movie list")
         mMovieListFragment.showErrorLoadingMovies()
     }
 

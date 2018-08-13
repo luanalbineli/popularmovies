@@ -10,27 +10,19 @@ import com.themovielist.favorite.FavoriteFragment
 import com.themovielist.home.HomeFragment
 import com.themovielist.intheaters.InTheatersFragment
 import com.themovielist.ui.searchabletoolbar.OnSearchToolbarQueryChanged
-import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.home_full_movie_list_activity.*
 import kotlinx.android.synthetic.main.content_main.*
 import java.security.InvalidParameterException
 
 
-class MainActivity : BaseActivity(), FragmentManager.OnBackStackChangedListener {
-    // Default tab.
+class MainActivity : BaseActivity() {
     private var mSelectedNavItemId = Int.MIN_VALUE
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.content_main)
 
-        /*vsMainContent.layoutResource = R.layout.content_main
-        vsMainContent.inflate()*/
-
         configureBottomNavigationView(savedInstanceState)
-
-        supportFragmentManager.addOnBackStackChangedListener(this)
-
-        checkShouldDisplayBackButton()
     }
 
     private fun configureBottomNavigationView(savedInstanceState: Bundle?) {
@@ -81,21 +73,10 @@ class MainActivity : BaseActivity(), FragmentManager.OnBackStackChangedListener 
         checkChangeMainContent(fragmentTag) {
             fragmentInstance
         }
-
-        // searchableToolbar.onSearchToolbarQueryChanged = (fragmentInstance as? OnSearchToolbarQueryChanged)
     }
 
     private fun checkChangeMainContent(fragmentTag: String, fragmentInstanceInvoker: () -> Fragment) {
         replaceFragment(supportFragmentManager, R.id.flMainContent, fragmentTag, fragmentInstanceInvoker)
-    }
-
-    private fun checkShouldDisplayBackButton() {
-        val shouldDisplayBackButton = supportFragmentManager.backStackEntryCount > 0
-        supportActionBar?.setDisplayHomeAsUpEnabled(shouldDisplayBackButton)
-    }
-
-    override fun onBackStackChanged() {
-        checkShouldDisplayBackButton()
     }
 
     public override fun onSaveInstanceState(outState: Bundle?) {

@@ -10,6 +10,7 @@ interface MovieRecommendationContract {
         fun hideLoadingIndicator()
         fun showMovieRecommendationList(movieRecommendationList: List<MovieModel>)
         fun showErrorLoadingMovieCast(error: Throwable)
+        fun showEmptyRecommendationListMessage()
     }
 
     interface Presenter : BasePresenter<View> {

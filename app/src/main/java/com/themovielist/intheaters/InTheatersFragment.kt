@@ -50,16 +50,9 @@ class InTheatersFragment : BaseFragment<InTheatersContract.View>(), InTheatersCo
         activity?.setTitle(R.string.cinema)
 
         mMovieListFragment = childFragmentManager.findFragmentById(R.id.fragmentMovieListInTheaters) as MovieListFragment
-        val filterFragment = childFragmentManager.findFragmentById(R.id.filter_fragment) as FilterFragment
 
         mMovieListFragment.useListLayout()
         mPresenter.start()
-
-        val bottomSheetBehaviour = BottomSheetBehavior.from(filterFragment.view)
-        bottomSheetBehaviour.state = BottomSheetBehavior.STATE_HIDDEN
-        fab_filter.setOnClickListener {
-            bottomSheetBehaviour.state = BottomSheetBehavior.STATE_EXPANDED
-        }
 
     }
 
@@ -99,8 +92,6 @@ class InTheatersFragment : BaseFragment<InTheatersContract.View>(), InTheatersCo
     }
 
     companion object {
-        const val IN_THEATERS_MOVIE_LIST_FRAGMENT = "in_theaters_movie_list_fragment"
-
         fun getInstance(): InTheatersFragment = InTheatersFragment()
     }
 }

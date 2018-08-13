@@ -56,10 +56,10 @@ constructor(retrofit: Retrofit, var applicationContext: PopularMovieApplication)
             Timber.d("The configuration model is no cached. And the request? ${mConfigurationRequest != null}")
             mConfigurationRequest ?: observeOnMainThread(mApiInstance.getConfiguration()).also {
                 mConfigurationRequest = it
-                it.subscribe({ response ->
+                it.subscribe { response ->
                     mConfigurationResponseModel = response
                     mConfigurationRequest = null
-                })
+                }
             }
         }()
     }

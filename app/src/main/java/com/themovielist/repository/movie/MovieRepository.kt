@@ -29,7 +29,7 @@ internal constructor(mRetrofit: Retrofit, private val mApplicationContext: Popul
 
     fun getFavoriteMovieListWithGenreAndConfiguration(): Single<MovieListResponseModel> {
         return getMoviesWithGenreAndConfiguration(
-                observeOnMainThread(Single.create({ emitter ->
+                observeOnMainThread(Single.create { emitter ->
                     mApplicationContext.safeContentResolver(emitter) {
                         val cursor = query(MovieContract.MovieEntry.CONTENT_URI, null, null, null, null)
                         if (cursor == null) {
@@ -50,7 +50,7 @@ internal constructor(mRetrofit: Retrofit, private val mApplicationContext: Popul
                             emitter.onSuccess(arrayRequestAPI)
                         }
                     }
-                })))
+                }))
     }
 
     fun getFavoriteMovieListWithGenreAndConfiguration(newQuery: String, pageIndex: Int): Single<MovieListResponseModel> {

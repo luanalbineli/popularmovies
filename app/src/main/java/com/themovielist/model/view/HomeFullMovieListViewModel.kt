@@ -2,11 +2,8 @@ package com.themovielist.model.view
 
 import android.os.Parcel
 import android.os.Parcelable
-import android.util.SparseArray
-import com.themovielist.model.GenreModel
 import com.themovielist.model.response.ConfigurationImageResponseModel
 import com.themovielist.util.readBoolean
-import com.themovielist.util.values
 import com.themovielist.util.writeBoolean
 
 data class HomeFullMovieListViewModel(
@@ -16,8 +13,7 @@ data class HomeFullMovieListViewModel(
         var firstVisibleItemPosition: Int = 0,
         var imageResponseModel: ConfigurationImageResponseModel? = null,
         var hasMorePages: Boolean = false,
-        var genreMap: SparseArray<GenreModel> = SparseArray(),
-        var selectedGenreMap: SparseArray<GenreModel> = SparseArray()) : Parcelable {
+        var genreListItemModelList: List<GenreListItemModel> = ArrayList()) : Parcelable {
 
     constructor(parcel: Parcel) : this(
             parcel.readInt(),
@@ -25,15 +21,8 @@ data class HomeFullMovieListViewModel(
             parcel.createTypedArrayList(MovieImageGenreViewModel).toMutableList(),
             parcel.readInt(),
             parcel.readParcelable(ConfigurationImageResponseModel::class.java.classLoader),
-            parcel.readBoolean()) {
-        parcel.createTypedArrayList(GenreModel).map {
-            genreMap.append(it.id, it)
-        }
-
-        parcel.createTypedArrayList(GenreModel).map {
-            selectedGenreMap.append(it.id, it)
-        }
-    }
+            parcel.readBoolean(),
+            parcel.createTypedArrayList(GenreListItemModel))
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
         parcel.writeInt(filter)
@@ -42,8 +31,7 @@ data class HomeFullMovieListViewModel(
         parcel.writeInt(firstVisibleItemPosition)
         parcel.writeParcelable(imageResponseModel, 0)
         parcel.writeBoolean(hasMorePages)
-        parcel.writeTypedList(genreMap.values())
-        parcel.writeTypedList(selectedGenreMap.values())
+        parcel.writeTypedList(genreListItemModelList)
     }
 
     override fun describeContents(): Int = 0

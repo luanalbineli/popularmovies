@@ -6,7 +6,7 @@ import android.provider.BaseColumns;
 public abstract class MovieContract {
     static final String CONTENT_AUTHORITY = "com.albineli.udacity.popuparmovies.provider";
 
-    static final Uri BASE_CONTENT_URI = Uri.parse("content://" + CONTENT_AUTHORITY);
+    private static final Uri BASE_CONTENT_URI = Uri.parse("content://" + CONTENT_AUTHORITY);
 
     static final String PATH_MOVIE = "movie";
 

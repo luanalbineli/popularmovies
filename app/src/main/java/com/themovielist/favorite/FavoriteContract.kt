@@ -29,7 +29,6 @@ object FavoriteContract {
         fun showMovieDetail(movieImageGenreViewModel: MovieImageGenreViewModel)
         fun onStop(firstVisibleItemPosition: Int)
         fun loadMoreMovies()
-        fun onChangeSelectedGenre(genreListItemModel: GenreListItemModel)
         fun onChangeListViewType(useListViewType: Boolean)
         fun handleSortMenuClick()
     }

@@ -7,7 +7,7 @@ import javax.inject.Inject
 
 class MovieRecommendationPresenter @Inject constructor(private val movieRepository: MovieRepository) : MovieRecommendationContract.Presenter {
     private lateinit var mView: MovieRecommendationContract.View
-    lateinit var movieListViewModel: MovieListViewModel
+    private lateinit var movieListViewModel: MovieListViewModel
     private var mRequest: Disposable? = null
     private var mMovieId: Int? = null
 
@@ -36,11 +36,15 @@ class MovieRecommendationPresenter @Inject constructor(private val movieReposito
 
     private fun loadMovieCast(movieId: Int) {
         mView.showLoadingIndicator()
-        movieRepository.getMovieRecommendationsByMovieId(movieId)
+        mRequest = movieRepository.getMovieRecommendationsByMovieId(movieId)
                 .doAfterTerminate { mView.hideLoadingIndicator() }
                 .subscribe({ response ->
                     this.movieListViewModel.movieList = response.results
-                    mView.showMovieRecommendationList(response.results)
+                    if (response.results.isEmpty()) {
+                        mView.showEmptyRecommendationListMessage()
+                    } else {
+                        mView.showMovieRecommendationList(response.results)
+                    }
                 }, { error -> mView.showErrorLoadingMovieCast(error) })
 
     }
@@ -53,5 +57,9 @@ class MovieRecommendationPresenter @Inject constructor(private val movieReposito
         }
     }
 
-    override fun tryAgain() = loadMovieCast(mMovieId!!)
+    override fun tryAgain() {
+        mMovieId?.let {
+            loadMovieCast(it)
+        }
+    }
 }

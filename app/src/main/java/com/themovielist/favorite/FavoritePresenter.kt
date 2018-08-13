@@ -2,7 +2,6 @@ package com.themovielist.favorite
 
 import com.themovielist.model.response.ConfigurationImageResponseModel
 import com.themovielist.model.response.MovieListResponseModel
-import com.themovielist.model.view.GenreListItemModel
 import com.themovielist.model.view.HomeFullMovieListViewModel
 import com.themovielist.model.view.MovieImageGenreViewModel
 import com.themovielist.repository.movie.CommonRepository
@@ -85,11 +84,6 @@ constructor(private var movieRepository: MovieRepository, private var commonRepo
             } else {
                 mView.disableLoadMoreListener()
             }
-
-            if (it.pageIndex == ApiUtil.INITIAL_PAGE_INDEX) {
-                it.selectedGenreMap = response.genreListModel.clone()
-                it.genreMap = response.genreListModel
-            }
         }
     }
 
@@ -137,18 +131,6 @@ constructor(private var movieRepository: MovieRepository, private var commonRepo
             if (!it.isDisposed) {
                 it.dispose()
             }
-        }
-    }
-
-    override fun onChangeSelectedGenre(genreListItemModel: GenreListItemModel) {
-        upcomingMoviesViewModel?.let {
-            if (genreListItemModel.selected) {
-                it.selectedGenreMap.append(genreListItemModel.genreModel.id, genreListItemModel.genreModel)
-            } else {
-                it.selectedGenreMap.delete(genreListItemModel.genreModel.id)
-            }
-
-            filterUpcomingMovieList(it.movieList, it.imageResponseModel!!, true)
         }
     }
 

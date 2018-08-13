@@ -1,8 +1,6 @@
 package com.themovielist.home.fulllist
 
-import android.util.SparseArray
 import com.themovielist.enums.HomeMovieSortEnum
-import com.themovielist.model.GenreModel
 import com.themovielist.model.response.ConfigurationImageResponseModel
 import com.themovielist.model.response.MovieListResponseModel
 import com.themovielist.model.view.GenreListItemModel
@@ -12,7 +10,6 @@ import com.themovielist.repository.movie.CommonRepository
 import com.themovielist.repository.movie.MovieRepository
 import com.themovielist.util.ApiUtil
 import com.themovielist.util.Defaults
-import com.themovielist.util.containsKey
 import com.themovielist.util.values
 import io.reactivex.disposables.Disposable
 import timber.log.Timber
@@ -45,7 +42,7 @@ constructor(private var movieRepository: MovieRepository, private var commonRepo
         mView.setListViewType(useListViewType)
 
         upcomingMoviesViewModel?.let { viewModel ->
-            filterUpcomingMovieList(viewModel.movieList, viewModel.imageResponseModel!!, viewModel.genreMap, viewModel.selectedGenreMap, true)
+            filterUpcomingMovieList(viewModel.movieList, viewModel.imageResponseModel!!, viewModel.genreListItemModelList, true)
             mView.scrollToItemPosition(viewModel.firstVisibleItemPosition)
 
             if (viewModel.hasMorePages) {
@@ -54,11 +51,7 @@ constructor(private var movieRepository: MovieRepository, private var commonRepo
                 mView.disableLoadMoreListener()
             }
 
-            mView.showGenreList(viewModel.genreMap.values()
-                    .sortedBy { it.name }
-                    .map {
-                        GenreListItemModel(it, viewModel.selectedGenreMap.containsKey(it.id))
-                    })
+            mView.showGenreList(viewModel.genreListItemModelList)
 
         } ?: fetchUpcomingMovieList()
     }
@@ -71,13 +64,15 @@ constructor(private var movieRepository: MovieRepository, private var commonRepo
             else
                 movieRepository.getMoviesByRatingWithGenreAndConfiguration(it.pageIndex)
 
-            mRequest = request.doAfterTerminate {
-                mView.hideLoadingIndicator()
-                mRequest = null
-            }
+            mRequest = request
+                    .doAfterTerminate {
+                        mView.hideLoadingIndicator()
+                    }
                     .subscribe({ response ->
+                        mRequest = null
                         handleSuccessfulUpcomingMoviesLoading(response)
                     }, { error ->
+                        mRequest = null
                         handleErrorLoadingUpcomingMovies(error)
                     })
         }
@@ -102,15 +97,16 @@ constructor(private var movieRepository: MovieRepository, private var commonRepo
                 mView.disableLoadMoreListener()
             }
 
+            // If is the first page, fill the genre filter list.
             if (it.pageIndex == ApiUtil.INITIAL_PAGE_INDEX) {
-                mView.showGenreList(response.genreListModel.values()
+                val genreListItemModel = response.genreListModel.values()
                         .sortedBy { it.name }
                         .map {
-                            GenreListItemModel(it, true)
-                        })
+                            GenreListItemModel(it, false)
+                        }
+                mView.showGenreList(genreListItemModel)
 
-                it.selectedGenreMap = response.genreListModel.clone()
-                it.genreMap = response.genreListModel
+                it.genreListItemModelList = genreListItemModel
             }
         }
     }
@@ -122,7 +118,7 @@ constructor(private var movieRepository: MovieRepository, private var commonRepo
         }
         viewModel.movieList.addAll(finalMovieList)
         viewModel.imageResponseModel = response.configurationResponseModel.imageResponseModel
-        filterUpcomingMovieList(finalMovieList, response.configurationResponseModel.imageResponseModel, viewModel.genreMap, viewModel.selectedGenreMap, false)
+        filterUpcomingMovieList(finalMovieList, response.configurationResponseModel.imageResponseModel, viewModel.genreListItemModelList, false)
     }
 
     private fun handleErrorLoadingUpcomingMovies(error: Throwable) {
@@ -133,7 +129,6 @@ constructor(private var movieRepository: MovieRepository, private var commonRepo
                 it.pageIndex--
             }
         }
-
     }
 
     override fun tryAgain() {
@@ -142,14 +137,17 @@ constructor(private var movieRepository: MovieRepository, private var commonRepo
     }
 
     override fun loadMoreMovies() {
+        Timber.d("loadMoreMovies - Called")
         // If mHasError, wait for for the user, to click the try again button
         if (mHasError || mRequest != null) {
             return
         }
 
+
         upcomingMoviesViewModel?.let {
             it.pageIndex++
         }
+        Timber.d("loadMoreMovies - Fetching the page: ${upcomingMoviesViewModel?.pageIndex}")
         fetchUpcomingMovieList()
     }
 
@@ -164,26 +162,27 @@ constructor(private var movieRepository: MovieRepository, private var commonRepo
 
     override fun onChangeSelectedGenre(genreListItemModel: GenreListItemModel) {
         upcomingMoviesViewModel?.let {
-            if (genreListItemModel.selected) {
-                it.selectedGenreMap.append(genreListItemModel.genreModel.id, genreListItemModel.genreModel)
-            } else {
-                it.selectedGenreMap.delete(genreListItemModel.genreModel.id)
-            }
-
-            filterUpcomingMovieList(it.movieList, it.imageResponseModel!!, it.genreMap, it.selectedGenreMap, true)
+            filterUpcomingMovieList(it.movieList, it.imageResponseModel!!, it.genreListItemModelList, true)
         }
     }
 
-    private fun filterUpcomingMovieList(upcomingMovieList: List<MovieImageGenreViewModel>, imageResponseModel: ConfigurationImageResponseModel, genreMap: SparseArray<GenreModel>, selectedGenreMap: SparseArray<GenreModel>, replaceData: Boolean) {
-        val finalUpcomingMovieList = if (genreMap.size() == selectedGenreMap.size()) {
+    private fun filterUpcomingMovieList(upcomingMovieList: List<MovieImageGenreViewModel>, imageResponseModel: ConfigurationImageResponseModel, selectedGenreMap: List<GenreListItemModel>, replaceData: Boolean) {
+        val selectedGenreList = selectedGenreMap.filter { it.selected }
+        Timber.d("filterUpcomingMovieList - selectedGenreList: ${selectedGenreList.isEmpty()}")
+        val finalUpcomingMovieList = if (selectedGenreList.isEmpty()) {
             upcomingMovieList
         } else {
-            upcomingMovieList.filter {
+            upcomingMovieList.filter { movie ->
                 // Always consider null genres
-                it.genreList == null || it.genreList.any {
-                    selectedGenreMap.containsKey(it.id)
+                movie.genreList == null || movie.genreList.any { movieGenreModel ->
+                    selectedGenreList.any { it.genreModel.id == movieGenreModel.id }
                 }
             }
+        }
+
+        if (selectedGenreList.isNotEmpty() && finalUpcomingMovieList.isEmpty()) {
+            Timber.d("filterUpcomingMovieList - Loading more moves, because the result list is empty")
+            loadMoreMovies()
         }
 
         if (replaceData) {
